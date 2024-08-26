@@ -1,11 +1,12 @@
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Greeting from "@/screens/Greeting";
 import Login from "@/screens/Login";
-import "@/styles/global.css";
-import { StatusBar } from "expo-status-bar";
 import Signup from '@/screens/SignUp';
+import "@/styles/global.css";
+import '@/styles/style.css';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StatusBar } from "expo-status-bar";
+import React from 'react';
 
 const Stack = createNativeStackNavigator();
 
