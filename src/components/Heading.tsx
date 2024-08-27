@@ -1,10 +1,10 @@
-import {Text} from 'react-native';
-import React from 'react';
+import React from 'react'
+import { Text } from 'react-native'
 
-export default function Heading(props) {
-  return (
-    <Text className="text-4xl font-extrabold text-textDark">
-      {props.content}
-    </Text>
-  );
+type HeadingProps = {
+  content: string
+}
+
+export function Heading(props: HeadingProps) {
+  return <Text className="text-4xl font-extrabold text-textDark">{props.content}</Text>
 }
