@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "cosmic-app",
-    "slug": "cosmic-app",
+    "name": "Cosmic",
+    "slug": "cosmic-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
