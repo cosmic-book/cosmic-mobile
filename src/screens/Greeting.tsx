@@ -4,6 +4,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
 import { Image, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import packageInfo from '../../package.json'
 
 type GreetingProps = NativeStackScreenProps<RootStackParamList, 'Greeting'>
 
@@ -22,8 +23,14 @@ const Greeting = ({ navigation }: GreetingProps) => {
       </View>
 
       <View className="mt-6 px-7">
-        <Button label="Login" className="mb-4" onPress={() => navigation.navigate('Login')} />
-        <Button label="Signup" variant={'secondary'} onPress={() => navigation.navigate('Signup')} />
+        <Button label="Entrar" className="mb-4" onPress={() => navigation.navigate('Login')} />
+        <Button label="Criar conta" variant={'secondary'} onPress={() => navigation.navigate('Signup')} />
+      </View>
+
+      <View className="mt-5 px-7">
+        <Text className="text-center text-sm text-textDark opacity-60">
+          v{packageInfo.version} - © 2024 Cosmic. Todos os direitos reservados.
+        </Text>
       </View>
     </SafeAreaView>
   )
