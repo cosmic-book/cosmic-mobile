@@ -3,15 +3,14 @@ import { RootStackParamList } from '@/navigation/RootStackParamList'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
 import { Image, Text, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import packageInfo from '../../package.json'
 
 type GreetingProps = NativeStackScreenProps<RootStackParamList, 'Greeting'>
 
 const Greeting = ({ navigation }: GreetingProps) => {
   return (
-    <SafeAreaView className="container bg-white h-full">
-      <View className="flex justify-center items-center mt-24">
+    <View className="flex-1 justify-center container bg-white h-full">
+      <View className="items-center">
         <Image source={require('../../assets/reading.png')} style={{ width: 400, height: 300 }} />
       </View>
 
@@ -32,7 +31,7 @@ const Greeting = ({ navigation }: GreetingProps) => {
           v{packageInfo.version} - © 2024 Cosmic. Todos os direitos reservados.
         </Text>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 

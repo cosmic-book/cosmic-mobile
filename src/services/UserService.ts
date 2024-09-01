@@ -11,7 +11,7 @@ export default class UserService {
   }
 
   static async login(username: string, password: string): Promise<User | undefined> {
-    const loginData = {
+    const loginData: Partial<User> = {
       username,
       password
     }

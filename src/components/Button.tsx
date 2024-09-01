@@ -60,4 +60,4 @@ function Button({ label, labelClasses, className, variant, size, ...props }: But
   )
 }
 
-export { Button, buttonVariants, buttonTextVariants }
+export { Button, buttonTextVariants, buttonVariants }
