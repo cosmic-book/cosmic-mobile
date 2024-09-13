@@ -1,4 +1,4 @@
-import { Greeting, Login, SignUp, Home } from '@/screens'
+import { GreetingScreen, LoginScreen, MainApp, SignUpScreen } from '@/screens'
 import '@/styles/global.css'
 import '@/styles/style.css'
 import { NavigationContainer } from '@react-navigation/native'
@@ -12,10 +12,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Greeting">
-        <Stack.Screen name="Greeting" component={Greeting} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Signup" component={SignUp} options={{ headerShown: false }} />
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name="Greeting" component={GreetingScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Signup" component={SignUpScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>

@@ -3,5 +3,8 @@ export type RootStackParamList = {
   Signup: undefined
   Greeting: undefined
   Items: undefined
-  Home: undefined
+  MainApp: undefined
+  Search: undefined
+  Bookshelf: undefined
+  Profile: undefined
 }

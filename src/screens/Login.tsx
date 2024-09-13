@@ -5,7 +5,7 @@ import { validateFields } from '@/utils/ValidateFields'
 import { useIsFocused } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
-import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
@@ -29,7 +29,7 @@ const Login = ({ navigation }: LoginProps) => {
     if (validate()) {
       const result = await UserService.login(username, password)
 
-      if (result) navigation.navigate('Home')
+      if (result) navigation.navigate('MainApp')
     }
   }
 
