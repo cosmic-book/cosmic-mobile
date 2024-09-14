@@ -1,10 +1,10 @@
-import { BookshelfScreen, ProfileScreen, SearchScreen } from '@/screens'
 import { Footer } from '@/components'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { BookshelfScreen, ProfileScreen, SearchScreen } from '@/screens'
 
 const Tab = createBottomTabNavigator()
 
-export default function AppNavigator() {
+const MainApp = () => {
   return (
     <Tab.Navigator tabBar={(props) => <Footer {...props} />}>
       {/* <Tab.Screen name="Menu" component={MenuScreen} /> */}
@@ -14,3 +14,5 @@ export default function AppNavigator() {
     </Tab.Navigator>
   )
 }
+
+export default MainApp

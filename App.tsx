@@ -1,4 +1,6 @@
-import { GreetingScreen, LoginScreen, MainApp, SignUpScreen } from '@/screens'
+import MainApp from '@/navigation/MainApp'
+import { RootStackParamList } from '@/navigation/RootStackParamList'
+import { GreetingScreen, LoginScreen, SignUpScreen } from '@/screens'
 import '@/styles/global.css'
 import '@/styles/style.css'
 import { NavigationContainer } from '@react-navigation/native'
@@ -6,7 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export default function App() {
   return (
