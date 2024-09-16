@@ -7,6 +7,11 @@ export const colors = {
   textDark: '#3F3D56',
   textWhite: '#f3f4f6',
 
+  lightBlue: '#1460CD',
+  darkBlue: '#272D92',
+  purple: '#512A83',
+  pink: '#C90B94',
+
   gray: {
     100: '#e4e4e7',
     400: '#707070',
