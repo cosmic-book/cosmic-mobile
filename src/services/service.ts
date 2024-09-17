@@ -17,9 +17,7 @@ export default class Service {
       return response.data
     } catch (err: any) {
       if (err.response) {
-        const errorData: any = err.response.data
-
-        console.error('API Error:', errorData)
+        console.error('API Error:', err.response)
       }
     }
   }
