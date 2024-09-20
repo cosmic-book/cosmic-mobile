@@ -1,3 +1,4 @@
+import { CustomToast } from '@/components'
 import MainApp from '@/navigation/MainApp'
 import { RootStackParamList } from '@/navigation/RootStackParamList'
 import { GreetingScreen, LoginScreen, SignUpScreen } from '@/screens'
@@ -20,6 +21,7 @@ export default function App() {
         <Stack.Screen name="MainApp" component={MainApp} options={{ headerShown: false }} />
       </Stack.Navigator>
       <StatusBar style="auto" />
+      <CustomToast />
     </NavigationContainer>
   )
 }

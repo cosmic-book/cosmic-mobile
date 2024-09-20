@@ -1,4 +1,4 @@
-import { Book } from '@/@types'
+import { Book, BookSearch } from '@/@types'
 import { FilterModel } from '@/@types/filters'
 import service from './service'
 
@@ -7,8 +7,8 @@ export default class BookService {
     return service.get('/books')
   }
 
-  static async search(filterModel: FilterModel): Promise<Book[]> {
-    return service.get(`/books/search/${filterModel.term}`)
+  static async search(filterModel: FilterModel): Promise<BookSearch> {
+    return service.get(`/books/search?term=${filterModel.term}`)
   }
 
   static async getById(id: number): Promise<Book | undefined> {

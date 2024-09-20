@@ -1,4 +1,4 @@
-import { Book } from '@/@types'
+import { Book, BookSearch } from '@/@types'
 import { FilterModel } from '@/@types/filters'
 import { BookListItem, Input, Skeleton } from '@/components'
 import { BookService } from '@/services'
@@ -16,6 +16,7 @@ type SearchProps = {
 const SearchScreen = ({ navigation, route }: SearchProps) => {
   const [search, setSearch] = useState('')
   const [books, setBooks] = useState<Book[]>([])
+  const [totalItems, setTotalItems] = useState(0)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -27,9 +28,10 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
     }
 
     if (debounceTerm) {
-      const result: Book[] = await BookService.search(filterModel)
+      const result: BookSearch = await BookService.search(filterModel)
 
-      setBooks(result)
+      setBooks(result.books)
+      setTotalItems(result.totalItems)
     }
 
     setIsLoading(false)
@@ -45,6 +47,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
     if (search) {
       setIsLoading(true)
     } else {
+      setIsLoading(false)
       setBooks([])
     }
   }, [search])
@@ -55,7 +58,14 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
         <Input placeholder="Pesquisar" value={search} onChangeText={setSearch} startIcon={Search} clearable />
       </View>
 
-      <Text className="text-lg font-bold pb-2">{search && books ? `Resultados de "${search}"` : 'Busca de Livros'}</Text>
+      <View>
+        <Text className="text-lg font-bold pb-2">{search && books ? `Resultados de "${search}"` : 'Busca de Livros'}</Text>
+        {
+          search && !isLoading && totalItems ?
+            <Text className="text-sm pb-2 color-slate-500">{`Livros encontrados: ${totalItems}`}</Text>
+            : null
+        }
+      </View>
 
       {!isLoading ? (
         <FlatList

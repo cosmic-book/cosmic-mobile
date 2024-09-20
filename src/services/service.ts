@@ -1,6 +1,6 @@
-import axios from 'axios'
 import { API_PATH } from '@env'
-//import Toast from 'react-native-toast-message'
+import axios from 'axios'
+import Toast from 'react-native-toast-message'
 
 const instance = axios.create({
   baseURL: API_PATH
@@ -16,9 +16,7 @@ export default class Service {
 
       return response.data
     } catch (err: any) {
-      if (err.response) {
-        console.error('API Error:', err.response)
-      }
+      this.handleError(err)
     }
   }
 
@@ -28,11 +26,7 @@ export default class Service {
 
       return response.data
     } catch (err: any) {
-      if (err.response) {
-        const data: any = err.response.data
-
-        //Toast.show({ type: 'error', text1: 'Algo de errado aconteceu 😿', text2: data.error })
-      }
+      this.handleError(err)
     }
   }
 
@@ -42,11 +36,7 @@ export default class Service {
 
       return response.data
     } catch (err: any) {
-      if (err.response) {
-        const data: any = err.response.data
-
-        //Toast.show({ type: 'error', text1: 'Algo de errado aconteceu 😿', text2: data.error })
-      }
+      this.handleError(err)
     }
   }
 
@@ -55,16 +45,30 @@ export default class Service {
       const { data } = await instance.delete(url)
 
       if (data) {
-        //Toast.show({ type: 'success', text1: 'Sucesso 😸', text2: data })
+        Toast.show({ type: 'error', text1: 'Algo de errado aconteceu', text2: data.message })
       }
 
       return data
     } catch (err: any) {
-      if (err.response) {
-        const data: any = err.response.data
+      this.handleError(err)
+    }
+  }
 
-        //Toast.show({ type: 'error', text1: 'Algo de errado aconteceu 😿', text2: data.error })
+  private static handleError(err: any): void {
+    const response = err.response
+
+    if (response) {
+      const status = response.status
+
+      let type = 'error'
+      let text1 = 'Um erro interno aconteceu'
+
+      if (status >= 400 && status < 500) {
+        type = 'warning'
+        text1 = 'Algo de errado aconteceu'
       }
+
+      Toast.show({ type, text1, text2: response.data.message })
     }
   }
 }
