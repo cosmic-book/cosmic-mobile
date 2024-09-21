@@ -1,6 +1,6 @@
 import { Book } from "@/@types";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Props = {
   book: Partial<Book>;
@@ -19,7 +19,11 @@ export function BookListItem({ book }: Props) {
           onError={() => setImageError(true)}
         />
       ) : (
-        <View style={{ width: 70, height: 100 }} className="bg-gray-300 rounded-lg" />
+        <Image
+          source={require('../assets/no-cover.png')}
+          style={{ width: 70, height: 100 }}
+          className="rounded-lg"
+        />
       )}
       <View className="flex-1 gap-1">
         <Text className="text-lg font-bold" numberOfLines={1}>{book.title}</Text>

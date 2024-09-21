@@ -5,7 +5,7 @@ import { BookService } from '@/services'
 import { NavigationProp, RouteProp } from '@react-navigation/native'
 import { Search } from 'lucide-react-native'
 import { useEffect, useState } from 'react'
-import { FlatList, ScrollView, Text, View } from 'react-native'
+import { FlatList, ScrollView, Text, View, Image } from 'react-native'
 import { useDebounce } from 'use-debounce'
 
 type SearchProps = {
@@ -75,9 +75,25 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
           className='pt-2 border-t border-gray-200'
           renderItem={({ item }) => <BookListItem book={item} />}
           ListEmptyComponent={
-            <Text className="text-center text-lg mt-6 color-gray-400">
-              {search ? 'Nenhum livro encontrado' : 'Pesquise a sua nova leitura'}
-            </Text>
+            <View className="items-center">
+              {search ? (
+                <>
+                  <Image
+                    source={require('../assets/no-results.png')}
+                    style={{ width: 150, height: 150, marginBottom: 16 }}
+                  />
+                  <Text className="text-center text-lg mt-2 color-gray-400">Nenhum livro encontrado</Text>
+                </>
+              ) : (
+                <>
+                  <Image
+                    source={require('../assets/search.png')}
+                    style={{ width: 200, height: 150, marginBottom: 16 }}
+                  />
+                  <Text className="text-center text-lg mt-2 color-gray-400">Pesquise a sua nova leitura</Text>
+                </>
+              )}
+            </View>
           }
         />
       ) : (

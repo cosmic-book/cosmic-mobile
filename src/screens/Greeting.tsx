@@ -11,7 +11,7 @@ const Greeting = ({ navigation }: GreetingProps) => {
   return (
     <View className="flex-1 justify-center container bg-white h-full">
       <View className="items-center">
-        <Image source={require('../../assets/reading.png')} style={{ width: 400, height: 300 }} />
+        <Image source={require('../assets/reading.png')} style={{ width: 400, height: 300 }} />
       </View>
 
       <View className="px-7">
