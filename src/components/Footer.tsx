@@ -26,8 +26,14 @@ export function Footer({ state, navigation }: any) {
             className="flex-col items-center justify-center px-5"
             onPress={() => handlePress(page)}
           >
-            {React.cloneElement(icon, { color: activePage === page ? '#1460cd' : '#2d2d2d', size: 30 })}
-            <Text className={`text-sm ${activePage === page ? 'text-blue-600' : 'text-gray-500'}`}>{label}</Text>
+            {React.cloneElement(icon,
+              {
+                color: activePage === page ? '#1460cd' : '#2d2d2d',
+                strokeWidth: activePage === page ? 2.3 : 1.7,
+                size: 30,
+              }
+            )}
+            <Text className={`text-sm ${activePage === page ? 'text-primary font-medium' : 'text-gray-500'}`}>{label}</Text>
           </TouchableOpacity>
         ))}
       </View>

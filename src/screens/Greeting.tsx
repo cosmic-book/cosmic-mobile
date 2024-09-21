@@ -11,13 +11,13 @@ const Greeting = ({ navigation }: GreetingProps) => {
   return (
     <View className="flex-1 justify-center container bg-white h-full">
       <View className="items-center">
-        <Image source={require('../assets/reading.png')} style={{ width: 400, height: 300 }} />
+        <Image source={require('@/assets/reading.png')} style={{ width: 400, height: 300 }} />
       </View>
 
       <View className="px-7">
         <Heading content="Cosmic" />
         <Text className="text-base opacity-60 text-textDark tracking-tight mt-2">
-          Organize suas leituras, defina metas e transforme o hábito de ler em uma experiência gratificante!
+          Organize sua estante, defina metas e transforme o hábito da leitura em uma experiência gratificante!
         </Text>
       </View>
 

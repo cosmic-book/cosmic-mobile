@@ -1,73 +1,94 @@
-import { Progress } from '@/components/Progress';
+import { Avatar, AvatarFallback, AvatarImage, Progress } from '@/components';
 import React from 'react';
-import { ScrollView, View, Text, Image } from 'react-native';
-import { Divider } from 'react-native-elements';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 const Profile = () => {
   return (
     <View className="flex-1 bg-white">
       <View className="items-center mt-24">
-        <Image
-          source={require('../assets/profile.jpg')}
-          className="w-24 h-24 rounded-full"
-        />
+        <TouchableOpacity>
+          <Avatar className="w-24 h-24">
+            <AvatarImage
+              source={require('@/assets/user-icon.png')}
+            />
+            <AvatarFallback className="bg-slate-300 flex-1 items-center justify-center">
+              USER
+            </AvatarFallback>
+          </Avatar>
+        </TouchableOpacity>
         <Text className="mt-4 text-xl font-bold">Nome Sobrenome</Text>
-        <Text className="mt-2 mb-5 text-center px-16 text-gray-500">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam rutrum tristique dolor.
+        <Text className="mt-2 mb-5 px-16 text-center text-gray-500">
+          Descrição
         </Text>
       </View>
 
-      <Divider />
-      <View className="flex-row justify-around mt-2 mb-4">
-        <View className="items-center">
-          <Text className="text-lightBlue text-lg font-bold">562</Text>
+      <View className="flex-row justify-around w-full mt-2 p-4 border border-l-0 border-r-0 border-gray-200">
+        <TouchableOpacity className="items-center w-1/3">
+          <Text className="text-primary text-lg font-bold">562</Text>
           <Text className="text-gray-500">Livros</Text>
-        </View>
-        <View className="items-center">
+        </TouchableOpacity>
+        <TouchableOpacity className="items-center w-1/3">
           <Text className="text-purple text-lg font-bold">1.873</Text>
           <Text className="text-gray-500">Páginas Lidas</Text>
-        </View>
-        <View className="items-center">
+        </TouchableOpacity>
+        <TouchableOpacity className="items-center w-1/3">
           <Text className="text-pink text-lg font-bold">300</Text>
           <Text className="text-gray-500">Resenhas</Text>
-        </View>
+        </TouchableOpacity>
       </View>
-      <Divider />
 
-      <ScrollView className="flex-1 w-full px-4">
-        <View className='px-4'>
-          <Text className="text-lg font-bold mb-4 mt-5">Livros Favoritos</Text>
-          <View className="flex-row justify-around mb-6">
-            <View className="w-20 h-28 bg-gray-300 rounded"></View>
-            <View className="w-20 h-28 bg-gray-300 rounded"></View>
-            <View className="w-20 h-28 bg-gray-300 rounded"></View>
+      <ScrollView className="flex-1 w-full">
+        <View className='px-12'>
+          <Text className="text-lg color-primary font-bold mb-4 mt-5">
+            Livros Favoritos
+          </Text>
+          <View className="flex-row justify-around gap-4 mb-6">
+            <View className="w-20 h-28 bg-slate-300 rounded" />
+            <View className="w-20 h-28 bg-slate-300 rounded" />
+            <View className="w-20 h-28 bg-slate-300 rounded" />
+            <View className="w-20 h-28 bg-slate-300 rounded" />
           </View>
         </View>
-        <Divider />
 
-        <View className='px-4'>
-          <Text className="text-lg font-bold mb-2 mt-5">Meta de Leitura</Text>
+        <View className='px-12 border border-l-0 border-r-0 border-gray-200'>
+          <Text className="text-lg color-primary font-bold mb-2 mt-5">
+            Meta de Leitura
+          </Text>
           <View className="mb-6">
+            <Text className="text-sm text-gray-400 mb-2 px-2">Páginas / Semana</Text>
             <Progress value={60} className="mb-2" />
-            <View className="flex-row justify-between">
-              <Text className="text-left text-lightBlue font-bold">280/400 pág.</Text>
-              <Text className="text-right text-pink font-bold">60%</Text>
+            <View className="flex-row justify-between px-2">
+              <Text className="text-left text-primary font-semibold">280/400 pág.</Text>
+              <Text className="text-right text-pink font-semibold">60%</Text>
             </View>
           </View>
         </View>
-        <Divider />
 
-        <View className='px-4'>
-          <Text className="text-lg font-bold mb-2 mt-5">Histórico</Text>
-          <View className="flex-row items-center mb-4 p-4 rounded border border-gray-300">
-            <View className="w-16 h-24 bg-gray-300 rounded mr-4"></View>
+        <View className='px-12'>
+          <Text className="text-lg color-primary font-bold mb-2 mt-5">
+            Última Atividade
+          </Text>
+          <View className="flex-row items-center mb-4 py-1 px-4 rounded-md border border-gray-300">
+            <View className="w-16 h-24 bg-slate-300 rounded mr-4"></View>
             <View className="flex-1">
-              <Text className="text-base font-semibold">Título do Livro</Text>
-              <Text className="text-sm text-gray-500">Nome do autor</Text>
-              <Progress value={90} className="my-2" />
-              <View className="flex-row justify-between">
-                <Text className="text-left text-lightBlue font-bold">280/300 pág.</Text>
-                <Text className="text-right text-pink font-bold">90%</Text>
+              <View className='my-2'>
+                <Text className="text-base font-semibold">
+                  Título do Livro
+                </Text>
+                <Text className="text-sm text-gray-400">
+                  Nome do autor
+                </Text>
+              </View>
+
+              <Progress value={90} className="h-3 my-2" />
+
+              <View className="flex-row justify-between mb-2">
+                <Text className="text-sm text-left text-primary font-semibold">
+                  280/300 pág.
+                </Text>
+                <Text className="text-sm text-right text-pink font-semibold">
+                  90%
+                </Text>
               </View>
             </View>
           </View>

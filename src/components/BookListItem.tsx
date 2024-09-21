@@ -20,7 +20,7 @@ export function BookListItem({ book }: Props) {
         />
       ) : (
         <Image
-          source={require('../assets/no-cover.png')}
+          source={require('@/assets/no-cover.png')}
           style={{ width: 70, height: 100 }}
           className="rounded-lg"
         />

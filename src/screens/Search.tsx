@@ -1,6 +1,6 @@
 import { Book, BookSearch } from '@/@types'
 import { FilterModel } from '@/@types/filters'
-import { BookListItem, Input, Skeleton } from '@/components'
+import { BookListItem, ImageView, Input, Skeleton } from '@/components'
 import { BookService } from '@/services'
 import { NavigationProp, RouteProp } from '@react-navigation/native'
 import { Search } from 'lucide-react-native'
@@ -59,12 +59,12 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
       </View>
 
       <View>
-        <Text className="text-lg font-bold pb-2">{search && books ? `Resultados de "${search}"` : 'Busca de Livros'}</Text>
-        {
-          search && !isLoading && totalItems ?
-            <Text className="text-sm pb-2 color-slate-500">{`Livros encontrados: ${totalItems}`}</Text>
-            : null
-        }
+        <Text className="text-lg font-bold pb-2">
+          {search && books ? `Resultados de "${search}"` : 'Busca de Livros'}
+        </Text>
+        {search && !isLoading && totalItems ? (
+          <Text className="text-sm pb-2 color-slate-500">{`Livros encontrados: ${totalItems}`}</Text>
+        ) : null}
       </View>
 
       {!isLoading ? (
@@ -72,34 +72,32 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
           data={books}
           initialNumToRender={10}
           keyExtractor={(item) => item.id.toString()}
-          className='pt-2 border-t border-gray-200'
+          className="pt-2 border-t border-gray-200"
           renderItem={({ item }) => <BookListItem book={item} />}
           ListEmptyComponent={
-            <View className="items-center">
+            <View className="flex py-24 justify-center items-center">
               {search ? (
-                <>
-                  <Image
-                    source={require('../assets/no-results.png')}
-                    style={{ width: 150, height: 150, marginBottom: 16 }}
-                  />
-                  <Text className="text-center text-lg mt-2 color-gray-400">Nenhum livro encontrado</Text>
-                </>
+                <ImageView
+                  image={require('@/assets/no-results.png')}
+                  label="Nenhum livro encontrado"
+                  width={300}
+                  height={300}
+                />
               ) : (
-                <>
-                  <Image
-                    source={require('../assets/search.png')}
-                    style={{ width: 200, height: 150, marginBottom: 16 }}
-                  />
-                  <Text className="text-center text-lg mt-2 color-gray-400">Pesquise a sua nova leitura</Text>
-                </>
+                <ImageView
+                  image={require('@/assets/search.png')}
+                  label="Pesquise por livros ou autores"
+                  width={350}
+                  height={300}
+                />
               )}
             </View>
           }
         />
       ) : (
-        <ScrollView className='pt-2 border-t border-gray-200'>
+        <ScrollView className="pt-2 border-t border-gray-200">
           {[...Array(5)].map((_, index) => (
-            <View key={index} className='flex-row gap-3 mb-5'>
+            <View key={index} className="flex-row gap-3 mb-5">
               <Skeleton className="w-20 h-28 mb-1" />
               <View>
                 <Skeleton className="w-72 h-6 mb-3" />

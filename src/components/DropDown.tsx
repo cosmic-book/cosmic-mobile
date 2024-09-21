@@ -46,8 +46,14 @@ const DropDownContent = ({ className, children }: DropDownContentTypes) => {
     <>
       {open && (
         <View
+          style={{
+            shadowOpacity: 0.2,
+            shadowOffset: { width: 0, height: 2 },
+            shadowRadius: 8,
+            elevation: 5,
+          }}
           className={cn(
-            'min-w-[8rem] w-full absolute flex gap-3 overflow-hidden rounded-md bg-white border border-border text-popover-foreground mt-3 p-3 top-12 mx-auto justify-center z-50',
+            'min-w-[8rem] w-full absolute flex gap-3 overflow-hidden rounded-md bg-white text-popover-foreground mt-3 p-3 top-12 mx-auto justify-center z-50',
             className
           )}
         >

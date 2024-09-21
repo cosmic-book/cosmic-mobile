@@ -42,7 +42,7 @@ const Input = forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
           </View>
         )}
 
-        <TextInput ref={ref} className={cn('flex-1', inputVariants({ variant, className }), inputClasses)} {...props} />
+        <TextInput ref={ref} className={cn('flex-1 selection:text-blue-400 caret-blue-400', inputVariants({ variant, className }), inputClasses)} {...props} />
 
         {clearable && props.value && (
           <TouchableOpacity className="pr-4" onPress={() => props.onChangeText?.('')}>

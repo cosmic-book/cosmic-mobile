@@ -6,7 +6,7 @@ import { cn } from '../lib/utils';
 
 function Progress({
   className,
-  colors = ['#272D92', '#512A83', '#C90B94'],
+  colors = ['#0e6de7', '#512A83', '#C90B94'],
   value,
   ...props
 }: { className?: string; value: number; colors?: string[] } & React.ComponentPropsWithoutRef<

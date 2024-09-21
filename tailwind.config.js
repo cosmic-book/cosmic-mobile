@@ -6,10 +6,7 @@ module.exports = {
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
-      colors,
-      boxShadow: {
-        custom: '0px 20px 20px 10px #00000024'
-      }
+      colors
     }
   },
   plugins: []
