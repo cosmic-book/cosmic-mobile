@@ -1,8 +1,16 @@
 import { Avatar, AvatarFallback, AvatarImage, Progress } from '@/components';
+import { RootStackParamList } from '@/navigation/RootStackParamList';
+import { RouteProp } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
-const Profile = () => {
+type ProfileProps = {
+  navigation: NativeStackScreenProps<RootStackParamList, 'Profile'>
+  route: RouteProp<any>
+}
+
+const Profile = ({ navigation, route }: ProfileProps) => {
   return (
     <View className="flex-1 bg-white">
       <View className="items-center mt-24">
