@@ -1,16 +1,23 @@
 import { Book } from "@/@types";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
+import { NavigationProp } from '@react-navigation/native';
+import { RootStackParamList } from '@/navigation/RootStackParamList';
 
 type Props = {
   book: Partial<Book>;
+  navigation: NavigationProp<RootStackParamList, 'BookDetails'>;
 };
 
-export function BookListItem({ book }: Props) {
+export function BookListItem({ book, navigation }: Props) {
   const [imageError, setImageError] = useState(false);
 
+  const handlePress = () => {
+    navigation.navigate('BookDetails', { book })
+  };
+
   return (
-    <TouchableOpacity className="flex-row gap-3 mb-5">
+    <TouchableOpacity className="flex-row gap-3 mb-5" onPress={handlePress}>
       {book.cover && !imageError ? (
         <Image
           source={{ uri: book.cover }}

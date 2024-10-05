@@ -74,7 +74,9 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
           initialNumToRender={10}
           keyExtractor={(item) => item.id.toString()}
           className="pt-2 border-t border-gray-200"
-          renderItem={({ item }) => <BookListItem book={item} />}
+          renderItem={({ item }) => (
+            <BookListItem book={item} navigation={navigation} />
+          )}
           ListEmptyComponent={
             <View className="flex py-24 justify-center items-center">
               {search ? (

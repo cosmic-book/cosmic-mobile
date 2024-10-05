@@ -1,6 +1,6 @@
 import { Footer } from '@/components'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { BookshelfScreen, ProfileScreen, SearchScreen } from '@/screens'
+import { BookshelfScreen, ProfileScreen, SearchScreen, BookDetailsScreen } from '@/screens'
 
 const Tab = createBottomTabNavigator()
 
@@ -11,6 +11,7 @@ const MainApp = () => {
       <Tab.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Bookshelf" component={BookshelfScreen} options={{ headerShown: false }} />
       <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <Tab.Screen name="BookDetails" component={BookDetailsScreen} options={{ headerShown: false }} />
     </Tab.Navigator>
   )
 }

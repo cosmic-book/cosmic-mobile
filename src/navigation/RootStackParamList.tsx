@@ -1,3 +1,5 @@
+import { Book } from "@/@types"
+
 export type RootStackParamList = {
   Login: undefined
   Signup: undefined
@@ -7,4 +9,7 @@ export type RootStackParamList = {
   Search: undefined
   Bookshelf: undefined
   Profile: undefined
+  BookDetails: {
+    book: Book;
+  };
 }
