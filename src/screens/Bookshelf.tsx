@@ -1,12 +1,12 @@
+import { MainStackParamList } from '@/@types/navigation'
 import { Heading } from '@/components'
-import { RootStackParamList } from '@/navigation/RootStackParamList'
 import { RouteProp } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
 import { ScrollView, View } from 'react-native'
 
 type BookshelfProps = {
-  navigation: NativeStackScreenProps<RootStackParamList, 'Bookshelf'>
+  navigation: NativeStackScreenProps<MainStackParamList, 'Bookshelf'>
   route: RouteProp<any>
 }
 

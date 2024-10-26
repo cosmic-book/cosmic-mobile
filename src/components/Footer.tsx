@@ -2,7 +2,7 @@ import { CircleUserRound, Library, Menu, Search } from 'lucide-react-native'
 import React, { useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
-export function Footer({ state, navigation }: any) {
+export function Footer({ navigation }: any) {
   const [activePage, setActivePage] = useState('Search')
 
   const tabs = [

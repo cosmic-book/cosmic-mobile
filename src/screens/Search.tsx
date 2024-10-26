@@ -1,7 +1,7 @@
 import { Book, BookSearch } from '@/@types'
 import { FilterModel } from '@/@types/filters'
+import { MainStackParamList } from '@/@types/navigation'
 import { BookListItem, ImageView, Input, Skeleton } from '@/components'
-import { RootStackParamList } from '@/navigation/RootStackParamList'
 import { BookService } from '@/services'
 import { NavigationProp, RouteProp } from '@react-navigation/native'
 import { Search } from 'lucide-react-native'
@@ -10,7 +10,7 @@ import { FlatList, ScrollView, Text, View } from 'react-native'
 import { useDebounce } from 'use-debounce'
 
 type SearchProps = {
-  navigation: NavigationProp<RootStackParamList, 'Search'>
+  navigation: NavigationProp<MainStackParamList, 'Search'>
   route: RouteProp<any>
 }
 

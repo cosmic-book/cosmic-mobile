@@ -1,11 +1,11 @@
+import { AuthStackParamList } from '@/@types/navigation'
 import { Button, Heading } from '@/components'
-import { RootStackParamList } from '@/navigation/RootStackParamList'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
 import { Image, Text, View } from 'react-native'
 import packageInfo from '../../package.json'
 
-type GreetingProps = NativeStackScreenProps<RootStackParamList, 'Greeting'>
+type GreetingProps = NativeStackScreenProps<AuthStackParamList, 'Greeting'>
 
 const Greeting = ({ navigation }: GreetingProps) => {
   return (
@@ -23,7 +23,7 @@ const Greeting = ({ navigation }: GreetingProps) => {
 
       <View className="mt-6 px-7">
         <Button label="Entrar" className="mb-4" onPress={() => navigation.navigate('Login')} />
-        <Button label="Criar conta" variant={'secondary'} onPress={() => navigation.navigate('Signup')} />
+        <Button label="Criar conta" variant={'secondary'} onPress={() => navigation.navigate('Register')} />
       </View>
 
       <View className="mt-5 px-7">

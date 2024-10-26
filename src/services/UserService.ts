@@ -1,5 +1,5 @@
-import service from './service'
 import { User } from '@/@types'
+import service from './service'
 
 export default class UserService {
   static async getAll(): Promise<User[]> {
@@ -8,15 +8,6 @@ export default class UserService {
 
   static async getById(id: number): Promise<User | undefined> {
     return service.get(`/users/${id}`)
-  }
-
-  static async login(username: string, password: string): Promise<User | undefined> {
-    const loginData: Partial<User> = {
-      username,
-      password
-    }
-
-    return service.post('/users/login', loginData)
   }
 
   static async create(user: User): Promise<any> {

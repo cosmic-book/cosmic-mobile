@@ -7,6 +7,10 @@ const instance = axios.create({
 })
 
 export default class Service {
+  static setAuthToken(token: string | null): void {
+    instance.defaults.headers.Authorization = token ? `Bearer ${token}` : null
+  }
+
   static async get(url: string, params = {}, options = {}): Promise<any> {
     try {
       const response = await instance.get(url, {

@@ -1,6 +1,6 @@
 import { User } from '@/@types'
+import { AuthStackParamList } from '@/@types/navigation'
 import { Button, DropDown, DropDownContent, DropDownItem, DropDownTrigger, Heading, Input } from '@/components'
-import { RootStackParamList } from '@/navigation/RootStackParamList'
 import { UserService } from '@/services'
 import { dateApplyMask } from '@/utils/masks'
 import { validateFields } from '@/utils/ValidateFields'
@@ -8,9 +8,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useState } from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 
-type SignUpProps = NativeStackScreenProps<RootStackParamList, 'Signup'>
+type RegisterProps = NativeStackScreenProps<AuthStackParamList, 'Register'>
 
-const SignUp = ({ navigation }: SignUpProps) => {
+const Register = ({ navigation }: RegisterProps) => {
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -141,4 +141,4 @@ const SignUp = ({ navigation }: SignUpProps) => {
   )
 }
 
-export default SignUp
+export default Register

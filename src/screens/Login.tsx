@@ -1,15 +1,17 @@
+import { AuthStackParamList } from '@/@types/navigation'
 import { Button, Heading, Input } from '@/components'
-import { RootStackParamList } from '@/navigation/RootStackParamList'
-import { UserService } from '@/services'
+import { useAuth } from '@/contexts/AuthContext'
 import { validateFields } from '@/utils/ValidateFields'
 import { useIsFocused } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
-type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
+type LoginProps = NativeStackScreenProps<AuthStackParamList, 'Login'>
 
 const Login = ({ navigation }: LoginProps) => {
+  const { login } = useAuth();
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -27,9 +29,7 @@ const Login = ({ navigation }: LoginProps) => {
 
   const handleLogin = async () => {
     if (validate()) {
-      const result = await UserService.login(username, password)
-
-      if (result) navigation.navigate('MainApp')
+      await login(username, password)
     }
   }
 
@@ -77,7 +77,7 @@ const Login = ({ navigation }: LoginProps) => {
       <View className="mt-10">
         <View className="flex flex-row items-center justify-center">
           <Text className="text-textDark">Não possui uma conta? </Text>
-          <Button label="Criar conta" variant={'link'} size={null} onPress={() => navigation.navigate('Signup')} />
+          <Button label="Criar conta" variant={'link'} size={null} onPress={() => navigation.navigate('Register')} />
         </View>
       </View>
     </View>
