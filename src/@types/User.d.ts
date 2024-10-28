@@ -7,7 +7,7 @@ type User = {
   gender: string
   image?: string
   profile?: number
-  password: string
+  password?: string
 }
 
 export default User

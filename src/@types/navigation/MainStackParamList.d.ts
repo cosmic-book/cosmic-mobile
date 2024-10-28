@@ -5,6 +5,7 @@ type MainStackParamList = {
     book: Book
   }
   Profile: undefined
+  ProfileEdit: undefined
 }
 
 export default MainStackParamList

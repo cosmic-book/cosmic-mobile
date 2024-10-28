@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage, Progress } from '@/components';
 import { useAuth } from '@/contexts/AuthContext';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Pencil } from 'lucide-react-native';
 import React from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
@@ -11,14 +12,18 @@ type ProfileProps = {
   route: RouteProp<any>
 }
 
-const Profile = ({ navigation, route }: ProfileProps) => {
+const Profile = ({ navigation }: ProfileProps) => {
   const { user } = useAuth();
+
+  const handlePress = () => {
+    navigation.navigate('ProfileEdit')
+  };
 
   return (
     user ?
       <View className="flex-1 bg-white">
         <View className="items-center mt-24">
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handlePress}>
             <Avatar className="w-24 h-24">
               <AvatarImage
                 source={require('@/assets/user-icon.png')}
@@ -27,14 +32,14 @@ const Profile = ({ navigation, route }: ProfileProps) => {
                 USER
               </AvatarFallback>
             </Avatar>
+            <View className="absolute bottom-0 right-0 w-6 h-6 bg-blue-500 rounded-full items-center justify-center">
+              <Pencil color="white" size={12} />
+            </View>
           </TouchableOpacity>
           <Text className="mt-4 text-xl font-bold">{user.name}</Text>
-          <Text className="mt-2 mb-5 px-16 text-center text-gray-500">
-            Descrição
-          </Text>
         </View>
 
-        <View className="flex-row justify-around w-full mt-2 p-4 border border-l-0 border-r-0 border-gray-200">
+        <View className="flex-row justify-around w-full mt-4 p-4 border border-l-0 border-r-0 border-gray-200">
           <TouchableOpacity className="items-center w-1/3">
             <Text className="text-primary text-lg font-bold">562</Text>
             <Text className="text-gray-500">Livros</Text>
@@ -77,7 +82,7 @@ const Profile = ({ navigation, route }: ProfileProps) => {
           </View>
 
           <View className='px-12'>
-            <Text className="text-lg color-primary font-bold mb-2 mt-5">
+            <Text className="text-lg font-bold mb-2 mt-5">
               Última Atividade
             </Text>
             <View className="flex-row items-center mb-4 py-1 px-4 rounded-md border border-gray-300">
