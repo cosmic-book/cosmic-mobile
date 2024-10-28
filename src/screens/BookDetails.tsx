@@ -26,7 +26,6 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
         />
       </View>
 
-      {/* Conteúdo principal */}
       <View style={styles.contentContainer}>
         <View className="items-center">
           <Image
@@ -37,7 +36,6 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           <Text className="text-2x1 opacity-90 mt-2 color-white">Por {book.author}</Text>
         </View>
 
-        {/* Estatísticas do livro */}
         <View className="mt-20 rounded-lg bg-white p-2 flex-row justify-around">
           <View className="flex-1 items-center border-r border-gray-200 p-2">
             <Text className="text-sm text-gray-500 mb-1">ANO</Text>
@@ -53,7 +51,6 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           </View>
         </View>
 
-        {/* Informações do livro */}
         <View className="flex-row items-center mt-8">
           <Image
             source={require('@/assets/user-icon.png')}
@@ -69,22 +66,11 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           </View>
         </View>
 
-        {/* Descrição do livro */}
         <View className="mt-4">
           <Text className="text-base text-justify">
-            Em O Labirinto das Sombras, o autor John McAllister nos leva a uma jornada emocionante através de um mundo onde
-            a linha entre realidade e fantasia é perigosamente tênue. A história segue Ethan Moore, um arqueólogo atormentado
-            por segredos do passado, que descobre um antigo labirinto subterrâneo repleto de mistérios insondáveis.
-            Ao lado de uma equipe improvável de especialistas, Ethan deve decifrar enigmas ancestrais e enfrentar forças
-            sobrenaturais que guardam um segredo capaz de mudar o destino da humanidade. Em um enredo cheio de reviravoltas,
-            McAllister cria um cenário rico, onde as sombras têm vida própria e as escolhas do presente ecoam por séculos.
-            Um thriller psicológico que desafia a mente e os sentidos, O Labirinto das Sombras é uma leitura obrigatória para
-            os fãs de aventuras intelectuais e mistérios sombrios.
-            {book.description}   {/*Não ta puxando a descrição aqui */}
+            {book.description}
           </Text>
         </View>
-
-        {/*Futuramente adicionar outros livros do autor*/}
       </View>
     </ScrollView>
   );

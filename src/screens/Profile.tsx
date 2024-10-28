@@ -1,5 +1,5 @@
 import { MainStackParamList } from '@/@types/navigation';
-import { Avatar, AvatarFallback, AvatarImage, Progress } from '@/components';
+import { Avatar, AvatarImage, Progress } from '@/components';
 import { useAuth } from '@/contexts/AuthContext';
 import { RouteProp } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -26,11 +26,8 @@ const Profile = ({ navigation }: ProfileProps) => {
           <TouchableOpacity onPress={handlePress}>
             <Avatar className="w-24 h-24">
               <AvatarImage
-                source={require('@/assets/user-icon.png')}
+                source={user.image ? { uri: user.image } : require('../assets/user-icon.png')}
               />
-              <AvatarFallback className="bg-slate-300 flex-1 items-center justify-center">
-                USER
-              </AvatarFallback>
             </Avatar>
             <View className="absolute bottom-0 right-0 w-6 h-6 bg-blue-500 rounded-full items-center justify-center">
               <Pencil color="white" size={12} />

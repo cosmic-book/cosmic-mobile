@@ -1,10 +1,11 @@
 import { MainStackParamList } from '@/@types/navigation';
-import { Button, DropDown, DropDownContent, DropDownItem, DropDownTrigger, Heading, Input, BackButton } from '@/components';
+import { Button, DropDown, DropDownContent, DropDownItem, DropDownTrigger, Heading, Input, BackButton, Avatar, AvatarImage, ImagePickerModal } from '@/components';
 import { useAuth } from '@/contexts/AuthContext';
 import { dateApplyMask } from '@/utils/masks';
 import { validateFields } from '@/utils/ValidateFields';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState, useEffect } from 'react';
+import { Camera } from 'lucide-react-native';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 type ProfileEditProps = NativeStackScreenProps<MainStackParamList, 'ProfileEdit'>;
@@ -17,7 +18,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
     const [email, setEmail] = useState('');
     const [birthday, setBirthday] = useState('');
     const [gender, setGender] = useState('');
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState<string | null>(null)
     const [profile, setProfile] = useState<number | undefined>(undefined);
 
     const [nameError, setNameError] = useState(false);
@@ -25,6 +26,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
     const [emailError, setEmailError] = useState(false);
     const [birthdayError, setBirthdayError] = useState(false);
     const [genderError, setGenderError] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false)
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -49,6 +51,10 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         };
         fetchUserData();
     }, []);
+
+    const handleImagePicked = (uri: string | null) => {
+        setImage(uri);
+    };
 
     const applyMask = (input: string) => {
         const value = input.replace(/\D/g, '');
@@ -76,6 +82,17 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
             >
                 <View className="justify-center items-center mb-6">
                     <Heading content="Editar Perfil" />
+                </View>
+
+                <View className="my-6 items-center">
+                    <TouchableOpacity onPress={() => setModalVisible(true)}>
+                        <Avatar className="w-28 h-28">
+                            <AvatarImage source={image ? { uri: image } : require('../assets/user-icon.png')} />
+                        </Avatar>
+                        <View className="absolute bottom-0 right-0 w-8 h-8 bg-blue-500 rounded-full items-center justify-center">
+                            <Camera color="white" size={15} />
+                        </View>
+                    </TouchableOpacity>
                 </View>
 
                 <View className="my-6 gap-3">
@@ -129,6 +146,12 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
                 </View>
                 <Button label="Salvar Alterações" />
             </ScrollView>
+
+            <ImagePickerModal
+                visible={modalVisible}
+                onClose={() => setModalVisible(false)}
+                onImagePicked={handleImagePicked}
+            />
         </View>
     );
 }
