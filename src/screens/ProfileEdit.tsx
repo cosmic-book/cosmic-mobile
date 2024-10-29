@@ -1,4 +1,5 @@
 import { MainStackParamList } from '@/@types/navigation';
+import { User } from '@/@types'
 import { Button, DropDown, DropDownContent, DropDownItem, DropDownTrigger, Heading, Input, BackButton, Avatar, AvatarImage, ImagePickerModal } from '@/components';
 import { useAuth } from '@/contexts/AuthContext';
 import { dateApplyMask } from '@/utils/masks';
@@ -7,6 +8,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useState, useEffect } from 'react';
 import { Camera } from 'lucide-react-native';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import UserService from '@/services/UserService';
 
 type ProfileEditProps = NativeStackScreenProps<MainStackParamList, 'ProfileEdit'>;
 
@@ -18,7 +20,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
     const [email, setEmail] = useState('');
     const [birthday, setBirthday] = useState('');
     const [gender, setGender] = useState('');
-    const [image, setImage] = useState<string | null>(null)
+    const [image, setImage] = useState<string | null>(null);
     const [profile, setProfile] = useState<number | undefined>(undefined);
 
     const [nameError, setNameError] = useState(false);
@@ -26,7 +28,14 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
     const [emailError, setEmailError] = useState(false);
     const [birthdayError, setBirthdayError] = useState(false);
     const [genderError, setGenderError] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const applyMask = (input: string) => {
+        const value = input.replace(/\D/g, '')
+
+        const date = dateApplyMask(value)
+        return setBirthday(date)
+    }
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -56,12 +65,6 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         setImage(uri);
     };
 
-    const applyMask = (input: string) => {
-        const value = input.replace(/\D/g, '');
-        const date = dateApplyMask(value);
-        return setBirthday(date);
-    };
-
     const validate = () => {
         return validateFields([
             { value: name, setter: setNameError },
@@ -70,6 +73,31 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
             { value: birthday, setter: setBirthdayError },
             { value: gender, setter: setGenderError },
         ]);
+    };
+
+    const handleSave = async () => {
+        if (validate() && user && user.id !== undefined) {
+            const formatBirthday = (date: string) => {
+                const [day, month, year] = date.split('/');
+                return `${year}-${month}-${day}`;
+            };
+
+            const updatedUser: User = {
+                ...user,
+                name,
+                username,
+                email,
+                image: image,
+                birthday: formatBirthday(birthday),
+                gender: gender.charAt(0),
+            };
+
+            const result = await UserService.update(user.id, updatedUser);
+
+            if (result) {
+                navigation.navigate('Profile');
+            }
+        }
     };
 
     return (
@@ -144,7 +172,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
                         </DropDownContent>
                     </DropDown>
                 </View>
-                <Button label="Salvar Alterações" />
+                <Button label="Salvar Alterações" onPress={handleSave} />
             </ScrollView>
 
             <ImagePickerModal

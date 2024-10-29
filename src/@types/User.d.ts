@@ -5,7 +5,7 @@ type User = {
   email: string
   birthday: string
   gender: string
-  image?: string
+  image?: string | null
   profile?: number
   password?: string
 }
