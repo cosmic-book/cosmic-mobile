@@ -1,5 +1,6 @@
 export * from './Avatar'
 export { BookListItem } from './BookListItem'
+export { BottomDrawer } from './BottomDrawer'
 export { Button } from './Button'
 export { BackButton } from './BackButton'
 export { CustomToast } from './CustomToast'

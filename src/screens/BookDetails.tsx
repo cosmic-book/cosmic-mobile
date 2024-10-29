@@ -1,13 +1,32 @@
 import { MainStackParamList } from '@/@types/navigation';
+import { BottomDrawer } from '@/components';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { X } from 'lucide-react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type BookDetailsProps = NativeStackScreenProps<MainStackParamList, 'BookDetails'>;
 
 const BookDetails = ({ route, navigation }: BookDetailsProps) => {
   const { book } = route.params;
+
+  const [imageError, setImageError] = useState(false);
+
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+
+  const handleOpenBottomSheet = () => {
+    setIsBottomSheetOpen(true);
+  };
+
+  const handleCloseBottomSheet = () => {
+    setIsBottomSheetOpen(false);
+  };
+
+  useEffect(() => {
+    if (book.cover) {
+      setImageError(false)
+    }
+  }, [book])
 
   return (
     <ScrollView className="flex-1 color-gray-200">
@@ -20,17 +39,19 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
 
       <View style={styles.backgroundContainer}>
         <Image
-          source={book.cover ? { uri: book.cover } : require('../assets/no-cover.png')}
+          source={book.cover && !imageError ? { uri: book.cover } : require('@/assets/no-cover.png')}
           style={styles.backgroundImage}
           blurRadius={15}
+          onError={() => setImageError(true)}
         />
       </View>
 
       <View style={styles.contentContainer}>
         <View className="items-center">
           <Image
-            source={book.cover ? { uri: book.cover } : require('../assets/no-cover.png')}
+            source={book.cover && !imageError ? { uri: book.cover } : require('@/assets/no-cover.png')}
             style={{ width: 160, height: 240, borderRadius: 10, top: -40 }}
+            onError={() => setImageError(true)}
           />
           <Text className="text-2xl color-white text-center">{book.title}</Text>
           <Text className="text-2x1 opacity-90 mt-2 color-white">Por {book.author}</Text>
@@ -47,7 +68,9 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           </View>
           <View className="flex-1 items-center p-2">
             <Text className="text-sm text-gray-500 mb-1">STATUS</Text>
-            <Text className="text-base font-bold text-green-500">Completo</Text>
+            <TouchableOpacity onPress={handleOpenBottomSheet}>
+              <Text className="text-base font-bold text-blue-500">Adicionar</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -59,19 +82,18 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           <View className="flex-1">
             <Text className="text-lg font-bold">{book.author}</Text>
             <Text className="text-sm text-gray-500" numberOfLines={2}>
-              John McAllister é um aclamado autor norte-americano, conhecido por seus romances envolventes e por sua habilidade de
-              explorar a profundidade emocional de seus personagens. Com uma carreira de mais de duas décadas,
-              McAllister já publicou oito best-sellers, traduzidos para mais de 15 idiomas.
+              Descrição do Autor
             </Text>
           </View>
         </View>
 
-        <View className="mt-4">
+        <View className="my-4">
           <Text className="text-base text-justify">
             {book.description}
           </Text>
         </View>
       </View>
+      <BottomDrawer isOpen={isBottomSheetOpen} handleClose={handleCloseBottomSheet} />
     </ScrollView>
   );
 };
