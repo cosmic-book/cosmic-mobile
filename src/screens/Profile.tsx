@@ -34,6 +34,7 @@ const Profile = ({ navigation }: ProfileProps) => {
             </View>
           </TouchableOpacity>
           <Text className="mt-4 text-xl font-bold">{user.name}</Text>
+          <Text className="mt-1 text-sm font-medium text-gray-400">{'@' + user.username}</Text>
         </View>
 
         <View className="flex-row justify-around w-full mt-4 p-4 border border-l-0 border-r-0 border-gray-200">

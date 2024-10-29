@@ -5,6 +5,7 @@ import React, { createContext, ReactNode, useContext, useState } from 'react';
 
 interface AuthContextProps {
   user: User | null;
+  setUser: (user: User | null) => void;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
@@ -35,7 +36,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
