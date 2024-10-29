@@ -1,5 +1,6 @@
 import { User } from '@/@types'
 import service from './service'
+import { INewPasswordForm } from '@/interfaces'
 
 export default class UserService {
   static async getAll(): Promise<User[]> {
@@ -18,11 +19,11 @@ export default class UserService {
     return service.put(`/users/${id}`, user)
   }
 
-  // async changePassword(id: number, payload: Object): Promise<User | undefined> {
-  //   const data = await service.put(`/users/password/${id}`, payload)
+  async updatePassword(id: number, payload: INewPasswordForm): Promise<User | undefined> {
+    const data = await service.put(`/users/password/${id}`, payload)
 
-  //   return data
-  // },
+    return data
+  }
 
   static async delete(id: number): Promise<any> {
     return service.delete(`/users/${id}`)
