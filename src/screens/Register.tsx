@@ -1,12 +1,13 @@
 import { User } from '@/@types'
 import { AuthStackParamList } from '@/@types/navigation'
-import { Button, DropDown, DropDownContent, DropDownItem, DropDownTrigger, Heading, Input } from '@/components'
+import { Button, Heading } from '@/components'
+import { DateInput, GenderSelect, Input, PasswordInput } from '@/components/fields'
 import { UserService } from '@/services'
-import { dateApplyMask } from '@/utils/masks'
 import { validateFields } from '@/utils/ValidateFields'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import moment from 'moment'
 import { useState } from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 
 type RegisterProps = NativeStackScreenProps<AuthStackParamList, 'Register'>
 
@@ -14,32 +15,18 @@ const Register = ({ navigation }: RegisterProps) => {
   const [name, setName] = useState('')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
-  const [birthday, setBirthday] = useState('')
+  const [birthday, setBirthday] = useState<Date | null>(null)
   const [gender, setGender] = useState('')
   const [password, setPassword] = useState('')
 
-  const [nameError, setNameError] = useState(false)
-  const [usernameError, setUsernameError] = useState(false)
-  const [emailError, setEmailError] = useState(false)
-  const [birthdayError, setBirthdayError] = useState(false)
-  const [genderError, setGenderError] = useState(false)
-  const [passwordError, setPasswordError] = useState(false)
-
-  const applyMask = (input: string) => {
-    const value = input.replace(/\D/g, '')
-
-    const date = dateApplyMask(value)
-    return setBirthday(date)
-  }
+  const [error, setError] = useState(false)
 
   const validate = () => {
     return validateFields([
-      { value: name, setter: setNameError },
-      { value: username, setter: setUsernameError },
-      { value: email, setter: setEmailError },
-      { value: birthday, setter: setBirthdayError },
-      { value: gender, setter: setGenderError },
-      { value: password, setter: setPasswordError }
+      {
+        value: (name && username && email && birthday && gender && password),
+        setter: setError
+      },
     ])
   }
 
@@ -49,7 +36,7 @@ const Register = ({ navigation }: RegisterProps) => {
         name,
         username,
         email,
-        birthday,
+        birthday: moment(birthday).format('YYYY-MM-DD'),
         gender: gender.charAt(0),
         password
       }
@@ -58,6 +45,15 @@ const Register = ({ navigation }: RegisterProps) => {
 
       if (result) navigation.navigate('Login')
     }
+  }
+
+  const handleClear = () => {
+    setName('')
+    setUsername('')
+    setEmail('')
+    setBirthday(null)
+    setGender('')
+    setPassword('')
   }
 
   return (
@@ -74,13 +70,11 @@ const Register = ({ navigation }: RegisterProps) => {
         <View className="my-6 gap-3">
           <Input
             placeholder="Nome Completo"
-            variant={nameError ? 'error' : 'default'}
             value={name}
             onChangeText={setName}
           />
           <Input
             placeholder="Nome de Usuário"
-            variant={usernameError ? 'error' : 'default'}
             value={username}
             onChangeText={setUsername}
           />
@@ -88,52 +82,51 @@ const Register = ({ navigation }: RegisterProps) => {
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
-            variant={emailError ? 'error' : 'default'}
             value={email}
             onChangeText={setEmail}
           />
-          <Input
+          <DateInput
             placeholder="Data de Nascimento"
-            keyboardType="number-pad"
-            variant={birthdayError ? 'error' : 'default'}
-            value={birthday}
-            maxLength={10}
-            onChangeText={applyMask}
+            date={birthday}
+            onChangeDate={setBirthday}
           />
-          <DropDown>
-            <DropDownTrigger>
-              <Input
-                placeholder={'Gênero'}
-                value={gender}
-                variant={genderError ? 'error' : 'default'}
-                showSoftInputOnFocus={false}
-              />
-            </DropDownTrigger>
-            <DropDownContent>
-              {['Masculino', 'Feminino', 'Outro'].map((item, index) => (
-                <DropDownItem key={index}>
-                  <TouchableOpacity className="flex flex-row gap-2 items-center" onPress={() => setGender(item)}>
-                    <Text className="text-black text-xl">{item}</Text>
-                  </TouchableOpacity>
-                </DropDownItem>
-              ))}
-            </DropDownContent>
-          </DropDown>
-          <Input
-            placeholder="Senha"
-            secureTextEntry={true}
-            autoCapitalize="none"
-            variant={passwordError ? 'error' : 'default'}
+          <GenderSelect
+            value={gender}
+            onChangeOption={setGender}
+          />
+          <PasswordInput
+            placeholder='Senha'
             value={password}
             onChangeText={setPassword}
           />
         </View>
-        <Button label="Cadastrar" onPress={handleRegister} />
+
+        <View className='items-center gap-3'>
+          {error && (
+            <Text className='text-sm text-error'>
+              Preencha os campos para se cadastrar
+            </Text>
+          )}
+
+          <Button className='w-full' label="Cadastrar" onPress={handleRegister} />
+
+          <Button
+            label="Limpar campos"
+            onPress={handleClear}
+            variant={'inline'}
+            size={null}
+          />
+        </View>
 
         <View className="mt-10">
           <View className="flex flex-row items-center justify-center">
             <Text className="text-gray-600">Já possui uma conta? </Text>
-            <Button label="Entrar" variant={'link'} size={null} onPress={() => navigation.navigate('Login')} />
+            <Button
+              label="Entrar"
+              variant={'link'}
+              size={null}
+              onPress={() => navigation.navigate('Login')}
+            />
           </View>
         </View>
       </ScrollView>

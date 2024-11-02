@@ -1,5 +1,6 @@
 import { AuthStackParamList } from '@/@types/navigation'
-import { Button, Heading, Input } from '@/components'
+import { Button, Heading } from '@/components'
+import { Input, PasswordInput } from '@/components/fields'
 import { useAuth } from '@/contexts/AuthContext'
 import { validateFields } from '@/utils/ValidateFields'
 import { useIsFocused } from '@react-navigation/native'
@@ -51,23 +52,22 @@ const Login = ({ navigation }: LoginProps) => {
       <View className="mt-4">
         <View className="gap-3">
           <Input
-            placeholder={'Nome de usuário'}
+            placeholder='Nome de usuário'
             variant={usernameError ? 'error' : 'default'}
             value={username}
             onChangeText={setUsername}
+            clearable
           />
-          <Input
-            placeholder={'Senha'}
-            secureTextEntry={true}
-            autoCapitalize="none"
-            variant={passwordError ? 'error' : 'default'}
+          <PasswordInput
+            placeholder='Senha'
             value={password}
             onChangeText={setPassword}
+            variant={passwordError ? 'error' : 'default'}
           />
         </View>
         <View className="mb-4">
           <TouchableOpacity className="flex items-end mt-2 mb-4" onPress={() => navigation.goBack()}>
-            <Text className="font-bold text-textDark">Esqueceu a senha?</Text>
+            <Text className="font-medium text-gray-600">Esqueceu a senha?</Text>
           </TouchableOpacity>
         </View>
       </View>

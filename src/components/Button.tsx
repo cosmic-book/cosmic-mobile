@@ -10,7 +10,8 @@ const buttonVariants = cva('flex flex-row items-center justify-center rounded-md
       secondary: 'bg-secondary',
       destructive: 'bg-destructive',
       ghost: 'bg-slate-700',
-      link: 'text-primary underline-offset-4'
+      link: 'text-primary underline-offset-4',
+      inline: 'bg-transparent'
     },
     size: {
       default: 'h-12 px-4',
@@ -31,7 +32,8 @@ const buttonTextVariants = cva('text-center font-medium', {
       secondary: 'text-secondary-foreground',
       destructive: 'text-destructive-foreground',
       ghost: 'text-primary-foreground',
-      link: 'text-gray-600 underline'
+      link: 'text-gray-600 underline',
+      inline: 'text-gray-500'
     },
     size: {
       default: 'text-base',
@@ -47,7 +49,7 @@ const buttonTextVariants = cva('text-center font-medium', {
 
 interface ButtonProps
   extends React.ComponentPropsWithoutRef<typeof TouchableOpacity>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   label: string
   labelClasses?: string
 }

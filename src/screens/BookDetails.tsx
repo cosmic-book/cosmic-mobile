@@ -93,7 +93,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           </Text>
         </View>
       </View>
-      <BottomDrawer isOpen={isBottomSheetOpen} handleClose={handleCloseBottomSheet} />
+      <BottomDrawer isOpen={isBottomSheetOpen} handleClose={handleCloseBottomSheet} book={book} />
     </ScrollView>
   );
 };

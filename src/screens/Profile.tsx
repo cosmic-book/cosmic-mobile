@@ -37,7 +37,7 @@ const Profile = ({ navigation }: ProfileProps) => {
           <Text className="mt-1 text-sm font-medium text-gray-400">{'@' + user.username}</Text>
         </View>
 
-        <View className="flex-row justify-around w-full mt-4 p-4 border border-l-0 border-r-0 border-gray-200">
+        <View className="flex-row justify-around w-full mt-4 p-4 border_y">
           <TouchableOpacity className="items-center w-1/3">
             <Text className="text-primary text-lg font-bold">562</Text>
             <Text className="text-gray-500">Livros</Text>
@@ -65,7 +65,7 @@ const Profile = ({ navigation }: ProfileProps) => {
             </View>
           </View>
 
-          <View className='px-12 border border-l-0 border-r-0 border-gray-200'>
+          <View className='px-12 border_y'>
             <Text className="text-lg color-primary font-bold mb-2 mt-5">
               Meta de Leitura
             </Text>

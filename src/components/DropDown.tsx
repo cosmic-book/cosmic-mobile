@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { cloneElement, createContext, useContext, useState } from 'react'
-import { Text, TouchableWithoutFeedback, View } from 'react-native'
+import { Keyboard, Text, TouchableWithoutFeedback, View } from 'react-native'
 
 import { cn } from '../lib/utils'
 
@@ -21,16 +21,24 @@ const DropDown = ({ children }: { children: React.ReactNode }) => {
   return (
     <TouchableWithoutFeedback onPress={handlePressOutside}>
       <DropDownContext.Provider value={{ open, setOpen }}>
-        <View className="relative">{children}</View>
+        <View className="relative">
+          {children}
+        </View>
       </DropDownContext.Provider>
     </TouchableWithoutFeedback>
   )
 }
 
 const DropDownTrigger = ({ children }: any) => {
-  const { setOpen } = useDropdown()
+  const { open, setOpen } = useDropdown()
   return cloneElement(children, {
-    onPress: () => setOpen((prev: any) => !prev),
+    onPress: () => {
+      setOpen(!open)
+
+      if (Keyboard.isVisible()) {
+        Keyboard.dismiss()
+      }
+    },
     onBlur: () => setOpen(false)
   })
 }
@@ -96,6 +104,7 @@ const DropDownItem = ({ children, className, onPress }: DropDownItemProps) => {
 const DropDownItemSeparator = () => {
   return <View className="h-[1px] bg-border flex-1" />
 }
+
 const useDropdown = () => {
   const context = useContext(DropDownContext)
   if (!context) {
@@ -103,4 +112,5 @@ const useDropdown = () => {
   }
   return context
 }
+
 export { DropDown, DropDownTrigger, DropDownContent, DropDownLabel, DropDownItemSeparator, DropDownItem, useDropdown }

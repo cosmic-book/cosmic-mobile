@@ -1,12 +1,13 @@
 import { User } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
-import { Avatar, AvatarImage, BackButton, Button, DropDown, DropDownContent, DropDownItem, DropDownTrigger, Heading, ImagePickerModal, Input } from '@/components';
+import { Avatar, AvatarImage, BackButton, Button, DropDown, DropDownContent, DropDownItem, DropDownTrigger, Heading, ImagePickerModal } from '@/components';
+import { DateInput, GenderSelect, Input } from '@/components/fields';
 import { useAuth } from '@/contexts/AuthContext';
 import UserService from '@/services/UserService';
-import { dateApplyMask } from '@/utils/masks';
 import { validateFields } from '@/utils/ValidateFields';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Camera } from 'lucide-react-native';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
@@ -17,22 +18,13 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [birthday, setBirthday] = useState('');
+  const [birthday, setBirthday] = useState<Date | null>(null);
   const [gender, setGender] = useState('');
   const [image, setImage] = useState<string | null>(null);
 
-  const [nameError, setNameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [birthdayError, setBirthdayError] = useState(false);
-  const [genderError, setGenderError] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const applyMask = (input: string) => {
-    const value = input.replace(/\D/g, '')
-
-    const date = dateApplyMask(value)
-    return setBirthday(date)
-  }
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -40,8 +32,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         setName(user.name);
         setEmail(user.email);
 
-        const formattedBirthday = new Date(user.birthday).toLocaleDateString('pt-BR');
-        setBirthday(formattedBirthday);
+        setBirthday(new Date(user.birthday));
 
         const genderMapping: { [key: string]: string } = {
           'F': 'Feminino',
@@ -63,26 +54,21 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
 
   const validate = () => {
     return validateFields([
-      { value: name, setter: setNameError },
-      { value: email, setter: setEmailError },
-      { value: birthday, setter: setBirthdayError },
-      { value: gender, setter: setGenderError },
-    ]);
-  };
+      {
+        value: (name && email && birthday && gender),
+        setter: setError
+      },
+    ])
+  }
 
   const handleSave = async () => {
     if (validate() && user && user.id !== undefined) {
-      const formatBirthday = (date: string) => {
-        const [day, month, year] = date.split('/');
-        return `${year}-${month}-${day}`;
-      };
-
       const updatedUser: User = {
         ...user,
         name,
         email,
         image: image,
-        birthday: formatBirthday(birthday),
+        birthday: moment(birthday).format('YYYY-MM-DD'),
         gender: gender.charAt(0),
       };
 
@@ -122,7 +108,6 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         <View className="my-6 gap-3">
           <Input
             placeholder="Nome Completo"
-            variant={nameError ? 'error' : 'default'}
             value={name}
             onChangeText={setName}
           />
@@ -130,39 +115,30 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
-            variant={emailError ? 'error' : 'default'}
             value={email}
             onChangeText={setEmail}
           />
-          <Input
+          <DateInput
             placeholder="Data de Nascimento"
-            keyboardType="number-pad"
-            variant={birthdayError ? 'error' : 'default'}
-            value={birthday}
-            maxLength={10}
-            onChangeText={applyMask}
+            date={birthday}
+            onChangeDate={setBirthday}
           />
-          <DropDown>
-            <DropDownTrigger>
-              <Input
-                placeholder="Gênero"
-                value={gender}
-                variant={genderError ? 'error' : 'default'}
-                showSoftInputOnFocus={false}
-              />
-            </DropDownTrigger>
-            <DropDownContent>
-              {['Masculino', 'Feminino', 'Outro'].map((item, index) => (
-                <DropDownItem key={index}>
-                  <TouchableOpacity className="flex flex-row gap-2 items-center" onPress={() => setGender(item)}>
-                    <Text className="text-black text-xl">{item}</Text>
-                  </TouchableOpacity>
-                </DropDownItem>
-              ))}
-            </DropDownContent>
-          </DropDown>
+          <GenderSelect
+            value={gender}
+            onChangeOption={setGender}
+          />
         </View>
-        <Button label="Salvar Alterações" onPress={handleSave} />
+
+        <View className='items-center gap-3'>
+          {error && (
+            <Text className='text-sm text-error'>
+              Preencha os campos antes de salvar
+            </Text>
+          )}
+
+          <Button className='w-full' label="Salvar Alterações" onPress={handleSave} />
+        </View>
+
       </ScrollView>
 
       <ImagePickerModal
