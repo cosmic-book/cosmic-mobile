@@ -1,7 +1,6 @@
 import { MainStackParamList } from '@/@types/navigation';
-import { BottomDrawer } from '@/components';
+import { BackButton, ReadingEditModal } from '@/components';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -30,12 +29,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
 
   return (
     <ScrollView className="flex-1 color-gray-200">
-      <TouchableOpacity
-        className="absolute right-5 z-10 mt-16"
-        onPress={() => navigation.goBack()}
-      >
-        <X size={30} color="white" />
-      </TouchableOpacity>
+      <BackButton color='white' onPress={() => navigation.goBack()} />
 
       <View style={styles.backgroundContainer}>
         <Image
@@ -93,7 +87,12 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           </Text>
         </View>
       </View>
-      <BottomDrawer isOpen={isBottomSheetOpen} handleClose={handleCloseBottomSheet} book={book} />
+
+      <ReadingEditModal
+        isOpen={isBottomSheetOpen}
+        handleClose={handleCloseBottomSheet}
+        book={book}
+      />
     </ScrollView>
   );
 };

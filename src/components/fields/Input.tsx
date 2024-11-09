@@ -4,11 +4,11 @@ import React, { forwardRef } from 'react'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { cn } from '../../lib/utils'
 
-const viewVariants = cva('flex-row items-center rounded-md', {
+const viewVariants = cva('flex-row items-center rounded-md border', {
   variants: {
     variant: {
-      default: 'border border-gray-300',
-      error: 'border border-error'
+      default: 'border-gray-300',
+      error: 'border-error'
     }
   },
   defaultVariants: {
@@ -38,14 +38,15 @@ export interface InputProps
   endIcon?: React.FC<LucideProps>
   endIconPress?: () => void
   clearable?: boolean
+  editable?: boolean
 }
 
-function Icon({ icon: Icon }: { icon: React.FC<LucideProps> }) {
-  return <Icon color="#5d5d5d" size={20} />
+function Icon({ icon: Icon, disabled = false }: { icon: React.FC<LucideProps>, disabled?: boolean }) {
+  return <Icon color={!disabled ? '#5d5d5d' : '#d1d5db'} size={20} />
 }
 
 const Input = forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
-  ({ className, label, labelClasses, variant, inputClasses, startIcon, endIcon, endIconPress, clearable, ...props }, ref) => (
+  ({ className, label, labelClasses, variant, inputClasses, startIcon, endIcon, endIconPress, clearable, editable = true, ...props }, ref) => (
     <View className={cn(className)}>
       {
         label &&
@@ -63,6 +64,7 @@ const Input = forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
 
         <TextInput
           ref={ref}
+          editable={editable}
           className={cn('flex-1 selection:text-blue-400 caret-blue-400', inputVariants({ variant, className }), inputClasses)}
           {...props}
         />
@@ -74,8 +76,8 @@ const Input = forwardRef<React.ElementRef<typeof TextInput>, InputProps>(
         )}
 
         {!clearable && endIcon && (
-          <TouchableOpacity onPress={endIconPress} className="pr-4">
-            <Icon icon={endIcon} />
+          <TouchableOpacity disabled={!editable} onPress={endIconPress} className="pr-4">
+            <Icon icon={endIcon} disabled={!editable} />
           </TouchableOpacity>
         )}
       </View>

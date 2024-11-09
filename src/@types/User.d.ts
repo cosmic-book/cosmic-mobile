@@ -1,10 +1,10 @@
 type User = {
-  id?: number
+  id: number
   name: string
   username: string
   email: string
   birthday: string
-  gender: string
+  gender: number
   image?: string | null
   profile?: number
   password?: string

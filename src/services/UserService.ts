@@ -11,7 +11,7 @@ export default class UserService {
     return service.get(`/users/${id}`)
   }
 
-  static async create(user: User): Promise<any> {
+  static async create(user: Partial<User>): Promise<any> {
     return service.post('/users', user)
   }
 

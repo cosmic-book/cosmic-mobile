@@ -10,9 +10,10 @@ type Props = {
   date: Date | null;
   onChangeDate: (value: Date | null) => void;
   variant?: 'default' | 'error' | null | undefined;
+  disabled?: boolean
 };
 
-export function DateInput({ placeholder, date, onChangeDate, variant }: Props) {
+export function DateInput({ placeholder, date, onChangeDate, variant, disabled }: Props) {
   const [show, setShow] = useState(false);
   const [inputValue, setInputValue] = useState(date ? moment(date).format('DD/MM/YYYY') : '');
 
@@ -20,6 +21,13 @@ export function DateInput({ placeholder, date, onChangeDate, variant }: Props) {
     setInputValue(date ? moment(date).format('DD/MM/yyyy') : '');
     onChangeDate(date ? date : null);
   }, [date]);
+
+  useEffect(() => {
+    if (!disabled) {
+      setInputValue('')
+      onChangeDate(null)
+    }
+  }, [disabled])
 
   const showDatePicker = () => {
     setShow(true);
@@ -73,6 +81,7 @@ export function DateInput({ placeholder, date, onChangeDate, variant }: Props) {
         onChangeText={handleInputChange}
         endIcon={Calendar}
         endIconPress={showDatePicker}
+        editable={!disabled}
       />
 
       {show && (
@@ -83,6 +92,7 @@ export function DateInput({ placeholder, date, onChangeDate, variant }: Props) {
           display="default"
           onChange={handleChangeDate}
           style={{ backgroundColor: 'white' }}
+          maximumDate={new Date()}
         />
       )}
     </View>

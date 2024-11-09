@@ -31,7 +31,7 @@ export function Footer({ navigation }: any) {
               strokeWidth={activePage === page ? 2.3 : 1.7}
               size={30}
             />
-            <Text className={`text-sm ${activePage === page ? 'text-blue-500 font-medium' : 'text-gray-500'}`}>{label}</Text>
+            <Text className={`text-sm ${activePage === page ? 'text-blue-600 font-medium' : 'text-gray-500'}`}>{label}</Text>
           </TouchableOpacity>
         ))}
       </View>

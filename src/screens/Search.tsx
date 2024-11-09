@@ -61,7 +61,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
       </View>
 
       <View>
-        <Text className="text-lg font-bold pb-2">
+        <Text className="text-lg font-bold pb-2" numberOfLines={1}>
           {search && books ? `Resultados de "${search}"` : 'Busca de Livros'}
         </Text>
         {search && !isLoading && totalItems ? (
@@ -75,6 +75,8 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
           initialNumToRender={10}
           keyExtractor={(item) => item.id.toString()}
           className="pt-2 border-t border-gray-200"
+          contentContainerStyle={{ paddingBottom: 100 }}
+          showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <BookListItem book={item} navigation={navigation} />
           )}

@@ -1,6 +1,6 @@
 import { User } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
-import { Avatar, AvatarImage, BackButton, Button, DropDown, DropDownContent, DropDownItem, DropDownTrigger, Heading, ImagePickerModal } from '@/components';
+import { Avatar, AvatarImage, BackButton, Button, Heading, ImagePickerModal } from '@/components';
 import { DateInput, GenderSelect, Input } from '@/components/fields';
 import { useAuth } from '@/contexts/AuthContext';
 import UserService from '@/services/UserService';
@@ -19,7 +19,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [birthday, setBirthday] = useState<Date | null>(null);
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState<number | null>(null);
   const [image, setImage] = useState<string | null>(null);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -31,16 +31,8 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
       if (user) {
         setName(user.name);
         setEmail(user.email);
-
         setBirthday(new Date(user.birthday));
-
-        const genderMapping: { [key: string]: string } = {
-          'F': 'Feminino',
-          'M': 'Masculino',
-          'Outro': 'Outro'
-        };
-
-        setGender(genderMapping[user.gender] || 'Outro');
+        setGender(gender !== null ? gender : null);
         setImage(user.image || '');
       }
     };
@@ -69,7 +61,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         email,
         image: image,
         birthday: moment(birthday).format('YYYY-MM-DD'),
-        gender: gender.charAt(0),
+        gender: gender ?? 0,
       };
 
       const result = await UserService.update(user.id, updatedUser);
@@ -84,7 +76,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
 
   return (
     <View className="bg-white flex-1">
-      <BackButton targetScreen="Profile" />
+      <BackButton color='black' targetScreen="Profile" />
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 16 }}
         keyboardShouldPersistTaps="handled"

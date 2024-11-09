@@ -16,7 +16,7 @@ const Register = ({ navigation }: RegisterProps) => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [birthday, setBirthday] = useState<Date | null>(null)
-  const [gender, setGender] = useState('')
+  const [gender, setGender] = useState<number | null>(null)
   const [password, setPassword] = useState('')
 
   const [error, setError] = useState(false)
@@ -32,12 +32,12 @@ const Register = ({ navigation }: RegisterProps) => {
 
   const handleRegister = async () => {
     if (validate()) {
-      const user: User = {
+      const user: Partial<User> = {
         name,
         username,
         email,
         birthday: moment(birthday).format('YYYY-MM-DD'),
-        gender: gender.charAt(0),
+        gender: gender ?? 0,
         password
       }
 
@@ -52,7 +52,7 @@ const Register = ({ navigation }: RegisterProps) => {
     setUsername('')
     setEmail('')
     setBirthday(null)
-    setGender('')
+    setGender(null)
     setPassword('')
   }
 
@@ -69,24 +69,24 @@ const Register = ({ navigation }: RegisterProps) => {
 
         <View className="my-6 gap-3">
           <Input
-            placeholder="Nome Completo"
+            placeholder="Nome Completo *"
             value={name}
             onChangeText={setName}
           />
           <Input
-            placeholder="Nome de Usuário"
+            placeholder="Nome de Usuário *"
             value={username}
             onChangeText={setUsername}
           />
           <Input
-            placeholder="E-mail"
+            placeholder="E-mail *"
             keyboardType="email-address"
             autoCapitalize="none"
             value={email}
             onChangeText={setEmail}
           />
           <DateInput
-            placeholder="Data de Nascimento"
+            placeholder="Data de Nascimento *"
             date={birthday}
             onChangeDate={setBirthday}
           />
@@ -95,7 +95,7 @@ const Register = ({ navigation }: RegisterProps) => {
             onChangeOption={setGender}
           />
           <PasswordInput
-            placeholder='Senha'
+            placeholder='Senha *'
             value={password}
             onChangeText={setPassword}
           />
