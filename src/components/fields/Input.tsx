@@ -4,7 +4,7 @@ import React, { forwardRef } from 'react'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { cn } from '../../lib/utils'
 
-const viewVariants = cva('flex-row items-center rounded-md border', {
+const viewVariants = cva('flex-row items-center rounded-md border py-1', {
   variants: {
     variant: {
       default: 'border-gray-300',
