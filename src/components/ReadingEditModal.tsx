@@ -19,7 +19,7 @@ type Props = {
 export function ReadingEditModal({ isOpen, handleClose, book }: Props) {
   const windowHeight = Dimensions.get('window').height;
 
-  const { user } = useAuth();
+  const { actualUser } = useAuth();
 
   const [type, setType] = useState<number>(0);
   const [status, setStatus] = useState<number | null>(null);
@@ -62,9 +62,9 @@ export function ReadingEditModal({ isOpen, handleClose, book }: Props) {
   }
 
   const handleSubmit = async () => {
-    if (user) {
+    if (actualUser) {
       const payload: Partial<Reading> = {
-        id_user: user.id,
+        id_user: actualUser.id,
         id_book: book.id,
         status: status ?? 0,
         type: type,

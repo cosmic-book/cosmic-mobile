@@ -2,16 +2,18 @@ import { AuthStackParamList } from '@/@types/navigation'
 import { Button, Heading } from '@/components'
 import { Input, PasswordInput } from '@/components/fields'
 import { useAuth } from '@/contexts/AuthContext'
+import { GlobalContext } from '@/contexts/GlobalContext'
 import { validateFields } from '@/utils/ValidateFields'
 import { useIsFocused } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
 type LoginProps = NativeStackScreenProps<AuthStackParamList, 'Login'>
 
 const Login = ({ navigation }: LoginProps) => {
   const { login } = useAuth();
+  const { loading, setLoading, getUserReadingsInfo } = useContext(GlobalContext)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -30,8 +32,16 @@ const Login = ({ navigation }: LoginProps) => {
 
   const handleLogin = async () => {
     if (validate()) {
-      await login(username, password)
+      setLoading(true)
+
+      const user = await login(username, password)
+
+      if (user) {
+        await getUserReadingsInfo(user)
+      }
     }
+
+    setLoading(false)
   }
 
   const clearFields = () => {
@@ -52,27 +62,27 @@ const Login = ({ navigation }: LoginProps) => {
       <View className="mt-4">
         <View className="gap-3">
           <Input
-            placeholder='Nome de usuário'
+            placeholder='Nome de usuário *'
             variant={usernameError ? 'error' : 'default'}
             value={username}
             onChangeText={setUsername}
             clearable
           />
           <PasswordInput
-            placeholder='Senha'
+            placeholder='Senha *'
             value={password}
             onChangeText={setPassword}
             variant={passwordError ? 'error' : 'default'}
           />
         </View>
         <View className="mb-4">
-          <TouchableOpacity className="flex items-end mt-2 mb-4" onPress={() => navigation.goBack()}>
+          <TouchableOpacity className="flex items-end mt-2 mb-4 mr-2" onPress={() => { }}>
             <Text className="font-medium text-gray-600">Esqueceu a senha?</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <Button label="Entrar" onPress={handleLogin} />
+      <Button label="Entrar" loading={loading} onPress={handleLogin} />
 
       <View className="mt-10">
         <View className="flex flex-row items-center justify-center">

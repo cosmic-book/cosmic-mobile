@@ -9,7 +9,7 @@ function Progress({
   colors = ['#0e6de7', '#512A83', '#C90B94'],
   value,
   ...props
-}: { className?: string; value: number; colors?: string[] } & React.ComponentPropsWithoutRef<
+}: { className?: string; value: number; colors?: [string, string, ...string[]] } & React.ComponentPropsWithoutRef<
   typeof View
 >) {
   const widthAnim = useRef(new Animated.Value(0)).current;
@@ -25,7 +25,7 @@ function Progress({
   return (
     <RnView
       className={cn(
-        'h-4 w-full overflow-hidden rounded-full bg-secondary',
+        'h-2 w-full overflow-hidden rounded-full bg-secondary',
         className
       )}
     >

@@ -3,11 +3,12 @@ import { FilterModel } from '@/@types/filters'
 import { MainStackParamList } from '@/@types/navigation'
 import { BookListItem, ImageView, Skeleton } from '@/components'
 import { Input } from '@/components/fields'
+import { GlobalContext } from '@/contexts/GlobalContext'
 import { BookService } from '@/services'
 import { NavigationProp, RouteProp } from '@react-navigation/native'
 import { Search } from 'lucide-react-native'
-import { useEffect, useState } from 'react'
-import { FlatList, ScrollView, Text, View } from 'react-native'
+import { useContext, useEffect, useState } from 'react'
+import { FlatList, Text, View } from 'react-native'
 import { useDebounce } from 'use-debounce'
 
 type SearchProps = {
@@ -16,11 +17,11 @@ type SearchProps = {
 }
 
 const SearchScreen = ({ navigation, route }: SearchProps) => {
+  const { loading, setLoading } = useContext(GlobalContext)
+
   const [search, setSearch] = useState('')
   const [books, setBooks] = useState<Book[]>([])
   const [totalItems, setTotalItems] = useState(0)
-
-  const [isLoading, setIsLoading] = useState(false)
 
   const [debounceTerm] = useDebounce(search, 3000)
 
@@ -36,7 +37,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
       setTotalItems(result.totalItems)
     }
 
-    setIsLoading(false)
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -47,9 +48,9 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
 
   useEffect(() => {
     if (search) {
-      setIsLoading(true)
+      setLoading(true)
     } else {
-      setIsLoading(false)
+      setLoading(false)
       setBooks([])
     }
   }, [search])
@@ -64,12 +65,12 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
         <Text className="text-lg font-bold pb-2" numberOfLines={1}>
           {search && books ? `Resultados de "${search}"` : 'Busca de Livros'}
         </Text>
-        {search && !isLoading && totalItems ? (
+        {search && !loading && totalItems ? (
           <Text className="text-sm pb-2 color-slate-500">{`Livros encontrados: ${totalItems}`}</Text>
         ) : null}
       </View>
 
-      {!isLoading ? (
+      {!loading ? (
         <FlatList
           data={books}
           initialNumToRender={10}
@@ -101,7 +102,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
           }
         />
       ) : (
-        <ScrollView className="pt-2 border-t border-gray-200">
+        <View className="flex-1 pt-2 border-t border-gray-200">
           {[...Array(5)].map((_, index) => (
             <View key={index} className="flex-row gap-3 mb-5">
               <Skeleton className="w-20 h-28 mb-1" />
@@ -113,7 +114,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
               </View>
             </View>
           ))}
-        </ScrollView>
+        </View>
       )}
     </View>
   )

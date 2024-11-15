@@ -2,41 +2,48 @@ import { User } from '@/@types';
 import { AuthService } from '@/services';
 import Service from '@/services/service';
 import React, { createContext, ReactNode, useContext, useState } from 'react';
+import { setItemAsync, deleteItemAsync } from 'expo-secure-store';
 
 interface AuthContextProps {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  actualUser: User | null;
+  setActualUser: (user: User | null) => void;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<boolean>;
+  login: (username: string, password: string) => Promise<User | null>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [actualUser, setActualUser] = useState<User | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
+  const login = async (username: string, password: string): Promise<User | null> => {
     const data = await AuthService.login(username, password);
 
-    if (!data) return false;
+    if (!data) return null;
 
-    setUser(data.user);
+    await setItemAsync('cosmic_user', JSON.stringify(data.user))
+    await setItemAsync('cosmic_auth', JSON.stringify(data))
+
+    setActualUser(data.user);
     setIsAuthenticated(!!data.user);
     Service.setAuthToken(data.token);
 
-    return isAuthenticated;
+    return data.user;
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    await deleteItemAsync('cosmic_user')
+    await deleteItemAsync('cosmic_auth')
+
+    setActualUser(null);
     setIsAuthenticated(false);
     Service.setAuthToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ actualUser, setActualUser, isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

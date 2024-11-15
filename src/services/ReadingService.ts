@@ -1,9 +1,13 @@
-import { Reading } from '@/@types'
+import { Reading, ReadingsInfo } from '@/@types'
 import service from './service'
 
 export default class ReadingService {
   static async getAll(): Promise<Reading[]> {
     return service.get('/readings')
+  }
+
+  static async getByUser(user_id: number): Promise<ReadingsInfo> {
+    return service.get(`/readings/user/${user_id}`)
   }
 
   static async getById(id: number): Promise<Reading | undefined> {

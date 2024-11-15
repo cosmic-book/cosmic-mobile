@@ -1,5 +1,6 @@
 import { CustomToast } from '@/components'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { GlobalProvider } from '@/contexts/GlobalContext'
 import Navigation from '@/navigation/Navigation'
 import '@/styles/global.css'
 import '@/styles/style.css'
@@ -8,10 +9,12 @@ import React from 'react'
 
 export default function App() {
   return (
-    <AuthProvider>
-      <Navigation />
-      <StatusBar style="auto" />
-      <CustomToast />
-    </AuthProvider>
+    <GlobalProvider>
+      <AuthProvider>
+        <Navigation />
+        <StatusBar style="auto" />
+        <CustomToast />
+      </AuthProvider>
+    </GlobalProvider>
   )
 }

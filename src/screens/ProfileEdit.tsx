@@ -14,7 +14,7 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 type ProfileEditProps = NativeStackScreenProps<MainStackParamList, 'ProfileEdit'>;
 
 function ProfileEditScreen({ navigation }: ProfileEditProps) {
-  const { user, setUser } = useAuth();
+  const { actualUser, setActualUser } = useAuth();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,12 +28,14 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (user) {
-        setName(user.name);
-        setEmail(user.email);
-        setBirthday(new Date(user.birthday));
+      console.log(actualUser);
+
+      if (actualUser) {
+        setName(actualUser.name);
+        setEmail(actualUser.email);
+        setBirthday(new Date(actualUser.birthday));
         setGender(gender !== null ? gender : null);
-        setImage(user.image || '');
+        setImage(actualUser.image || '');
       }
     };
 
@@ -54,9 +56,9 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
   }
 
   const handleSave = async () => {
-    if (validate() && user && user.id !== undefined) {
+    if (validate() && actualUser && actualUser.id !== undefined) {
       const updatedUser: User = {
-        ...user,
+        ...actualUser,
         name,
         email,
         image: image,
@@ -64,9 +66,9 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         gender: gender ?? 0,
       };
 
-      const result = await UserService.update(user.id, updatedUser);
+      const result = await UserService.update(actualUser.id, updatedUser);
 
-      setUser(updatedUser);
+      setActualUser(updatedUser);
 
       if (result) {
         navigation.navigate('Profile');

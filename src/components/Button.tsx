@@ -1,15 +1,15 @@
 import { type VariantProps, cva } from 'class-variance-authority'
-import { Text, TouchableOpacity } from 'react-native'
+import { ActivityIndicator, Text, TouchableOpacity } from 'react-native'
 
 import { cn } from '../lib/utils'
 
-const buttonVariants = cva('flex flex-row items-center justify-center rounded-md', {
+const buttonVariants = cva('flex flex-row justify-center items-center rounded-md', {
   variants: {
     variant: {
       default: 'bg-primary',
       secondary: 'bg-secondary',
       destructive: 'bg-destructive',
-      ghost: 'bg-slate-700',
+      disabled: 'bg-gray-300',
       link: 'text-primary underline-offset-4',
       inline: 'bg-transparent'
     },
@@ -31,7 +31,7 @@ const buttonTextVariants = cva('text-center font-medium', {
       default: 'text-white',
       secondary: 'text-secondary-foreground',
       destructive: 'text-destructive-foreground',
-      ghost: 'text-primary-foreground',
+      disabled: 'text-primary-foreground',
       link: 'text-gray-600 underline',
       inline: 'text-gray-500'
     },
@@ -52,12 +52,27 @@ interface ButtonProps
   VariantProps<typeof buttonVariants> {
   label: string
   labelClasses?: string
+  loading?: boolean
 }
 
-function Button({ label, labelClasses, className, variant, size, ...props }: ButtonProps) {
+function Button({ label, labelClasses, loading, className, variant, size, ...props }: ButtonProps) {
+
+
   return (
-    <TouchableOpacity className={cn(buttonVariants({ variant, size, className }))} {...props}>
-      <Text className={cn(buttonTextVariants({ variant, size, className: labelClasses }))}>{label}</Text>
+    <TouchableOpacity
+      className={cn(buttonVariants({ variant: loading ? 'disabled' : variant, size, className }))}
+      disabled={loading}
+      {...props}
+    >
+      {loading ?
+        <ActivityIndicator color="#6b7280" />
+        :
+        <Text
+          className={cn(buttonTextVariants({ variant, size, className: labelClasses }))}
+        >
+          {label}
+        </Text>
+      }
     </TouchableOpacity>
   )
 }
