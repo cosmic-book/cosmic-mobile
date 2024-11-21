@@ -7,7 +7,7 @@ interface GlobalContextData {
   loading: boolean;
   setLoading: (load: boolean) => void;
   userReadingsInfo: ReadingsInfo;
-  getUserReadingsInfo: (user: User) => Promise<void>;
+  getUserReadingsInfo: (userId: number | undefined) => Promise<void>;
 };
 
 type GlobalProviderProps = {
@@ -20,12 +20,12 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [userReadingsInfo, setUserReadingsInfo] = useState<ReadingsInfo>({} as ReadingsInfo);
 
-  async function getUserReadingsInfo(user: User | undefined): Promise<void> {
+  async function getUserReadingsInfo(userId: number | undefined): Promise<void> {
     try {
-      if (user) {
+      if (userId) {
         setLoading(true)
 
-        const result = await ReadingService.getByUser(user.id);
+        const result = await ReadingService.getByUser(userId);
 
         setUserReadingsInfo(result);
       }

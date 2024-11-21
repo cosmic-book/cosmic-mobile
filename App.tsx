@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { CustomToast } from '@/components'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { GlobalProvider } from '@/contexts/GlobalContext'

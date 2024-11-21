@@ -16,54 +16,43 @@ type ProfileEditProps = NativeStackScreenProps<MainStackParamList, 'ProfileEdit'
 function ProfileEditScreen({ navigation }: ProfileEditProps) {
   const { actualUser, setActualUser } = useAuth();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [birthday, setBirthday] = useState<Date | null>(null);
-  const [gender, setGender] = useState<number | null>(null);
-  const [image, setImage] = useState<string | null>(null);
+  const [user, setUser] = useState<User>({} as User);
 
   const [modalVisible, setModalVisible] = useState(false);
-
   const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log(actualUser);
-
       if (actualUser) {
-        setName(actualUser.name);
-        setEmail(actualUser.email);
-        setBirthday(new Date(actualUser.birthday));
-        setGender(gender !== null ? gender : null);
-        setImage(actualUser.image || '');
+        setUser(actualUser);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [actualUser]);
 
   const handleImagePicked = (uri: string | null) => {
-    setImage(uri);
+    setUser({ ...user, image: uri });
   };
 
   const validate = () => {
     return validateFields([
       {
-        value: (name && email && birthday && gender),
-        setter: setError
+        value: (user.name && user.email && user.birthday && user.gender),
+        setter: setError,
       },
-    ])
-  }
+    ]);
+  };
 
   const handleSave = async () => {
     if (validate() && actualUser && actualUser.id !== undefined) {
       const updatedUser: User = {
         ...actualUser,
-        name,
-        email,
-        image: image,
-        birthday: moment(birthday).format('YYYY-MM-DD'),
-        gender: gender ?? 0,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        birthday: moment(user.birthday).format('YYYY-MM-DD'),
+        gender: user.gender ?? 0,
       };
 
       const result = await UserService.update(actualUser.id, updatedUser);
@@ -78,7 +67,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
 
   return (
     <View className="bg-white flex-1">
-      <BackButton color='black' targetScreen="Profile" />
+      <BackButton color="black" targetScreen="Profile" />
       <ScrollView
         contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', paddingHorizontal: 16 }}
         keyboardShouldPersistTaps="handled"
@@ -91,7 +80,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         <View className="my-6 items-center">
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Avatar className="w-28 h-28">
-              <AvatarImage source={image ? { uri: image } : require('../assets/user-icon.png')} />
+              <AvatarImage source={user.image ? { uri: user.image } : require('@/assets/user-icon.png')} />
             </Avatar>
             <View className="absolute bottom-0 right-0 w-8 h-8 bg-blue-500 rounded-full items-center justify-center">
               <Camera color="white" size={15} />
@@ -102,37 +91,39 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         <View className="my-6 gap-3">
           <Input
             placeholder="Nome Completo"
-            value={name}
-            onChangeText={setName}
+            value={user.name}
+            onChangeText={(text) => setUser({ ...user, name: text })}
           />
+
           <Input
             placeholder="E-mail"
             keyboardType="email-address"
             autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
+            value={user.email}
+            onChangeText={(text) => setUser({ ...user, email: text })}
           />
+
           <DateInput
             placeholder="Data de Nascimento"
-            date={birthday}
-            onChangeDate={setBirthday}
+            date={user.birthday}
+            onChangeDate={(date) => setUser({ ...user, birthday: date ?? '' })}
           />
+
           <GenderSelect
-            value={gender}
-            onChangeOption={setGender}
+            value={user.gender}
+            onChangeOption={(gender) => setUser({ ...user, gender: gender ?? 0 })}
           />
         </View>
 
-        <View className='items-center gap-3'>
+        <View className="items-center gap-3">
           {error && (
-            <Text className='text-sm text-error'>
+            <Text className="text-sm text-error">
               Preencha os campos antes de salvar
             </Text>
           )}
 
-          <Button className='w-full' label="Salvar Alterações" onPress={handleSave} />
+          <Button className="w-full" label="Salvar Alterações" onPress={handleSave} />
         </View>
-
       </ScrollView>
 
       <ImagePickerModal

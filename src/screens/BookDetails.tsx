@@ -1,99 +1,153 @@
+import { Reading } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
-import { BackButton, ReadingEditModal } from '@/components';
+import { BackButton, ReadingEditModalize } from '@/components';
+import { GlobalContext } from '@/contexts/GlobalContext';
+import { ReadingService } from '@/services';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Modalize } from 'react-native-modalize';
 
 type BookDetailsProps = NativeStackScreenProps<MainStackParamList, 'BookDetails'>;
 
+const statusTypes = [
+  {
+    label: 'Quero Ler',
+    color: 'text-blue-500',
+  },
+  {
+    label: 'Lendo',
+    color: 'text-yellow-500',
+  },
+  {
+    label: 'Concluído',
+    color: 'text-green-500',
+  },
+  {
+    label: 'Relendo',
+    color: 'text-orange-500',
+  },
+  {
+    label: 'Abandonado',
+    color: 'text-red-500',
+  },
+]
+
 const BookDetails = ({ route, navigation }: BookDetailsProps) => {
   const { book } = route.params;
+  const { userReadingsInfo, getUserReadingsInfo } = useContext(GlobalContext)
+
+  const readingModalizeRef = useRef<Modalize>(null)
+
+  const [actualReading, setActualReading] = useState<Reading>({} as Reading);
 
   const [imageError, setImageError] = useState(false);
 
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-
-  const handleOpenBottomSheet = () => {
-    setIsBottomSheetOpen(true);
-  };
-
-  const handleCloseBottomSheet = () => {
-    setIsBottomSheetOpen(false);
-  };
+  const [statusLabel, setStatusLabel] = useState('');
+  const [statusColor, setStatusColor] = useState('');
 
   useEffect(() => {
     if (book.cover) {
       setImageError(false)
     }
+
+    setActualReading({} as Reading)
+    setStatusLabel('Adicionar')
+    setStatusColor('text-blue-500')
+
+    userReadingsInfo.readings.filter((reading) => {
+      if (reading.id_book === book.id && reading.status !== null) {
+        setActualReading(reading)
+
+        setStatusLabel(statusTypes[reading.status].label)
+        setStatusColor(statusTypes[reading.status].color)
+      }
+    })
   }, [book])
 
+  const updateReading = async (reading: Reading) => {
+    await getUserReadingsInfo(reading.id_user)
+    setActualReading(reading)
+
+    if (reading.status) {
+      setStatusLabel(statusTypes[reading.status].label)
+      setStatusColor(statusTypes[reading.status].color)
+    }
+  }
+
   return (
-    <ScrollView className="flex-1 color-gray-200">
-      <BackButton color='white' onPress={() => navigation.goBack()} />
+    <GestureHandlerRootView>
+      <ScrollView className="flex-1 color-gray-200">
+        <BackButton color='white' onPress={() => navigation.goBack()} />
 
-      <View style={styles.backgroundContainer}>
-        <Image
-          source={book.cover && !imageError ? { uri: book.cover } : require('@/assets/no-cover.png')}
-          style={styles.backgroundImage}
-          blurRadius={15}
-          onError={() => setImageError(true)}
-        />
-      </View>
-
-      <View style={styles.contentContainer}>
-        <View className="items-center">
+        <View style={styles.backgroundContainer}>
           <Image
             source={book.cover && !imageError ? { uri: book.cover } : require('@/assets/no-cover.png')}
-            style={{ width: 160, height: 240, borderRadius: 10, top: -40 }}
+            style={styles.backgroundImage}
+            blurRadius={15}
             onError={() => setImageError(true)}
           />
-          <Text className="text-2xl color-white text-center">{book.title}</Text>
-          <Text className="text-2x1 opacity-90 mt-2 color-white">Por {book.author}</Text>
         </View>
 
-        <View className="mt-20 rounded-lg bg-white p-2 flex-row justify-around">
-          <View className="flex-1 items-center border-r border-gray-200 p-2">
-            <Text className="text-sm text-gray-500 mb-1">ANO</Text>
-            <Text className="text-base font-bold">{book.year}</Text>
+        <View style={styles.contentContainer}>
+          <View className="items-center">
+            <Image
+              source={book.cover && !imageError ? { uri: book.cover } : require('@/assets/no-cover.png')}
+              style={{ width: 160, height: 240, borderRadius: 10, top: -40 }}
+              onError={() => setImageError(true)}
+            />
+            <Text className="text-2xl color-white text-center">{book.title}</Text>
+            <Text className="text-2x1 opacity-90 mt-2 color-white">Por {book.author}</Text>
           </View>
-          <View className="flex-1 items-center border-r border-gray-200 p-2">
-            <Text className="text-sm text-gray-500 mb-1">PÁGINAS</Text>
-            <Text className="text-base font-bold">{book.pages}</Text>
-          </View>
-          <View className="flex-1 items-center p-2">
-            <Text className="text-sm text-gray-500 mb-1">STATUS</Text>
-            <TouchableOpacity onPress={handleOpenBottomSheet}>
-              <Text className="text-base font-bold text-blue-500">Adicionar</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
 
-        <View className="flex-row items-center mt-8">
-          <Image
-            source={require('@/assets/user-icon.png')}
-            className="w-16 h-16 rounded-full mr-4"
-          />
-          <View className="flex-1">
-            <Text className="text-lg font-bold">{book.author}</Text>
-            <Text className="text-sm text-gray-500" numberOfLines={2}>
-              Descrição do Autor
+          <View className="mt-20 rounded-lg bg-white p-2 flex-row justify-around">
+            <View className="flex-1 items-center border-r border-gray-200 p-2">
+              <Text className="text-sm text-gray-500 mb-1">ANO</Text>
+              <Text className="text-base font-bold">{book.year}</Text>
+            </View>
+
+            <View className="flex-1 items-center border-r border-gray-200 p-2">
+              <Text className="text-sm text-gray-500 mb-1">PÁGINAS</Text>
+              <Text className="text-base font-bold">{book.pages}</Text>
+            </View>
+
+            <View className="flex-1 items-center p-2">
+              <Text className="text-sm text-gray-500 mb-1">STATUS</Text>
+              <TouchableOpacity onPress={() => readingModalizeRef.current?.open()}>
+                <Text className={`${statusColor} text-base font-bold`}>{statusLabel}</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View className="flex-row items-center mt-8">
+            <Image
+              source={require('@/assets/user-icon.png')}
+              className="w-16 h-16 rounded-full mr-4"
+            />
+            <View className="flex-1">
+              <Text className="text-lg font-bold">{book.author}</Text>
+              <Text className="text-sm text-gray-500" numberOfLines={2}>
+                Descrição do Autor
+              </Text>
+            </View>
+          </View>
+
+          <View className="my-4">
+            <Text className="text-base text-justify">
+              {book.description}
             </Text>
           </View>
         </View>
+      </ScrollView>
 
-        <View className="my-4">
-          <Text className="text-base text-justify">
-            {book.description}
-          </Text>
-        </View>
-      </View>
-
-      <ReadingEditModal
-        isOpen={isBottomSheetOpen}
-        handleClose={handleCloseBottomSheet}
+      <ReadingEditModalize
         book={book}
+        actualReading={actualReading}
+        modalRef={readingModalizeRef}
+        onSubmit={updateReading}
       />
-    </ScrollView>
+    </GestureHandlerRootView>
   );
 };
 

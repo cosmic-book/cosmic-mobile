@@ -14,12 +14,12 @@ export default class ReadingService {
     return service.get(`/readings/${id}`)
   }
 
-  static async create(user: Partial<Reading>): Promise<Reading> {
-    return service.post('/readings', user)
+  static async create(reading: Reading): Promise<Reading> {
+    return service.post('/readings', reading)
   }
 
-  static async update(id: number, user: Reading): Promise<Reading | undefined> {
-    return service.put(`/readings/${id}`, user)
+  static async update(id: number, reading: Reading): Promise<Reading | undefined> {
+    return service.put(`/readings/${id}`, reading)
   }
 
   static async delete(id: number): Promise<any> {

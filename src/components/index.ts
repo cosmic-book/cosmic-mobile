@@ -1,7 +1,7 @@
 export * from './Avatar'
 export { BackButton } from './BackButton'
 export { BookListItem } from './BookListItem'
-export { ReadingEditModal } from './ReadingEditModal'
+export { ReadingEditModalize } from './ReadingEditModalize'
 export { Button } from './Button'
 export { CustomToast } from './CustomToast'
 export * from './DropDown'

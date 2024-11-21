@@ -5,7 +5,7 @@ type Reading = {
   id: number
   id_user: number
   id_book: number
-  status: number
+  status: number | null
   type: number
   category: number
   readPages?: number

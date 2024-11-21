@@ -37,7 +37,7 @@ const Login = ({ navigation }: LoginProps) => {
       const user = await login(username, password)
 
       if (user) {
-        await getUserReadingsInfo(user)
+        await getUserReadingsInfo(user.id)
       }
     }
 

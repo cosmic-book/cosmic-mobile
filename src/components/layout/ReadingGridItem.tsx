@@ -8,19 +8,16 @@ import { Progress } from "../Progress";
 type Props = {
   reading: Partial<Reading>;
   navigation: NavigationProp<MainStackParamList>;
+  onPress?: () => void;
 };
 
-export function ReadingGridItem({ reading, navigation }: Props) {
+export function ReadingGridItem({ reading, navigation, onPress }: Props) {
   const [imageError, setImageError] = useState(false);
-
-  const handlePress = () => {
-    //navigation.navigate('BookDetails', { book })
-  };
 
   return (
     <TouchableOpacity
       className="flex-col gap-2 mb-5 w-full items-center"
-      onPress={handlePress}
+      onPress={onPress}
     >
       {reading.book && (
         <>

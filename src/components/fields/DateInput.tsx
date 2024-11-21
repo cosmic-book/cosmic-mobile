@@ -7,27 +7,21 @@ import { Input } from './Input';
 
 type Props = {
   placeholder?: string;
-  date: Date | null;
-  onChangeDate: (value: Date | null) => void;
+  date: string | null;
+  onChangeDate: (value: string | null) => void;
   variant?: 'default' | 'error' | null | undefined;
-  disabled?: boolean
+  disabled?: boolean;
 };
 
 export function DateInput({ placeholder, date, onChangeDate, variant, disabled }: Props) {
   const [show, setShow] = useState(false);
-  const [inputValue, setInputValue] = useState(date ? moment(date).format('DD/MM/YYYY') : '');
+  const [inputValue, setInputValue] = useState(
+    date ? moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY') : ''
+  );
 
   useEffect(() => {
-    setInputValue(date ? moment(date).format('DD/MM/yyyy') : '');
-    onChangeDate(date ? date : null);
+    setInputValue(date ? moment(date, 'YYYY-MM-DD').format('DD/MM/YYYY') : '');
   }, [date]);
-
-  useEffect(() => {
-    if (!disabled) {
-      setInputValue('')
-      onChangeDate(null)
-    }
-  }, [disabled])
 
   const showDatePicker = () => {
     setShow(true);
@@ -56,10 +50,8 @@ export function DateInput({ placeholder, date, onChangeDate, variant, disabled }
 
     if (text.length === 0) {
       onChangeDate(null);
-    }
-
-    if (parsedDate.isValid()) {
-      onChangeDate(parsedDate.toDate());
+    } else if (parsedDate.isValid()) {
+      onChangeDate(parsedDate.format('YYYY-MM-DD'));
     }
   };
 
@@ -67,7 +59,7 @@ export function DateInput({ placeholder, date, onChangeDate, variant, disabled }
     setShow(false);
 
     if (selectedDate) {
-      onChangeDate(selectedDate);
+      onChangeDate(moment(selectedDate).format('YYYY-MM-DD'));
       setInputValue(moment(selectedDate).format('DD/MM/YYYY'));
     }
   };
@@ -86,7 +78,7 @@ export function DateInput({ placeholder, date, onChangeDate, variant, disabled }
 
       {show && (
         <DateTimePicker
-          value={date ?? new Date()}
+          value={date ? moment(date, 'YYYY-MM-DD').toDate() : new Date()} // Converte string para Date
           mode="date"
           is24Hour={true}
           display="default"
