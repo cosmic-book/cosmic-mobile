@@ -1,8 +1,8 @@
 import { Reading } from "@/@types";
 import { MainStackParamList } from "@/@types/navigation";
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp } from "@react-navigation/native";
 import { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View } from "react-native";
 import { Progress } from "../Progress";
 
 type Props = {
@@ -13,6 +13,10 @@ type Props = {
 
 export function ReadingGridItem({ reading, navigation, onPress }: Props) {
   const [imageError, setImageError] = useState(false);
+
+  const totalPages = reading.book?.pages ?? 0;
+  const readPages = reading.read_pages ?? 0;
+  const progress = totalPages > 0 ? (readPages / totalPages) * 100 : 0;
 
   return (
     <TouchableOpacity
@@ -34,13 +38,7 @@ export function ReadingGridItem({ reading, navigation, onPress }: Props) {
             />
           )}
           <View className="gap-1 items-center px-2 w-full">
-            <Text
-              className="text-base text-center text-black font-medium"
-              numberOfLines={1}
-            >
-              {reading.book.title}
-            </Text>
-            <Progress value={75} />
+            <Progress value={progress} />
           </View>
         </>
       )}

@@ -8,9 +8,9 @@ type Reading = {
   status: number | null
   type: number
   category: number
-  readPages?: number
-  rating?: number
-  review?: string
+  read_pages?: number | null
+  rating?: number | null
+  review?: string | null
   like?: boolean
   start_date?: string | null
   finish_date?: string | null
