@@ -19,7 +19,7 @@ type Props = {
 };
 
 export function ReadingEditModalize({ book, actualReading, modalRef, onSubmit }: Props) {
-  const windowHeight = Dimensions.get('window').height * 0.68;
+  const windowHeight = Dimensions.get('window').height * 0.65;
 
   const { actualUser } = useAuth();
 
@@ -106,79 +106,79 @@ export function ReadingEditModalize({ book, actualReading, modalRef, onSubmit }:
     }
   };
 
+  const headerComponent = (
+    <View className="flex-row items-center w-full border_bottom p-5">
+      <View className="flex-col">
+        <Text className="text-gray-600 text-base font-medium">{book.title}</Text>
+        <Text className="text-gray-500 text-sm">{book.author}</Text>
+      </View>
+    </View>
+  );
+
+  const footerComponent = (
+    <View className="items-center mx-5 my-3">
+      <Button label={`${reading.id ? 'Editar' : 'Adicionar'} na Estante`} onPress={handleSubmit} />
+    </View>
+  );
+
   return (
     <Modalize
       ref={modalRef}
       onOpened={handleOpen}
       onClose={handleReset}
       modalHeight={windowHeight}
+      HeaderComponent={headerComponent}
+      FooterComponent={footerComponent}
       keyboardAvoidingBehavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       avoidKeyboardLikeIOS={true}
-      disableScrollIfPossible={true}
       scrollViewProps={{ scrollEnabled: false }}
       rootStyle={{ zIndex: 1 }}
     >
-      <View className="p-6">
-        <View className="flex-row justify-between items-center w-full border_bottom pb-3">
-          <View className="flex-col">
-            <Text className="text-gray-600 text-base font-medium">{book.title}</Text>
-            <Text className="text-gray-500 text-sm">{book.author}</Text>
-          </View>
-
-          <TouchableOpacity onPress={() => modalRef.current?.close()}>
-            <X size={24} color="gray" />
-          </TouchableOpacity>
+      <View className="p-5 gap-5">
+        <View className="flex items-center">
+          <ReadingTypeSelector
+            value={reading.type ?? 0}
+            onSelect={(type) => setReading({ ...reading, type })}
+          />
         </View>
 
-        <View className="gap-5 py-6">
-          <View className="flex items-center">
-            <ReadingTypeSelector
-              value={reading.type ?? 0}
-              onSelect={(type) => setReading({ ...reading, type })}
-            />
-          </View>
+        <ReadingStatusSelect
+          value={reading.status ?? null}
+          onChangeOption={(status) => setReading({ ...reading, status })}
+        />
 
-          <ReadingStatusSelect
-            value={reading.status ?? null}
-            onChangeOption={(status) => setReading({ ...reading, status })}
-          />
+        <DateInput
+          placeholder="Data de Início"
+          date={reading.start_date ?? null}
+          onChangeDate={(value) => setReading({ ...reading, start_date: value })}
+          disabled={!reading.status || isToRead}
+        />
 
-          <DateInput
-            placeholder="Data de Início"
-            date={reading.start_date ?? null}
-            onChangeDate={(value) => setReading({ ...reading, start_date: value })}
-            disabled={!reading.status || isToRead}
-          />
+        <DateInput
+          placeholder="Data de Conclusão"
+          date={reading.finish_date ?? null}
+          onChangeDate={(value) => setReading({ ...reading, finish_date: value })}
+          disabled={!isFinished}
+        />
 
-          <DateInput
-            placeholder="Data de Conclusão"
-            date={reading.finish_date ?? null}
-            onChangeDate={(value) => setReading({ ...reading, finish_date: value })}
-            disabled={!isFinished}
-          />
+        <ReadingCategorySelector
+          value={reading.category ?? 0}
+          onSelect={(category) => setReading({ ...reading, category })}
+        />
 
-          <ReadingCategorySelector
-            value={reading.category ?? 0}
-            onSelect={(category) => setReading({ ...reading, category })}
-          />
-
-          <TouchableOpacity
-            disabled={!isFinished}
-            className="flex-row items-center gap-2"
+        <TouchableOpacity
+          disabled={!isFinished}
+          className="flex-row items-center gap-2"
+        >
+          <Plus size={24} color={isFinished ? '#6b7280' : '#d1d5db'} />
+          <Text
+            className={`
+              ${isFinished ? 'text-gray-500' : 'text-gray-300'} 
+            text-lg`}
           >
-            <Plus size={24} color={isFinished ? '#6b7280' : '#d1d5db'} />
-            <Text
-              className={`${isFinished ? 'text-gray-500' : 'text-gray-300'
-                } text-lg`}
-            >
-              Escrever uma resenha
-            </Text>
-          </TouchableOpacity>
-
-          <View className="items-center mt-4">
-            <Button label={`${reading.id ? 'Editar' : 'Adicionar'} na Estante`} onPress={handleSubmit} />
-          </View>
-        </View>
+            Escrever uma resenha
+          </Text>
+        </TouchableOpacity>
       </View>
     </Modalize>
   );

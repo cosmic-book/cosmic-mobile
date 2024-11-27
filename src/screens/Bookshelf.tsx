@@ -1,12 +1,11 @@
 import { MainStackParamList } from '@/@types/navigation'
-import { ImageView, Skeleton } from '@/components'
+import { ImageView, ReadingMenuModalize, Skeleton } from '@/components'
 import { ReadingGridItem } from '@/components/layout'
 import { GlobalContext } from '@/contexts/GlobalContext'
 import { NavigationProp, RouteProp } from '@react-navigation/native'
 import React, { useContext, useRef, useState } from 'react'
 import { FlatList, Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { ReadingReviewModal } from '@/components/ReadingReviewModal'
 import { Modalize } from 'react-native-modalize'
 import { Book, Reading } from '@/@types'
 
@@ -19,12 +18,11 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
   const { loading, userReadingsInfo } = useContext(GlobalContext)
   const modalizeRef = useRef<Modalize>(null)
 
-  const [selectedBook, setSelectedBook] = useState(userReadingsInfo.readings[0]?.book || {} as Book)
   const [actualReading, setActualReading] = useState(userReadingsInfo.readings[0] || {} as Reading)
 
-  const openModalize = (book: Book, reading: Reading) => {
-    setSelectedBook(book)
+  const openModalize = (reading: Reading) => {
     setActualReading(reading)
+
     modalizeRef.current?.open()
   }
 
@@ -45,14 +43,14 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
               numColumns={3}
               keyExtractor={(item) => item.id.toString()}
               contentContainerStyle={{ paddingBottom: 100 }}
-              columnWrapperStyle={{ justifyContent: 'left', gap: 15 }}
+              columnWrapperStyle={{ justifyContent: 'flex-start', gap: 15 }}
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
                 <View className="w-[30%]">
                   <ReadingGridItem
                     reading={item}
                     navigation={navigation}
-                    onPress={() => openModalize(item.book, item)}
+                    onPress={() => openModalize(item)}
                   />
                 </View>
               )}
@@ -85,11 +83,17 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
           )}
         </View>
 
-        <ReadingReviewModal
+        {/* <ReadingReviewModal
           book={selectedBook}
           actualReading={actualReading}
           modalRef={modalizeRef}
           onSubmit={handleModalSubmit}
+        /> */}
+
+        <ReadingMenuModalize
+          actualReading={actualReading}
+          modalRef={modalizeRef}
+          navigation={navigation}
         />
       </View>
     </GestureHandlerRootView>

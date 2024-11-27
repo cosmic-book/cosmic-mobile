@@ -15,7 +15,6 @@ const MainStack: React.FC = () => (
     <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
     <Tab.Screen name="ProfileEdit" component={ProfileEditScreen} options={{ headerShown: false }} />
   </Tab.Navigator>
-
 );
 
 export default MainStack;
