@@ -13,6 +13,10 @@
   border-right: 1px solid #e2e8f0;
 }
 
+.border_top {
+  border-top: 1px solid #e2e8f0;
+}
+
 .border_bottom {
   border-bottom: 1px solid #e2e8f0;
 }

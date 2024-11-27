@@ -3,6 +3,7 @@ export const colors = {
   secondary: '#e4e4e7',
 
   error: '#dc2626',
+  delete: '#dc2626',
 
   textDark: '#3F3D56',
   textWhite: '#f3f4f6',

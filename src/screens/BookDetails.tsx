@@ -2,7 +2,6 @@ import { Reading } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
 import { BackButton, ReadingEditModalize } from '@/components';
 import { GlobalContext } from '@/contexts/GlobalContext';
-import { ReadingService } from '@/services';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
