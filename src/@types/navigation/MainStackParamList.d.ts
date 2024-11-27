@@ -1,4 +1,5 @@
 type MainStackParamList = {
+  Menu: undefined
   Search: undefined
   Bookshelf: undefined
   BookDetails: {

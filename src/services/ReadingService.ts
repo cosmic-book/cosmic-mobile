@@ -14,6 +14,10 @@ export default class ReadingService {
     return service.get(`/readings/${id}`)
   }
 
+  static async getFavoritesByUser(user_id: number): Promise<Reading | undefined> {
+    return service.get(`/readings/favorite/${user_id}`)
+  }
+
   static async create(reading: Reading): Promise<Reading> {
     return service.post('/readings', reading)
   }

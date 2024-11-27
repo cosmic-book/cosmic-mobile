@@ -4,8 +4,21 @@ import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { NavigationProp, RouteProp } from '@react-navigation/native';
 import { Pencil } from 'lucide-react-native';
-import React, { useContext } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, Text, TouchableOpacity, View, Alert } from 'react-native';
+import ReadingService from '@/services/ReadingService';
+import { FavoritesCarousel } from '@/components/layout';
+
+type FavoriteBook = {
+  id: number;
+  favorite: boolean;
+  book: {
+    id: number;
+    cover: string;
+    title: string;
+    author: string;
+  };
+};
 
 type ProfileProps = {
   navigation: NavigationProp<MainStackParamList, 'Profile'>
@@ -15,13 +28,29 @@ type ProfileProps = {
 const Profile = ({ navigation }: ProfileProps) => {
   const { actualUser } = useAuth();
   const { userReadingsInfo } = useContext(GlobalContext);
+  const [favoriteBooks, setFavoriteBooks] = useState<FavoriteBook[]>([]);
+
+  useEffect(() => {
+    if (actualUser?.id) {
+      fetchFavorites(actualUser.id);
+    }
+  }, [actualUser]);
+
+  const fetchFavorites = async (userId: number) => {
+    try {
+      const response = await ReadingService.getFavoritesByUser(userId);
+      setFavoriteBooks(response?.favorites || []);
+    } catch (error) {
+      Alert.alert('Erro', 'Não foi possível carregar os livros favoritos.');
+    }
+  };
 
   const handlePress = () => {
     navigation.navigate('ProfileEdit')
-  };
+  }
 
   return (
-    actualUser ?
+    actualUser ? (
       <View className="flex-1 bg-white">
         <View className="items-center mt-24">
           <TouchableOpacity onPress={handlePress}>
@@ -54,19 +83,9 @@ const Profile = ({ navigation }: ProfileProps) => {
         </View>
 
         <ScrollView className="flex-1 w-full">
-          <View className='px-12'>
-            <Text className="text-lg color-primary font-bold mb-4 mt-5">
-              Livros Favoritos
-            </Text>
-            <View className="flex-row justify-around gap-4 mb-6">
-              <View className="w-20 h-28 bg-slate-300 rounded" />
-              <View className="w-20 h-28 bg-slate-300 rounded" />
-              <View className="w-20 h-28 bg-slate-300 rounded" />
-              <View className="w-20 h-28 bg-slate-300 rounded" />
-            </View>
-          </View>
+          <FavoritesCarousel favoriteBooks={favoriteBooks} />
 
-          <View className='px-12 border_y'>
+          <View className="px-12 border_y">
             <Text className="text-lg color-primary font-bold mb-2 mt-5">
               Meta de Leitura
             </Text>
@@ -111,7 +130,7 @@ const Profile = ({ navigation }: ProfileProps) => {
           </View>
         </ScrollView>
       </View>
-      : null
+    ) : null
   );
 };
 
