@@ -1,6 +1,6 @@
 {
   "name": "cosmic-mobile",
-  "version": "1.0.29",
+  "version": "1.0.33",
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "expo start",

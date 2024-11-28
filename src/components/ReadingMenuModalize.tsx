@@ -111,7 +111,6 @@ export function ReadingMenuModalize({ actualReading, modalRef, navigation }: Pro
         book={actualReading.book as Book}
         actualReading={actualReading}
         modalRef={editModalRef}
-        onSubmit={() => editModalRef.current?.close()}
       />
 
       <ReadingHistoryModalize

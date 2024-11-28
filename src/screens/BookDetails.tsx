@@ -35,7 +35,7 @@ const statusTypes = [
 
 const BookDetails = ({ route, navigation }: BookDetailsProps) => {
   const { book } = route.params;
-  const { userReadingsInfo, getUserReadingsInfo } = useContext(GlobalContext)
+  const { userReadingsInfo } = useContext(GlobalContext)
 
   const readingModalizeRef = useRef<Modalize>(null)
 
@@ -64,16 +64,6 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
       }
     })
   }, [book])
-
-  const updateReading = async (reading: Reading) => {
-    await getUserReadingsInfo(reading.id_user)
-    setActualReading(reading)
-
-    if (reading.status) {
-      setStatusLabel(statusTypes[reading.status].label)
-      setStatusColor(statusTypes[reading.status].color)
-    }
-  }
 
   return (
     <GestureHandlerRootView>
@@ -144,7 +134,6 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
         book={book}
         actualReading={actualReading}
         modalRef={readingModalizeRef}
-        onSubmit={updateReading}
       />
     </GestureHandlerRootView>
   );

@@ -1,10 +1,11 @@
 import { Book, Reading } from '@/@types';
 import { useAuth } from '@/contexts/AuthContext';
+import { GlobalContext } from '@/contexts/GlobalContext';
 import { ReadingStatus } from '@/enums';
 import { ReadingService } from '@/services';
-import { Plus, X } from 'lucide-react-native';
+import { Plus } from 'lucide-react-native';
 import moment from 'moment';
-import { MutableRefObject, useEffect, useState } from 'react';
+import { MutableRefObject, useContext, useEffect, useState } from 'react';
 import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
@@ -15,13 +16,14 @@ type Props = {
   book: Book;
   actualReading: Reading;
   modalRef: MutableRefObject<Modalize | null>
-  onSubmit: (reading: Reading) => void;
 };
 
-export function ReadingEditModalize({ book, actualReading, modalRef, onSubmit }: Props) {
+export function ReadingEditModalize({ book, actualReading, modalRef }: Props) {
   const windowHeight = Dimensions.get('window').height * 0.65;
 
   const { actualUser } = useAuth();
+
+  const { getUserReadingsInfo } = useContext(GlobalContext)
 
   const [isToRead, setIsToRead] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -101,7 +103,9 @@ export function ReadingEditModalize({ book, actualReading, modalRef, onSubmit }:
       if (response) {
         Toast.show({ type: 'success', text1: `Leitura ${actualReading.id ? 'editada' : 'adicionada'}`, text2: 'Acesse a estante para visualizar seus livros' })
 
-        onSubmit(response);
+        await getUserReadingsInfo(actualUser.id)
+
+        modalRef.current?.close();
       }
     }
   };
