@@ -67,6 +67,7 @@ export function DateInput({ placeholder, date, onChangeDate, variant, disabled }
   return (
     <View>
       <Input
+        className='w-full'
         placeholder={placeholder}
         value={inputValue}
         variant={variant}

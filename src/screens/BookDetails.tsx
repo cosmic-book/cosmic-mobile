@@ -35,29 +35,30 @@ const statusTypes = [
 
 const BookDetails = ({ route, navigation }: BookDetailsProps) => {
   const { book } = route.params;
-  const { userReadingsInfo } = useContext(GlobalContext)
+  const { userReadingsInfo, loadReading } = useContext(GlobalContext)
 
   const readingModalizeRef = useRef<Modalize>(null)
-
-  const [actualReading, setActualReading] = useState<Reading>({} as Reading);
 
   const [imageError, setImageError] = useState(false);
 
   const [statusLabel, setStatusLabel] = useState('');
   const [statusColor, setStatusColor] = useState('');
 
+  const handleLoad = async (id: number) => {
+    await loadReading(id);
+  }
+
   useEffect(() => {
     if (book.cover) {
       setImageError(false)
     }
 
-    setActualReading({} as Reading)
     setStatusLabel('Adicionar')
     setStatusColor('text-blue-500')
 
     userReadingsInfo.readings.filter((reading) => {
       if (reading.id_book === book.id && reading.status !== null) {
-        setActualReading(reading)
+        handleLoad(reading.id)
 
         setStatusLabel(statusTypes[reading.status].label)
         setStatusColor(statusTypes[reading.status].color)
@@ -130,11 +131,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
         </View>
       </ScrollView>
 
-      <ReadingEditModalize
-        book={book}
-        actualReading={actualReading}
-        modalRef={readingModalizeRef}
-      />
+      <ReadingEditModalize book={book} modalRef={readingModalizeRef} />
     </GestureHandlerRootView>
   );
 };

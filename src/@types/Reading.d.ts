@@ -8,7 +8,7 @@ type Reading = {
   status: number | null
   type: number
   category: number
-  read_pages?: number | null
+  read_pages: number
   rating?: number | null
   review?: string | null
   like?: boolean

@@ -49,7 +49,7 @@ export default class Service {
       const { data } = await instance.delete(url)
 
       if (data) {
-        Toast.show({ type: 'error', text1: 'Algo de errado aconteceu', text2: data.message })
+        Toast.show({ type: 'success', text1: 'Item excluído', text2: data.message })
       }
 
       return data
