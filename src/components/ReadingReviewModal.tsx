@@ -105,7 +105,6 @@ export function ReadingReviewModal({ book, actualReading, modalRef, onSubmit }: 
             rootStyle={{ zIndex: 1 }}
         >
             <View className="p-6">
-                {/* Cabeçalho */}
                 <View className="flex-row justify-between items-center w-full border_bottom pb-3 mb-4">
                     <View className="flex-col">
                         <Text className="text-gray-600 text-base font-medium">{book.title}</Text>

@@ -1,13 +1,13 @@
+import { Reading } from '@/@types'
 import { MainStackParamList } from '@/@types/navigation'
 import { ImageView, ReadingMenuModalize, Skeleton } from '@/components'
 import { ReadingGridItem } from '@/components/layout'
 import { GlobalContext } from '@/contexts/GlobalContext'
 import { NavigationProp, RouteProp } from '@react-navigation/native'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useRef } from 'react'
 import { FlatList, Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
-import { Book, Reading } from '@/@types'
 
 type BookshelfProps = {
   navigation: NavigationProp<MainStackParamList, 'Bookshelf'>
@@ -15,20 +15,13 @@ type BookshelfProps = {
 }
 
 const Bookshelf = ({ navigation, route }: BookshelfProps) => {
-  const { loading, userReadingsInfo } = useContext(GlobalContext)
+  const { loading, userReadingsInfo, actualReading, loadReading } = useContext(GlobalContext)
   const modalizeRef = useRef<Modalize>(null)
 
-  const [actualReading, setActualReading] = useState(userReadingsInfo.readings[0] || {} as Reading)
-
-  const openModalize = (reading: Reading) => {
-    setActualReading(reading)
+  const openModalize = async (reading: Reading) => {
+    await loadReading(reading.id)
 
     modalizeRef.current?.open()
-  }
-
-  const handleModalSubmit = (updatedReading: Reading) => {
-    console.log('Leitura atualizada:', updatedReading)
-    modalizeRef.current?.close()
   }
 
   return (
@@ -62,11 +55,6 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
                     width={350}
                     height={300}
                   />
-                  {/* <Button
-                  label="Buscar livros"
-                  variant='link'
-                  onPress={() => navigation.navigate('Search')}
-                /> */}
                 </View>
               }
             />
@@ -83,15 +71,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
           )}
         </View>
 
-        {/* <ReadingReviewModal
-          book={selectedBook}
-          actualReading={actualReading}
-          modalRef={modalizeRef}
-          onSubmit={handleModalSubmit}
-        /> */}
-
         <ReadingMenuModalize
-          actualReading={actualReading}
           modalRef={modalizeRef}
           navigation={navigation}
         />

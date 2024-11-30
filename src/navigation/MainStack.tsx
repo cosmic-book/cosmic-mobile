@@ -1,6 +1,6 @@
 import { MainStackParamList } from '@/@types/navigation';
 import { Footer } from '@/components';
-import { BookDetailsScreen, BookshelfScreen, ProfileScreen, ProfileEditScreen, SearchScreen, MenuScreen } from '@/screens';
+import { BookDetailsScreen, BookshelfScreen, HistoriesScreen, MenuScreen, ProfileEditScreen, ProfileScreen, SearchScreen } from '@/screens';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react';
 
@@ -12,6 +12,7 @@ const MainStack: React.FC = () => (
     <Tab.Screen name="Menu" component={MenuScreen} options={{ headerShown: false }} />
     <Tab.Screen name="Bookshelf" component={BookshelfScreen} options={{ headerShown: false }} />
     <Tab.Screen name="BookDetails" component={BookDetailsScreen} options={{ headerShown: false }} />
+    <Tab.Screen name="History" component={HistoriesScreen} options={{ headerShown: false }} />
     <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
     <Tab.Screen name="ProfileEdit" component={ProfileEditScreen} options={{ headerShown: false }} />
   </Tab.Navigator>

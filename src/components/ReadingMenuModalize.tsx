@@ -1,28 +1,24 @@
-import { Book, Reading } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { ReadingService } from '@/services';
 import { NavigationProp } from '@react-navigation/native';
 import { Edit, History, Info, Trash } from 'lucide-react-native';
-import { MutableRefObject, useContext, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, useContext, useRef } from 'react';
 import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
-import { ReadingHistoryModalize } from './ReadingHistoryModalize';
 import { ReadingEditModalize } from './ReadingEditModalize';
 
 type Props = {
-  actualReading: Reading;
   modalRef: MutableRefObject<Modalize | null>;
   navigation: NavigationProp<MainStackParamList>;
 };
 
-export function ReadingMenuModalize({ actualReading, modalRef, navigation }: Props) {
+export function ReadingMenuModalize({ modalRef, navigation }: Props) {
   const { actualUser } = useAuth()
-  const { getUserReadingsInfo } = useContext(GlobalContext)
+  const { getUserReadingsInfo, actualReading } = useContext(GlobalContext)
 
-  const historyModalRef = useRef<Modalize>(null)
   const editModalRef = useRef<Modalize>(null)
 
   const windowHeight = Dimensions.get('window').height * 0.3;
@@ -37,7 +33,8 @@ export function ReadingMenuModalize({ actualReading, modalRef, navigation }: Pro
 
   const handleOpenHistory = () => {
     modalRef.current?.close();
-    historyModalRef.current?.open();
+
+    navigation.navigate('History')
   }
 
   const handleOpenEdit = () => {
@@ -107,16 +104,9 @@ export function ReadingMenuModalize({ actualReading, modalRef, navigation }: Pro
         </View>
       </Modalize>
 
-      <ReadingEditModalize
-        book={actualReading.book as Book}
-        actualReading={actualReading}
-        modalRef={editModalRef}
-      />
-
-      <ReadingHistoryModalize
-        actualReading={actualReading}
-        modalRef={historyModalRef}
-      />
+      {actualReading.book && (
+        <ReadingEditModalize book={actualReading.book} modalRef={editModalRef} />
+      )}
     </>
   );
 }

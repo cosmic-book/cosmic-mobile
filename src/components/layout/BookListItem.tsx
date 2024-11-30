@@ -17,7 +17,7 @@ export function BookListItem({ book, navigation }: Props) {
   };
 
   return (
-    <TouchableOpacity className="flex-row gap-3 mb-5" onPress={handlePress}>
+    <TouchableOpacity className="flex-row gap-3" onPress={handlePress}>
       {book.cover && !imageError ? (
         <Image
           source={{ uri: book.cover }}

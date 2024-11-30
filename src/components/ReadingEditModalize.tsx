@@ -14,16 +14,15 @@ import { DateInput, ReadingCategorySelector, ReadingStatusSelect, ReadingTypeSel
 import { ReviewModal } from './ReviewModal';
 
 type Props = {
-  book: Book;
-  actualReading: Reading;
+  book: Partial<Book>;
   modalRef: MutableRefObject<Modalize | null>
 };
 
-export function ReadingEditModalize({ book, actualReading, modalRef }: Props) {
+export function ReadingEditModalize({ book, modalRef }: Props) {
   const windowHeight = Dimensions.get('window').height * 0.7;
 
   const { actualUser } = useAuth();
-  const { getUserReadingsInfo } = useContext(GlobalContext)
+  const { getUserReadingsInfo, actualReading, loadReading } = useContext(GlobalContext)
 
   const [isToRead, setIsToRead] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -72,12 +71,14 @@ export function ReadingEditModalize({ book, actualReading, modalRef }: Props) {
     }
   }, [reading.status]);
 
-  const handleOpen = () => {
-    if (actualReading) {
+  const handleOpen = async () => {
+    if (actualReading.id_book === book.id) {
       setReading(actualReading);
       setIsFavorite(actualReading.favorite !== null);
       setRating(actualReading.rating ?? null);
       setReview(actualReading.review ?? null);
+
+      await loadReading(actualReading.id);
     } else {
       setReading({} as Reading);
       setIsFavorite(false);
@@ -86,12 +87,14 @@ export function ReadingEditModalize({ book, actualReading, modalRef }: Props) {
     }
   };
 
-  const handleReset = () => {
+  const handleReset = async () => {
     if (actualReading) {
       setReading(actualReading);
       setIsFavorite(actualReading.favorite !== null);
       setRating(actualReading.rating ?? null);
       setReview(actualReading.review ?? null);
+
+      await loadReading(actualReading.id);
     } else {
       setReading({
         ...reading,
@@ -112,10 +115,11 @@ export function ReadingEditModalize({ book, actualReading, modalRef }: Props) {
       const payload: Reading = {
         id: actualReading?.id,
         id_user: actualUser.id,
-        id_book: book.id,
+        id_book: actualReading.book ? actualReading.book.id : 0,
         status: reading.status ?? 0,
         type: reading.type,
         category: reading.category,
+        read_pages: reading.read_pages ?? 0,
         start_date: reading.start_date ? moment(reading.start_date).format('YYYY-MM-DD') : null,
         finish_date: reading.finish_date ? moment(reading.finish_date).format('YYYY-MM-DD') : null,
         favorite: isFavorite ? 1 : null,
@@ -144,8 +148,13 @@ export function ReadingEditModalize({ book, actualReading, modalRef }: Props) {
   const headerComponent = (
     <View className="flex-row items-center w-full border_bottom p-5">
       <View className="flex-col">
-        <Text className="text-gray-600 text-base font-medium">{book.title}</Text>
-        <Text className="text-gray-500 text-sm">{book.author}</Text>
+        <Text className="text-gray-600 text-base font-medium">
+          {reading.book ? reading.book.title : book ? book.title : ''}
+        </Text>
+
+        <Text className="text-gray-500 text-sm">
+          {reading.book ? reading.book.author : book ? book.author : ''}
+        </Text>
       </View>
     </View>
   );
@@ -159,12 +168,12 @@ export function ReadingEditModalize({ book, actualReading, modalRef }: Props) {
   return (
     <>
       <Modalize
+        ref={modalRef}
+        onOpen={handleOpen}
+        onClose={handleReset}
+        modalHeight={windowHeight}
         HeaderComponent={headerComponent}
         FooterComponent={footerComponent}
-        ref={modalRef}
-        modalHeight={windowHeight}
-        onOpened={handleOpen}
-        onClose={handleReset}
         keyboardAvoidingBehavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         avoidKeyboardLikeIOS={true}
         scrollViewProps={{ scrollEnabled: !isReviewModalOpen }}
