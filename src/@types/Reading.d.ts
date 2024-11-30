@@ -14,6 +14,7 @@ type Reading = {
   like?: boolean
   start_date?: string | null
   finish_date?: string | null
+  favorite: number | null
   book?: Book
 }
 
