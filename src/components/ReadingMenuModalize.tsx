@@ -2,9 +2,9 @@ import { MainStackParamList } from '@/@types/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { ReadingService } from '@/services';
-import { NavigationProp } from '@react-navigation/native';
+import { NavigationProp, useIsFocused } from '@react-navigation/native';
 import { Edit, History, Info, Trash } from 'lucide-react-native';
-import { MutableRefObject, useContext, useRef } from 'react';
+import { MutableRefObject, useContext, useEffect, useRef } from 'react';
 import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
@@ -17,11 +17,13 @@ type Props = {
 
 export function ReadingMenuModalize({ modalRef, navigation }: Props) {
   const { actualUser } = useAuth()
-  const { getUserReadingsInfo, actualReading } = useContext(GlobalContext)
+  const { getUserReadingsInfo, actualReading, loadReading } = useContext(GlobalContext)
+
+  const windowHeight = Dimensions.get('window').height * 0.3;
 
   const editModalRef = useRef<Modalize>(null)
 
-  const windowHeight = Dimensions.get('window').height * 0.3;
+  const isFocused = useIsFocused()
 
   const handleRouteInfo = () => {
     const book = actualReading.book
@@ -46,6 +48,7 @@ export function ReadingMenuModalize({ modalRef, navigation }: Props) {
     if (actualUser) {
       await ReadingService.delete(actualReading.id);
 
+      await loadReading(actualReading.id);
       await getUserReadingsInfo(actualUser.id);
 
       Toast.show({ type: 'success', text1: `Livro removido`, text2: 'Seu livro foi removida da estante' })
@@ -53,6 +56,10 @@ export function ReadingMenuModalize({ modalRef, navigation }: Props) {
       modalRef.current?.close();
     }
   }
+
+  useEffect(() => {
+    editModalRef.current?.close()
+  }, [isFocused]);
 
   const headerComponent = (
     <>

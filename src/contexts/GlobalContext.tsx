@@ -26,7 +26,7 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     try {
       const result = await ReadingService.getById(readingId);
 
-      if (result) setActualReading(result);
+      setActualReading(result ?? ({} as Reading));
     } catch (err) {
       console.log(err);
     }

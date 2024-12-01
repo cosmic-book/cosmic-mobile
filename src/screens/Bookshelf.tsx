@@ -3,8 +3,8 @@ import { MainStackParamList } from '@/@types/navigation'
 import { ImageView, ReadingMenuModalize, Skeleton } from '@/components'
 import { ReadingGridItem } from '@/components/layout'
 import { GlobalContext } from '@/contexts/GlobalContext'
-import { NavigationProp, RouteProp } from '@react-navigation/native'
-import React, { useContext, useRef } from 'react'
+import { NavigationProp, RouteProp, useIsFocused } from '@react-navigation/native'
+import React, { useContext, useEffect, useRef } from 'react'
 import { FlatList, Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
@@ -15,14 +15,20 @@ type BookshelfProps = {
 }
 
 const Bookshelf = ({ navigation, route }: BookshelfProps) => {
-  const { loading, userReadingsInfo, actualReading, loadReading } = useContext(GlobalContext)
+  const { loading, userReadingsInfo, loadReading } = useContext(GlobalContext)
   const modalizeRef = useRef<Modalize>(null)
+
+  const isFocused = useIsFocused()
 
   const openModalize = async (reading: Reading) => {
     await loadReading(reading.id)
 
     modalizeRef.current?.open()
   }
+
+  useEffect(() => {
+    modalizeRef.current?.close()
+  }, [isFocused]);
 
   return (
     <GestureHandlerRootView>

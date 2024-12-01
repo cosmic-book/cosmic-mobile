@@ -1,7 +1,9 @@
 import { Reading } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
 import { BackButton, ReadingEditModalize } from '@/components';
+import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
+import { useIsFocused } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -35,9 +37,13 @@ const statusTypes = [
 
 const BookDetails = ({ route, navigation }: BookDetailsProps) => {
   const { book } = route.params;
-  const { userReadingsInfo, loadReading } = useContext(GlobalContext)
+
+  const { actualUser } = useAuth()
+  const { userReadingsInfo, getUserReadingsInfo, loadReading } = useContext(GlobalContext)
 
   const readingModalizeRef = useRef<Modalize>(null)
+
+  const isFocused = useIsFocused()
 
   const [imageError, setImageError] = useState(false);
 
@@ -46,7 +52,15 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
 
   const handleLoad = async (id: number) => {
     await loadReading(id);
+
+    if (actualUser) {
+      await getUserReadingsInfo(actualUser.id);
+    }
   }
+
+  useEffect(() => {
+    readingModalizeRef.current?.close()
+  }, [isFocused]);
 
   useEffect(() => {
     if (book.cover) {

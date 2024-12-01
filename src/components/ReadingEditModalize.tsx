@@ -5,7 +5,7 @@ import { ReadingStatus } from '@/enums';
 import { ReadingService } from '@/services';
 import { Pencil, Plus } from 'lucide-react-native';
 import moment from 'moment';
-import { MutableRefObject, useContext, useEffect, useState, useRef } from 'react';
+import { MutableRefObject, useContext, useEffect, useRef, useState } from 'react';
 import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
@@ -19,13 +19,14 @@ type Props = {
 };
 
 export function ReadingEditModalize({ book, modalRef }: Props) {
-  const windowHeight = Dimensions.get('window').height * 0.7;
+  const windowHeight = Dimensions.get('window').height * 0.67;
 
   const { actualUser } = useAuth();
   const { getUserReadingsInfo, actualReading, loadReading } = useContext(GlobalContext)
 
   const [isToRead, setIsToRead] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
+
   const [isFavorite, setIsFavorite] = useState(false);
   const [rating, setRating] = useState<number | null>(null);
   const [review, setReview] = useState<string | null>(null);
@@ -42,6 +43,84 @@ export function ReadingEditModalize({ book, modalRef }: Props) {
   const handleReviewSubmit = (newReview: string, newRating: number) => {
     setReview(newReview);
     setRating(newRating);
+  };
+
+  const handleOpen = async () => {
+    if (actualReading.id_book === book.id) {
+      setReading(actualReading);
+      setIsFavorite(actualReading.favorite !== null);
+      setRating(actualReading.rating ?? null);
+      setReview(actualReading.review ?? null);
+
+      if (actualReading.id) {
+        await loadReading(actualReading.id);
+      }
+    } else {
+      setReading({} as Reading);
+      setIsFavorite(false);
+      setRating(null);
+      setReview(null);
+    }
+  };
+
+  const handleReset = async () => {
+    if (actualReading) {
+      setReading(actualReading);
+      setIsFavorite(actualReading.favorite !== null);
+      setRating(actualReading.rating ?? null);
+      setReview(actualReading.review ?? null);
+
+      if (actualReading.id) {
+        await loadReading(actualReading.id);
+      }
+    } else {
+      setReading({
+        ...reading,
+        type: 0,
+        status: 0,
+        start_date: null,
+        finish_date: null,
+        category: 0,
+      });
+      setIsFavorite(false);
+      setRating(null);
+      setReview(null);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (actualUser) {
+      const payload: Reading = {
+        id: reading?.id,
+        id_user: actualUser.id,
+        id_book: book.id ?? actualReading.id_book,
+        status: reading.status ?? null,
+        type: reading.type ?? 0,
+        category: reading.category ?? 0,
+        read_pages: reading.read_pages ?? 0,
+        start_date: reading.start_date ? moment(reading.start_date).format('YYYY-MM-DD') : null,
+        finish_date: reading.finish_date ? moment(reading.finish_date).format('YYYY-MM-DD') : null,
+        favorite: isFavorite ? 1 : null,
+        rating: rating ?? null,
+        review: review ?? null,
+      };
+
+      let response: Reading | undefined;
+
+      if (payload.id) {
+        response = await ReadingService.update(actualReading.id, payload);
+      } else {
+        response = await ReadingService.create(payload);
+      }
+
+      if (response) {
+        Toast.show({ type: 'success', text1: `Leitura ${actualReading.id ? 'editada' : 'adicionada'}`, text2: 'Acesse a estante para visualizar seus livros' })
+
+        await getUserReadingsInfo(actualUser.id)
+
+        modalRef.current?.close();
+      }
+    }
   };
 
   useEffect(() => {
@@ -70,80 +149,6 @@ export function ReadingEditModalize({ book, modalRef }: Props) {
       });
     }
   }, [reading.status]);
-
-  const handleOpen = async () => {
-    if (actualReading.id_book === book.id) {
-      setReading(actualReading);
-      setIsFavorite(actualReading.favorite !== null);
-      setRating(actualReading.rating ?? null);
-      setReview(actualReading.review ?? null);
-
-      await loadReading(actualReading.id);
-    } else {
-      setReading({} as Reading);
-      setIsFavorite(false);
-      setRating(null);
-      setReview(null);
-    }
-  };
-
-  const handleReset = async () => {
-    if (actualReading) {
-      setReading(actualReading);
-      setIsFavorite(actualReading.favorite !== null);
-      setRating(actualReading.rating ?? null);
-      setReview(actualReading.review ?? null);
-
-      await loadReading(actualReading.id);
-    } else {
-      setReading({
-        ...reading,
-        type: 0,
-        status: 0,
-        start_date: null,
-        finish_date: null,
-        category: 0,
-      });
-      setIsFavorite(false);
-      setRating(null);
-      setReview(null);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (actualUser) {
-      const payload: Reading = {
-        id: actualReading?.id,
-        id_user: actualUser.id,
-        id_book: actualReading.book ? actualReading.book.id : 0,
-        status: reading.status ?? 0,
-        type: reading.type,
-        category: reading.category,
-        read_pages: reading.read_pages ?? 0,
-        start_date: reading.start_date ? moment(reading.start_date).format('YYYY-MM-DD') : null,
-        finish_date: reading.finish_date ? moment(reading.finish_date).format('YYYY-MM-DD') : null,
-        favorite: isFavorite ? 1 : null,
-        rating: rating ?? null,
-        review: review ?? null,
-      };
-
-      let response: Reading | undefined;
-
-      if (actualReading.id) {
-        response = await ReadingService.update(actualReading.id, payload);
-      } else {
-        response = await ReadingService.create(payload);
-      }
-
-      if (response) {
-        Toast.show({ type: 'success', text1: `Leitura ${actualReading.id ? 'editada' : 'adicionada'}`, text2: 'Acesse a estante para visualizar seus livros' })
-
-        await getUserReadingsInfo(actualUser.id)
-
-        modalRef.current?.close();
-      }
-    }
-  };
 
   const headerComponent = (
     <View className="flex-row items-center w-full border_bottom p-5">
