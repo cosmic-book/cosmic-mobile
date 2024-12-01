@@ -11,6 +11,7 @@ type MainStackParamList = {
   History: undefined
   Profile: undefined
   ProfileEdit: undefined
+  Settings: undefined
 }
 
 export default MainStackParamList

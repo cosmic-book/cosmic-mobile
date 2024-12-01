@@ -19,7 +19,7 @@ export default class UserService {
     return service.put(`/users/${id}`, user)
   }
 
-  async updatePassword(id: number, payload: INewPasswordForm): Promise<User | undefined> {
+  static async updatePassword(id: number, payload: INewPasswordForm): Promise<User | undefined> {
     const data = await service.put(`/users/password/${id}`, payload)
 
     return data

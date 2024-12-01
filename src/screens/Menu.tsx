@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, ScrollView, Text, Alert } from 'react-native';
-import { List, Settings, LogOut, Bell, BarChart2, Users } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { List, Settings, LogOut, Bell } from 'lucide-react-native';
 import { MenuItem } from '@/components';
 import { Avatar, AvatarImage } from '@/components';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Menu = () => {
     const { actualUser, logout } = useAuth();
+    const navigation = useNavigation();
 
     const handleLogout = () => {
         Alert.alert(
@@ -53,7 +55,7 @@ const Menu = () => {
                 <MenuItem
                     icon={<Settings size={24} color="#1460CD" />}
                     label="Configurações"
-                    onPress={() => console.log('Configuraçoes')}
+                    onPress={() => navigation.navigate('Settings')}
                 />
                 <MenuItem
                     icon={<LogOut size={24} color="#1460CD" />}
