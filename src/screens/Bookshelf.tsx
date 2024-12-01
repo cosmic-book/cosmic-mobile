@@ -29,16 +29,8 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
     modalizeRef.current?.open()
   }
 
-  const handleReload = async () => {
-    if (actualUser) {
-      await getUserReadingsInfo(actualUser.id)
-    }
-  }
-
   useEffect(() => {
     modalizeRef.current?.close()
-
-    handleReload()
   }, [isFocused]);
 
   return (

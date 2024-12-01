@@ -9,7 +9,7 @@ type Props = {
 export function InputArea({ placeholder, value, onChangeText }: Props) {
   return (
     <TextInput
-      className="h-48 border border-gray-300 rounded-lg p-2 align-top"
+      className="h-48 border border-gray-300 rounded-lg p-4 align-top selection:text-blue-400 caret-blue-400"
       placeholder={placeholder}
       multiline
       value={value}

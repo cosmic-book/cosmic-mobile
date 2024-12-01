@@ -108,13 +108,13 @@ export function ReadingEditModalize({ book, modalRef }: Props) {
       let response: Reading | undefined;
 
       if (payload.id) {
-        response = await ReadingService.update(actualReading.id, payload);
+        response = await ReadingService.update(payload.id, payload);
       } else {
         response = await ReadingService.create(payload);
       }
 
       if (response) {
-        Toast.show({ type: 'success', text1: `Leitura ${actualReading.id ? 'editada' : 'adicionada'}`, text2: 'Acesse a estante para visualizar seus livros' })
+        Toast.show({ type: 'success', text1: `Leitura ${payload.id ? 'editada' : 'adicionada'}`, text2: 'Acesse a estante para visualizar seus livros' })
 
         await getUserReadingsInfo(actualUser.id)
 

@@ -25,6 +25,7 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
   const [imageError, setImageError] = useState(false);
 
   const [histories, setHistories] = useState<History[]>([]);
+  const [history, setHistory] = useState<History>({} as History);
 
   const fetchData = async () => {
     setLoading(true)
@@ -38,6 +39,12 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
     setLoading(false)
   }
 
+  const handleOpen = (item?: History) => {
+    setHistory(item || {} as History)
+
+    editModalRef.current?.open()
+  }
+
   const handleDelete = async (id: number) => {
     await HistoryService.delete(id)
 
@@ -47,15 +54,6 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
     }
 
     fetchData()
-  }
-
-  const handleOpenEdit = () => {
-    editModalRef.current?.open()
-  }
-
-  const handleUpdate = async () => {
-    await loadReading(actualReading.id)
-    await fetchData()
   }
 
   useEffect(() => {
@@ -73,7 +71,7 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
         </View>
 
         <View className='flex-row gap-4 items-center'>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleOpen(item)}>
             <Pencil size={20} color='#6b7280' />
           </TouchableOpacity>
 
@@ -153,43 +151,44 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
         )}
 
         {!loading ? (
-          <FlatList
-            data={histories}
-            initialNumToRender={10}
-            keyExtractor={(item) => item.id.toString()}
-            contentContainerStyle={{ paddingBottom: 100 }}
-            showsVerticalScrollIndicator={false}
-            renderItem={renderItem}
-            ItemSeparatorComponent={() => <View className='h-3' />}
-            ListEmptyComponent={
-              <View className="flex-1 justify-center items-center">
-                <Text className="text-lg text-gray-600 text-center font-medium">Ainda sem registros</Text>
-                <Text className="text-gray-500 text-center">Cadastre sua primeira leitura</Text>
-              </View>
-            }
-          />
+          <View className="flex-1">
+            <FlatList
+              data={histories}
+              initialNumToRender={10}
+              keyExtractor={(item) => item.id.toString()}
+              contentContainerStyle={{ paddingBottom: 100 }}
+              showsVerticalScrollIndicator={false}
+              renderItem={renderItem}
+              ItemSeparatorComponent={() => <View className='h-3' />}
+              ListEmptyComponent={
+                <View className="flex-1 justify-center items-center">
+                  <Text className="text-lg text-gray-600 text-center font-medium">Ainda sem registros</Text>
+                  <Text className="text-gray-500 text-center">Cadastre sua primeira leitura</Text>
+                </View>
+              }
+            />
+
+            <Button
+              className='mx-5 my-3'
+              label='Adicionar Registro'
+              onPress={() => handleOpen()}
+            />
+          </View>
         ) : (
           <View className="flex-1 pt-2 border-t border-gray-200">
             {[...Array(5)].map((_, index) => (
-              <View key={index} className="flex-row gap-3 mb-5">
-                <Skeleton className="w-20 h-28 mb-1" />
-                <View>
-                  <Skeleton className="w-72 h-6 mb-3" />
-                  <Skeleton className="w-48 h-4 mb-1" />
-                  <Skeleton className="w-48 h-4 mb-1" />
-                  <Skeleton className="w-48 h-4 mb-1" />
-                </View>
+              <View key={index} className="flex-row gap-3 mb-3">
+                <Skeleton className="w-full h-28 mb-1" />
               </View>
             ))}
           </View>
         )}
-
-        <Button label='Adicionar Registro' onPress={handleOpenEdit} className='mx-5 my-3' />
       </View>
 
       <HistoryEditModalize
+        actualHistory={history}
         modalRef={editModalRef}
-        afterSubmit={handleUpdate}
+        afterSubmit={fetchData}
       />
     </GestureHandlerRootView>
   );

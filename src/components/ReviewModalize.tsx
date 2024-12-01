@@ -30,7 +30,7 @@ export function ReviewModalize({
 
   const handleSubmit = () => {
     if (!review.trim() || rating === null) {
-      Toast.show({ type: 'error', text1: 'Erro', text2: 'Por favor, preencha a resenha e atribua uma nota.' });
+      Toast.show({ type: 'warning', text1: 'Oops!', text2: 'Por favor, preencha a resenha e atribua uma nota.' });
       return;
     }
 
