@@ -2,6 +2,7 @@ import { Reading } from '@/@types'
 import { MainStackParamList } from '@/@types/navigation'
 import { ImageView, ReadingMenuModalize, Skeleton } from '@/components'
 import { ReadingGridItem } from '@/components/layout'
+import { useAuth } from '@/contexts/AuthContext'
 import { GlobalContext } from '@/contexts/GlobalContext'
 import { NavigationProp, RouteProp, useIsFocused } from '@react-navigation/native'
 import React, { useContext, useEffect, useRef } from 'react'
@@ -15,7 +16,9 @@ type BookshelfProps = {
 }
 
 const Bookshelf = ({ navigation, route }: BookshelfProps) => {
-  const { loading, userReadingsInfo, loadReading } = useContext(GlobalContext)
+  const { actualUser } = useAuth()
+  const { loading, userReadingsInfo, getUserReadingsInfo, loadReading } = useContext(GlobalContext)
+
   const modalizeRef = useRef<Modalize>(null)
 
   const isFocused = useIsFocused()
@@ -26,8 +29,16 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
     modalizeRef.current?.open()
   }
 
+  const handleReload = async () => {
+    if (actualUser) {
+      await getUserReadingsInfo(actualUser.id)
+    }
+  }
+
   useEffect(() => {
     modalizeRef.current?.close()
+
+    handleReload()
   }, [isFocused]);
 
   return (

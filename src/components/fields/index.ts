@@ -1,6 +1,7 @@
 export { DateInput } from './DateInput'
 export { GenderSelect } from './GenderSelect'
 export { Input } from './Input'
+export { InputArea } from './InputArea'
 export { PasswordInput } from './PasswordInput'
 export { ReadingCategorySelector } from './ReadingCategorySelector'
 export { ReadingStatusSelect } from './ReadingStatusSelect'

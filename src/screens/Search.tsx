@@ -58,7 +58,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
 
   return (
     <View className="flex-1 justify-center container bg-white h-full pt-16 px-6">
-      <View className="mb-10">
+      <View className="mb-5">
         <Input placeholder="Pesquisar" value={search} onChangeText={setSearch} startIcon={Search} clearable />
       </View>
 
@@ -82,7 +82,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
           renderItem={({ item }) => (
             <BookListItem book={item} navigation={navigation} />
           )}
-          ItemSeparatorComponent={() => <View className='h-3' />}
+          ItemSeparatorComponent={() => <View className='h-5' />}
           ListEmptyComponent={
             <View className="flex py-24 justify-center items-center">
               {search ? (
@@ -106,7 +106,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
       ) : (
         <View className="flex-1 pt-2 border-t border-gray-200">
           {[...Array(5)].map((_, index) => (
-            <View key={index} className="flex-row gap-3 mb-3">
+            <View key={index} className="flex-row gap-3 mb-5">
               <Skeleton className="w-20 h-28 mb-1" />
               <View>
                 <Skeleton className="w-72 h-6 mb-3" />

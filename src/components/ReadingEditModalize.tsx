@@ -11,7 +11,7 @@ import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
 import { Button } from './Button';
 import { DateInput, ReadingCategorySelector, ReadingStatusSelect, ReadingTypeSelector } from './fields';
-import { ReviewModal } from './ReviewModal';
+import { ReviewModalize } from './ReviewModalize';
 
 type Props = {
   book: Partial<Book>;
@@ -235,7 +235,7 @@ export function ReadingEditModalize({ book, modalRef }: Props) {
         </View>
       </Modalize>
 
-      <ReviewModal
+      <ReviewModalize
         modalRef={reviewModalRef}
         onSubmit={(newReview, newRating, newFavorite) => {
           handleReviewSubmit(newReview, newRating);
