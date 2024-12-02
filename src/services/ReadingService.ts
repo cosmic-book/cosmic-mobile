@@ -1,4 +1,4 @@
-import { Reading, ReadingsInfo } from '@/@types'
+import { FavoritesResult, Reading, ReadingsInfo } from '@/@types'
 import service from './service'
 
 export default class ReadingService {
@@ -14,7 +14,7 @@ export default class ReadingService {
     return service.get(`/readings/${id}`)
   }
 
-  static async getFavoritesByUser(user_id: number): Promise<Reading | undefined> {
+  static async getFavoritesByUser(user_id: number): Promise<FavoritesResult> {
     return service.get(`/readings/favorite/${user_id}`)
   }
 

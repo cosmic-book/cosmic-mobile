@@ -3,6 +3,7 @@ import { Reading } from '@/@types'
 import { MainStackParamList } from '@/@types/navigation'
 import { ImageView, ReadingMenuModalize, Skeleton, BookshelfFilterModal } from '@/components'
 import { ReadingGridItem } from '@/components/layout'
+import { useAuth } from '@/contexts/AuthContext'
 import { GlobalContext } from '@/contexts/GlobalContext'
 import { NavigationProp, RouteProp, useIsFocused } from '@react-navigation/native'
 import React, { useContext, useEffect, useRef } from 'react'
@@ -15,8 +16,10 @@ type BookshelfProps = {
   route: RouteProp<any>
 }
 
-const Bookshelf = ({ navigation }: BookshelfProps) => {
-  const { loading, userReadingsInfo, loadReading } = useContext(GlobalContext)
+const Bookshelf = ({ navigation, route }: BookshelfProps) => {
+  const { actualUser } = useAuth()
+  const { loading, userReadingsInfo, getUserReadingsInfo, loadReading } = useContext(GlobalContext)
+
   const modalizeRef = useRef<Modalize>(null)
   const filterModalRef = useRef<Modalize | null>(null);
 

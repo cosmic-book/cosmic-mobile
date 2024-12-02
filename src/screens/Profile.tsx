@@ -1,24 +1,14 @@
+import { FavoritesResult, Reading } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
 import { Avatar, AvatarImage, Progress } from '@/components';
+import { FavoritesCarousel } from '@/components/layout';
 import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
-import { NavigationProp, RouteProp } from '@react-navigation/native';
-import { Pencil } from 'lucide-react-native';
-import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View, Alert } from 'react-native';
 import ReadingService from '@/services/ReadingService';
-import { FavoritesCarousel } from '@/components/layout';
-
-type FavoriteBook = {
-  id: number;
-  favorite: boolean;
-  book: {
-    id: number;
-    cover: string;
-    title: string;
-    author: string;
-  };
-};
+import { NavigationProp, RouteProp, useIsFocused } from '@react-navigation/native';
+import { Bookmark, Pencil, Trophy } from 'lucide-react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 type ProfileProps = {
   navigation: NavigationProp<MainStackParamList, 'Profile'>
@@ -27,27 +17,39 @@ type ProfileProps = {
 
 const Profile = ({ navigation }: ProfileProps) => {
   const { actualUser } = useAuth();
-  const { userReadingsInfo } = useContext(GlobalContext);
-  const [favoriteBooks, setFavoriteBooks] = useState<FavoriteBook[]>([]);
+  const { userReadingsInfo, getUserReadingsInfo } = useContext(GlobalContext);
+  const [favoriteBooks, setFavoriteBooks] = useState<Reading[]>([]);
 
-  useEffect(() => {
-    if (actualUser?.id) {
-      fetchFavorites(actualUser.id);
-    }
-  }, [actualUser]);
+  const isFocused = useIsFocused();
 
   const fetchFavorites = async (userId: number) => {
     try {
-      const response = await ReadingService.getFavoritesByUser(userId);
-      setFavoriteBooks(response?.favorites || []);
+      const response: FavoritesResult = await ReadingService.getFavoritesByUser(userId);
+
+      if (response) {
+        setFavoriteBooks(response.favorites || []);
+      }
     } catch (error) {
       Alert.alert('Erro', 'Não foi possível carregar os livros favoritos.');
     }
   };
 
+  const handleReload = async () => {
+    if (actualUser) {
+      await fetchFavorites(actualUser.id);
+      await getUserReadingsInfo(actualUser.id)
+    }
+  }
+
   const handlePress = () => {
     navigation.navigate('ProfileEdit')
   }
+
+  useEffect(() => {
+    if (isFocused) {
+      handleReload()
+    }
+  }, [isFocused]);
 
   return (
     actualUser ? (
@@ -86,9 +88,12 @@ const Profile = ({ navigation }: ProfileProps) => {
           <FavoritesCarousel favoriteBooks={favoriteBooks} />
 
           <View className="px-12 border_y">
-            <Text className="text-lg color-primary font-bold mb-2 mt-5">
-              Meta de Leitura
-            </Text>
+            <View className='flex-row items-center gap-2 my-3'>
+              <Trophy color='#1460cd' size={16} />
+              <Text className="text-lg color-primary font-bold">
+                Meta de Leitura
+              </Text>
+            </View>
             <View className="mb-6">
               <Text className="text-sm text-gray-400 mb-2 px-2">Páginas / Semana</Text>
               <Progress value={60} className="mb-2" />
@@ -100,9 +105,12 @@ const Profile = ({ navigation }: ProfileProps) => {
           </View>
 
           <View className='px-12'>
-            <Text className="text-lg font-bold mb-2 mt-5">
-              Última Atividade
-            </Text>
+            <View className='flex-row items-center gap-2 my-3'>
+              <Bookmark color='#1460cd' size={16} />
+              <Text className="text-lg color-primary font-bold">
+                Última Atividade
+              </Text>
+            </View>
             <View className="flex-row items-center mb-4 py-1 px-4 rounded-md border border-gray-300">
               <View className="w-16 h-24 bg-slate-300 rounded mr-4"></View>
               <View className="flex-1">
