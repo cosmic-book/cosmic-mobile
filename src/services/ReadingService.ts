@@ -1,4 +1,4 @@
-import { FavoritesResult, Reading } from '@/@types'
+import { Reading } from '@/@types'
 import service from './service'
 
 export default class ReadingService {
@@ -12,10 +12,6 @@ export default class ReadingService {
 
   static async getById(id: number): Promise<Reading | undefined> {
     return service.get(`/readings/${id}`)
-  }
-
-  static async getFavoritesByUser(user_id: number): Promise<FavoritesResult> {
-    return service.get(`/readings/favorite/${user_id}`)
   }
 
   static async create(reading: Reading): Promise<Reading> {

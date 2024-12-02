@@ -1,6 +1,5 @@
 export { default as Book } from './Book'
 export { default as BookSearch } from './BookSearch'
-export { default as FavoritesResult } from './FavoritesResult'
 export { default as Gender } from './Gender'
 export { default as History } from './History'
 export { default as HistoryResult } from './HistoryResult'

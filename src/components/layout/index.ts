@@ -1,3 +1,4 @@
 export { BookListItem } from './BookListItem'
-export { ReadingGridItem } from './ReadingGridItem'
 export { FavoritesCarousel } from './FavoritesCarousel'
+export { LastHistoryItem } from './LastHistoryItem'
+export { ReadingGridItem } from './ReadingGridItem'

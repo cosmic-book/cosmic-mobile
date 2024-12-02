@@ -1,14 +1,12 @@
-import { FavoritesResult, Reading } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
 import { Avatar, AvatarImage, Progress } from '@/components';
-import { FavoritesCarousel } from '@/components/layout';
+import { FavoritesCarousel, LastHistoryItem } from '@/components/layout';
 import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
-import ReadingService from '@/services/ReadingService';
 import { NavigationProp, RouteProp, useIsFocused } from '@react-navigation/native';
 import { Bookmark, Pencil, Trophy } from 'lucide-react-native';
-import React, { useContext, useEffect, useState } from 'react';
-import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 
 type ProfileProps = {
   navigation: NavigationProp<MainStackParamList, 'Profile'>
@@ -20,8 +18,6 @@ const Profile = ({ navigation }: ProfileProps) => {
   const { userInfos, loadUserInfos } = useContext(GlobalContext);
 
   const isFocused = useIsFocused();
-
-  const [imageError, setImageError] = useState(false);
 
   const handleReload = async () => {
     if (actualUser) {
@@ -99,50 +95,8 @@ const Profile = ({ navigation }: ProfileProps) => {
                 Última Atividade
               </Text>
             </View>
-            <View className="flex-row items-center mb-4 py-2 pl-2 pr-4 rounded-md border border-gray-300">
-              {userInfos.lastHistory && userInfos.lastHistory.reading && userInfos.lastHistory.reading.book && (
-                <>
-                  <View className='mr-4'>
-                    {userInfos.lastHistory.reading.book.cover && !imageError ? (
-                      <Image
-                        source={{ uri: userInfos.lastHistory.reading.book.cover }}
-                        style={{ width: 70, height: 100 }}
-                        className="rounded-md"
-                        onError={() => setImageError(true)}
-                      />
-                    ) : (
-                      <Image
-                        source={require('@/assets/no-cover.png')}
-                        style={{ width: 70, height: 100 }}
-                        className="rounded-md"
-                      />
-                    )}
-                  </View>
 
-                  <View className="flex-1">
-                    <View className='my-2'>
-                      <Text className="text-base font-semibold" numberOfLines={1}>
-                        {userInfos.lastHistory.reading.book.title}
-                      </Text>
-                      <Text className="text-sm text-gray-400">
-                        {userInfos.lastHistory.reading.book.author}
-                      </Text>
-                    </View>
-
-                    <Progress value={Math.ceil(userInfos.lastHistory.read_pages / userInfos.lastHistory.reading.book.pages * 100)} className="my-2" />
-
-                    <View className="flex-row justify-between mb-2">
-                      <Text className="text-sm text-left text-primary font-semibold">
-                        {userInfos.lastHistory.read_pages}/{userInfos.lastHistory.reading.book.pages} pág.
-                      </Text>
-                      <Text className="text-sm text-right text-pink font-semibold">
-                        {Math.ceil((userInfos.lastHistory.read_pages / userInfos.lastHistory.reading.book.pages) * 100)}%
-                      </Text>
-                    </View>
-                  </View>
-                </>
-              )}
-            </View>
+            <LastHistoryItem history={userInfos.lastHistory} />
           </View>
         </ScrollView>
       </View>
