@@ -1,11 +1,12 @@
+import { Filter } from 'lucide-react-native'
 import { Reading } from '@/@types'
 import { MainStackParamList } from '@/@types/navigation'
-import { ImageView, ReadingMenuModalize, Skeleton } from '@/components'
+import { ImageView, ReadingMenuModalize, Skeleton, BookshelfFilterModal } from '@/components'
 import { ReadingGridItem } from '@/components/layout'
 import { GlobalContext } from '@/contexts/GlobalContext'
 import { NavigationProp, RouteProp, useIsFocused } from '@react-navigation/native'
 import React, { useContext, useEffect, useRef } from 'react'
-import { FlatList, Text, View } from 'react-native'
+import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 
@@ -14,15 +15,15 @@ type BookshelfProps = {
   route: RouteProp<any>
 }
 
-const Bookshelf = ({ navigation, route }: BookshelfProps) => {
+const Bookshelf = ({ navigation }: BookshelfProps) => {
   const { loading, userReadingsInfo, loadReading } = useContext(GlobalContext)
   const modalizeRef = useRef<Modalize>(null)
+  const filterModalRef = useRef<Modalize | null>(null);
 
   const isFocused = useIsFocused()
 
   const openModalize = async (reading: Reading) => {
     await loadReading(reading.id)
-
     modalizeRef.current?.open()
   }
 
@@ -32,8 +33,13 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
 
   return (
     <GestureHandlerRootView>
-      <View className="flex-1 justify-center bg-white h-full pt-16 px-6 gap-3">
-        <Text className="font-semibold text-xl text-primary">Minha Estante</Text>
+      <View className="flex-1 justify-center bg-white h-full pt-16 px-6 gap-3 mt-6">
+        <View className="flex-row justify-between items-center">
+          <Text className="font-semibold text-xl text-primary">Minha Estante</Text>
+          <TouchableOpacity onPress={() => filterModalRef.current?.open()}>
+            <Filter size={24} color="grey" />
+          </TouchableOpacity>
+        </View>
 
         <View className="h-full flex-row flex-wrap justify-center pt-2 border-t border-gray-200">
           {!loading ? (
@@ -77,13 +83,12 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
           )}
         </View>
 
-        <ReadingMenuModalize
-          modalRef={modalizeRef}
-          navigation={navigation}
-        />
+        <BookshelfFilterModal modalRef={filterModalRef} onApplyFilters={() => { }} />
+
+        <ReadingMenuModalize modalRef={modalizeRef} navigation={navigation} />
       </View>
     </GestureHandlerRootView>
-  )
-}
+  );
+};
 
-export default Bookshelf
+export default Bookshelf;
