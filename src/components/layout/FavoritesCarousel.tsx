@@ -17,14 +17,14 @@ export function FavoritesCarousel({ favoriteBooks }: FavoritesCarouselProps) {
         </Text>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        className="mb-6"
-        contentContainerStyle={{ gap: 16 }}
-      >
-        {favoriteBooks.length > 0 ? (
-          favoriteBooks.map((favorite) => (
+      {favoriteBooks.length > 0 ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="mb-6"
+          contentContainerStyle={{ gap: 16 }}
+        >
+          {favoriteBooks.map((favorite) => (
             <View key={favorite.id} className="w-20 h-28">
               <Image
                 source={{ uri: favorite.book?.cover }}
@@ -32,13 +32,13 @@ export function FavoritesCarousel({ favoriteBooks }: FavoritesCarouselProps) {
                 resizeMode="cover"
               />
             </View>
-          ))
-        ) : (
-          <Text className="text-gray-500 text-center w-full">
-            Nenhum livro favorito encontrado.
-          </Text>
-        )}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      ) : (
+        <Text className="text-gray-500 text-center align-middle w-full h-[40%]">
+          Nenhum livro favorito adicionado.
+        </Text>
+      )}
     </View>
   );
 }

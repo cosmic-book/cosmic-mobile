@@ -12,19 +12,14 @@ import { ScrollView, Text, View } from 'react-native'
 type RegisterProps = NativeStackScreenProps<AuthStackParamList, 'Register'>
 
 const Register = ({ navigation }: RegisterProps) => {
-  const [name, setName] = useState('')
-  const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
-  const [birthday, setBirthday] = useState<Date | null>(null)
-  const [gender, setGender] = useState<number | null>(null)
-  const [password, setPassword] = useState('')
+  const [user, setUser] = useState<User>({} as User)
 
   const [error, setError] = useState(false)
 
   const validate = () => {
     return validateFields([
       {
-        value: (name && username && email && birthday && gender && password),
+        value: (user.name && user.username && user.email && user.birthday && user.gender && user.password),
         setter: setError
       },
     ])
@@ -32,28 +27,20 @@ const Register = ({ navigation }: RegisterProps) => {
 
   const handleRegister = async () => {
     if (validate()) {
-      const user: Partial<User> = {
-        name,
-        username,
-        email,
-        birthday: moment(birthday).format('YYYY-MM-DD'),
-        gender: gender ?? 0,
-        password
+      const payload: Partial<User> = {
+        ...user,
+        birthday: moment(user.birthday).format('YYYY-MM-DD'),
+        gender: user.gender ?? 0,
       }
 
-      const result = await UserService.create(user)
+      const result = await UserService.create(payload)
 
       if (result) navigation.navigate('Login')
     }
   }
 
   const handleClear = () => {
-    setName('')
-    setUsername('')
-    setEmail('')
-    setBirthday(null)
-    setGender(null)
-    setPassword('')
+    setUser({} as User)
   }
 
   return (
@@ -70,34 +57,39 @@ const Register = ({ navigation }: RegisterProps) => {
         <View className="my-6 gap-3">
           <Input
             placeholder="Nome Completo *"
-            value={name}
-            onChangeText={setName}
+            value={user.name}
+            onChangeText={(value) => setUser({ ...user, name: value })}
           />
+
           <Input
             placeholder="Nome de Usuário *"
-            value={username}
-            onChangeText={setUsername}
+            value={user.username}
+            onChangeText={(value) => setUser({ ...user, username: value })}
           />
+
           <Input
             placeholder="E-mail *"
             keyboardType="email-address"
             autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
+            value={user.email}
+            onChangeText={(value) => setUser({ ...user, email: value })}
           />
+
           <DateInput
             placeholder="Data de Nascimento *"
-            date={birthday}
-            onChangeDate={setBirthday}
+            date={user.birthday}
+            onChangeDate={(date) => setUser({ ...user, birthday: date ?? '' })}
           />
+
           <GenderSelect
-            value={gender}
-            onChangeOption={setGender}
+            value={user.gender}
+            onChangeOption={(value) => setUser({ ...user, gender: value ?? 0 })}
           />
+
           <PasswordInput
             placeholder='Senha *'
-            value={password}
-            onChangeText={setPassword}
+            value={user.password}
+            onChangeText={(value) => setUser({ ...user, password: value })}
           />
         </View>
 

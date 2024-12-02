@@ -72,6 +72,8 @@ export default class Service {
         text1 = 'Algo de errado aconteceu'
       }
 
+      console.log('Error:', response.data)
+
       Toast.show({ type, text1, text2: response.data.message })
     }
   }
