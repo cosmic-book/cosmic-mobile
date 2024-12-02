@@ -13,7 +13,7 @@ type LoginProps = NativeStackScreenProps<AuthStackParamList, 'Login'>
 
 const Login = ({ navigation }: LoginProps) => {
   const { login } = useAuth();
-  const { loading, setLoading, getUserReadingsInfo } = useContext(GlobalContext)
+  const { loading, setLoading, loadUserInfos } = useContext(GlobalContext)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -37,7 +37,7 @@ const Login = ({ navigation }: LoginProps) => {
       const user = await login(username, password)
 
       if (user) {
-        await getUserReadingsInfo(user.id)
+        await loadUserInfos(user.id)
       }
     }
 

@@ -17,7 +17,7 @@ type Props = {
 
 export function ReadingMenuModalize({ modalRef, navigation }: Props) {
   const { actualUser } = useAuth()
-  const { getUserReadingsInfo, actualReading, loadReading } = useContext(GlobalContext)
+  const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext)
 
   const windowHeight = Dimensions.get('window').height * 0.3;
 
@@ -49,7 +49,7 @@ export function ReadingMenuModalize({ modalRef, navigation }: Props) {
       await ReadingService.delete(actualReading.id);
 
       await loadReading(actualReading.id);
-      await getUserReadingsInfo(actualUser.id);
+      await loadUserInfos(actualUser.id);
 
       Toast.show({ type: 'success', text1: `Livro removido`, text2: 'Seu livro foi removida da estante' })
 

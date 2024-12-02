@@ -17,8 +17,7 @@ type BookshelfProps = {
 }
 
 const Bookshelf = ({ navigation, route }: BookshelfProps) => {
-  const { actualUser } = useAuth()
-  const { loading, userReadingsInfo, getUserReadingsInfo, loadReading } = useContext(GlobalContext)
+  const { loading, userInfos, loadReading } = useContext(GlobalContext)
 
   const modalizeRef = useRef<Modalize>(null)
   const filterModalRef = useRef<Modalize | null>(null);
@@ -36,7 +35,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
 
   return (
     <GestureHandlerRootView>
-      <View className="flex-1 justify-center bg-white h-full pt-16 px-6 gap-3 mt-6">
+      <View className="flex-1 justify-center bg-white h-full pt-20 px-6 gap-3">
         <View className="flex-row justify-between items-center">
           <Text className="font-semibold text-xl text-primary">Minha Estante</Text>
           <TouchableOpacity onPress={() => filterModalRef.current?.open()}>
@@ -47,7 +46,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
         <View className="h-full flex-row flex-wrap justify-center pt-2 border-t border-gray-200">
           {!loading ? (
             <FlatList
-              data={userReadingsInfo.readings}
+              data={userInfos.readings}
               numColumns={3}
               keyExtractor={(item) => item.id.toString()}
               contentContainerStyle={{ paddingBottom: 100 }}

@@ -17,7 +17,7 @@ type HistoryProps = NativeStackScreenProps<MainStackParamList, 'History'>;
 
 function HistoriesScreen({ navigation, route }: HistoryProps) {
   const { actualUser } = useAuth();
-  const { loading, setLoading, actualReading, loadReading, getUserReadingsInfo } = useContext(GlobalContext)
+  const { loading, setLoading, actualReading, loadReading, loadUserInfos } = useContext(GlobalContext)
 
   const editModalRef = useRef<Modalize>(null)
   const isFocused = useIsFocused()
@@ -50,7 +50,7 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
 
     if (actualUser) {
       await loadReading(actualReading.id)
-      await getUserReadingsInfo(actualUser.id)
+      await loadUserInfos(actualUser.id)
     }
 
     fetchData()

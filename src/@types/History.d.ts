@@ -2,6 +2,7 @@ import Reading from './Reading'
 
 type History = {
   id: number
+  id_user: number
   id_reading: number
   date: string | null
   read_pages: number

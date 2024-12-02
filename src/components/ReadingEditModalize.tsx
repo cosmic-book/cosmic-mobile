@@ -22,7 +22,7 @@ export function ReadingEditModalize({ book, modalRef }: Props) {
   const windowHeight = Dimensions.get('window').height * 0.67;
 
   const { actualUser } = useAuth();
-  const { getUserReadingsInfo, actualReading, loadReading } = useContext(GlobalContext)
+  const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext)
 
   const [isToRead, setIsToRead] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -116,7 +116,7 @@ export function ReadingEditModalize({ book, modalRef }: Props) {
       if (response) {
         Toast.show({ type: 'success', text1: `Leitura ${payload.id ? 'editada' : 'adicionada'}`, text2: 'Acesse a estante para visualizar seus livros' })
 
-        await getUserReadingsInfo(actualUser.id)
+        await loadUserInfos(actualUser.id)
 
         modalRef.current?.close();
       }

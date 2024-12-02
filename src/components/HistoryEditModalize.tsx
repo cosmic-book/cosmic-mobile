@@ -1,5 +1,4 @@
 import { History } from '@/@types';
-import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { HistoryService } from '@/services';
 import { validateFields } from '@/utils/ValidateFields';
@@ -21,8 +20,7 @@ type Props = {
 export function HistoryEditModalize({ actualHistory, modalRef, afterSubmit }: Props) {
   const windowHeight = Dimensions.get('window').height * 0.52;
 
-  const { actualUser } = useAuth();
-  const { getUserReadingsInfo, actualReading, loadReading } = useContext(GlobalContext);
+  const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext);
 
   const [history, setHistory] = useState<History>(actualHistory || {} as History);
   const [error, setError] = useState(false);
@@ -40,6 +38,7 @@ export function HistoryEditModalize({ actualHistory, modalRef, afterSubmit }: Pr
     if (validate()) {
       const payload: History = {
         ...history,
+        id_user: actualReading.id_user,
         id_reading: actualReading.id,
         date: moment(history.id ? history.date : new Date()).format('YYYY-MM-DDTHH:mm:ss'),
       };
@@ -69,9 +68,7 @@ export function HistoryEditModalize({ actualHistory, modalRef, afterSubmit }: Pr
   };
 
   const handleReload = async () => {
-    if (actualUser) {
-      await getUserReadingsInfo(actualUser.id);
-    }
+    await loadUserInfos(actualReading.id_user);
 
     if (actualReading.id) {
       await loadReading(actualReading.id);

@@ -39,7 +39,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
   const { book } = route.params;
 
   const { actualUser } = useAuth()
-  const { userReadingsInfo, getUserReadingsInfo, loadReading } = useContext(GlobalContext)
+  const { userInfos, loadUserInfos, loadReading } = useContext(GlobalContext)
 
   const readingModalizeRef = useRef<Modalize>(null)
 
@@ -54,7 +54,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
     await loadReading(id);
 
     if (actualUser) {
-      await getUserReadingsInfo(actualUser.id);
+      await loadUserInfos(actualUser.id);
     }
   }
 
@@ -70,7 +70,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
     setStatusLabel('Adicionar')
     setStatusColor('text-blue-500')
 
-    userReadingsInfo.readings.filter((reading) => {
+    userInfos.readings.filter((reading) => {
       if (reading.id_book === book.id && reading.status !== null) {
         handleLoad(reading.id)
 

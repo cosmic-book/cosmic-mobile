@@ -1,5 +1,5 @@
-import { Reading, ReadingsInfo } from '@/@types';
-import { ReadingService } from '@/services';
+import { Reading, ProfileInfos } from '@/@types';
+import { ProfileService, ReadingService } from '@/services';
 import React, { createContext, ReactNode, useState } from 'react';
 
 interface GlobalContextData {
@@ -7,8 +7,8 @@ interface GlobalContextData {
   setLoading: (load: boolean) => void;
   actualReading: Reading;
   loadReading: (readingId: number) => Promise<void>;
-  userReadingsInfo: ReadingsInfo;
-  getUserReadingsInfo: (userId: number | undefined) => Promise<void>;
+  userInfos: ProfileInfos;
+  loadUserInfos: (userId: number | undefined) => Promise<void>;
 };
 
 type GlobalProviderProps = {
@@ -20,7 +20,7 @@ export const GlobalContext = createContext<GlobalContextData>({} as GlobalContex
 export const GlobalProvider = ({ children }: GlobalProviderProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [actualReading, setActualReading] = useState<Reading>({} as Reading);
-  const [userReadingsInfo, setUserReadingsInfo] = useState<ReadingsInfo>({} as ReadingsInfo);
+  const [userInfos, setUserInfos] = useState<ProfileInfos>({} as ProfileInfos);
 
   async function loadReading(readingId: number): Promise<void> {
     try {
@@ -32,14 +32,14 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     }
   }
 
-  async function getUserReadingsInfo(userId: number | undefined): Promise<void> {
+  async function loadUserInfos(userId: number | undefined): Promise<void> {
     try {
       if (userId) {
         setLoading(true)
 
-        const result = await ReadingService.getByUser(userId);
+        const result = await ProfileService.getByUser(userId);
 
-        setUserReadingsInfo(result);
+        setUserInfos(result);
       }
 
       setLoading(false)
@@ -55,8 +55,8 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
         setLoading,
         actualReading,
         loadReading,
-        userReadingsInfo,
-        getUserReadingsInfo,
+        userInfos,
+        loadUserInfos
       }}
     >
       {children}
