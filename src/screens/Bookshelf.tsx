@@ -6,10 +6,11 @@ import { ReadingGridItem } from '@/components/layout'
 import { useAuth } from '@/contexts/AuthContext'
 import { GlobalContext } from '@/contexts/GlobalContext'
 import { NavigationProp, RouteProp, useIsFocused } from '@react-navigation/native'
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
+import { BookshelfFilter } from '@/@types/filters'
 
 type BookshelfProps = {
   navigation: NavigationProp<MainStackParamList, 'Bookshelf'>
@@ -17,20 +18,34 @@ type BookshelfProps = {
 }
 
 const Bookshelf = ({ navigation, route }: BookshelfProps) => {
-  const { loading, userInfos, loadReading } = useContext(GlobalContext)
+  const { actualUser } = useAuth()
+  const { loading, userInfos, loadUserInfos, loadReading } = useContext(GlobalContext)
 
   const modalizeRef = useRef<Modalize>(null)
   const filterModalRef = useRef<Modalize | null>(null);
 
   const isFocused = useIsFocused()
 
+  const [hasFilter, setHasFilter] = useState(false)
+
   const openModalize = async (reading: Reading) => {
     await loadReading(reading.id)
     modalizeRef.current?.open()
   }
 
+  const handleFilter = async (filters: BookshelfFilter) => {
+    const hasFilters = !!(filters.category !== undefined || filters.status !== undefined || filters.type !== undefined || filters.rating !== undefined)
+
+    setHasFilter(hasFilters)
+
+    if (actualUser) {
+      await loadUserInfos(actualUser.id, filters)
+    }
+  }
+
   useEffect(() => {
     modalizeRef.current?.close()
+    filterModalRef.current?.close()
   }, [isFocused]);
 
   return (
@@ -39,14 +54,14 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
         <View className="flex-row justify-between items-center">
           <Text className="font-semibold text-xl text-primary">Minha Estante</Text>
           <TouchableOpacity onPress={() => filterModalRef.current?.open()}>
-            <Filter size={24} color="grey" />
+            <Filter size={24} color="grey" fill={hasFilter ? 'grey' : 'transparent'} />
           </TouchableOpacity>
         </View>
 
         <View className="h-full flex-row flex-wrap justify-center pt-2 border-t border-gray-200">
           {!loading ? (
             <FlatList
-              data={userInfos.readings}
+              data={userInfos.filteredReadings}
               numColumns={3}
               keyExtractor={(item) => item.id.toString()}
               contentContainerStyle={{ paddingBottom: 100 }}
@@ -65,7 +80,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
                 <View className="flex py-24 justify-center items-center">
                   <ImageView
                     image={require('@/assets/no-results.png')}
-                    label="Parece que sua estante está vazia"
+                    label={hasFilter ? 'Nenhuma leitura encontrada' : 'Parece que sua estante está vazia'}
                     width={350}
                     height={300}
                   />
@@ -77,7 +92,6 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
               {[...Array(12)].map((_, index) => (
                 <View key={index} className="w-[30%] p-1 gap-2">
                   <Skeleton className="h-44" />
-                  <Skeleton className="mx-4 h-2" />
                   <Skeleton className="mx-2 h-2" />
                 </View>
               ))}
@@ -85,7 +99,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
           )}
         </View>
 
-        <BookshelfFilterModal modalRef={filterModalRef} onApplyFilters={() => { }} />
+        <BookshelfFilterModal modalRef={filterModalRef} onApplyFilters={handleFilter} />
 
         <ReadingMenuModalize modalRef={modalizeRef} navigation={navigation} />
       </View>

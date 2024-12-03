@@ -2,7 +2,8 @@ import History from './History'
 import Reading from './Reading'
 
 type ProfileInfos = {
-  readings: Reading[]
+  allReadings: Reading[]
+  filteredReadings: Reading[]
   totalReadPages: number
   totalReviews: number
   totalItems: number

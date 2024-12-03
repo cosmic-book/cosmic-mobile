@@ -1,4 +1,5 @@
 import { Reading, ProfileInfos } from '@/@types';
+import { BookshelfFilter } from '@/@types/filters';
 import { ProfileService, ReadingService } from '@/services';
 import React, { createContext, ReactNode, useState } from 'react';
 
@@ -8,7 +9,7 @@ interface GlobalContextData {
   actualReading: Reading;
   loadReading: (readingId: number) => Promise<void>;
   userInfos: ProfileInfos;
-  loadUserInfos: (userId: number | undefined) => Promise<void>;
+  loadUserInfos: (userId?: number, filters?: BookshelfFilter) => Promise<void>;
 };
 
 type GlobalProviderProps = {
@@ -32,12 +33,12 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     }
   }
 
-  async function loadUserInfos(userId: number | undefined): Promise<void> {
+  async function loadUserInfos(userId?: number, filters?: BookshelfFilter): Promise<void> {
     try {
       if (userId) {
         setLoading(true)
 
-        const result = await ProfileService.getByUser(userId);
+        const result = await ProfileService.getByUser(userId, filters);
 
         setUserInfos(result);
       }

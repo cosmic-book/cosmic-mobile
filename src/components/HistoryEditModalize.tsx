@@ -1,4 +1,4 @@
-import { History } from '@/@types';
+import { History, Reading } from '@/@types';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { HistoryService } from '@/services';
 import { validateFields } from '@/utils/ValidateFields';
@@ -137,7 +137,7 @@ export function HistoryEditModalize({ actualHistory, modalRef, afterSubmit }: Pr
 
         {actualReading.book && (
           <Text className="text-sm text-right font-medium mr-3">
-            Página atual: {actualHistory.reading?.read_pages ?? 0}/{actualReading.book.pages}
+            Página atual: {!actualHistory.id ? actualReading.read_pages : actualHistory.read_pages}/{actualReading.book.pages}
           </Text>
         )}
       </View>
