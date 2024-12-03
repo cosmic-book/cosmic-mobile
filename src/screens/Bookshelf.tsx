@@ -1,16 +1,17 @@
-import { Filter } from 'lucide-react-native'
 import { Reading } from '@/@types'
+import { BookshelfFilter } from '@/@types/filters'
 import { MainStackParamList } from '@/@types/navigation'
-import { ImageView, ReadingMenuModalize, Skeleton, BookshelfFilterModal } from '@/components'
+import { ImageView, Skeleton } from '@/components'
 import { ReadingGridItem } from '@/components/layout'
+import { BookshelfFilterModal, ReadingMenuModal } from '@/components/modals'
 import { useAuth } from '@/contexts/AuthContext'
 import { GlobalContext } from '@/contexts/GlobalContext'
 import { NavigationProp, RouteProp, useIsFocused } from '@react-navigation/native'
+import { Filter } from 'lucide-react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { FlatList, Text, TouchableOpacity, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
-import { BookshelfFilter } from '@/@types/filters'
 
 type BookshelfProps = {
   navigation: NavigationProp<MainStackParamList, 'Bookshelf'>
@@ -101,7 +102,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
 
         <BookshelfFilterModal modalRef={filterModalRef} onApplyFilters={handleFilter} />
 
-        <ReadingMenuModalize modalRef={modalizeRef} navigation={navigation} />
+        <ReadingMenuModal modalRef={modalizeRef} navigation={navigation} />
       </View>
     </GestureHandlerRootView>
   );

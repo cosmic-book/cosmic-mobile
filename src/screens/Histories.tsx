@@ -1,6 +1,7 @@
 import { History, HistoryResult } from "@/@types";
 import { MainStackParamList } from "@/@types/navigation";
-import { Button, HistoryEditModalize, Progress, Skeleton } from "@/components";
+import { Button, Progress, Skeleton } from "@/components";
+import { HistoryEditModal } from "@/components/modals";
 import { useAuth } from "@/contexts/AuthContext";
 import { GlobalContext } from "@/contexts/GlobalContext";
 import { HistoryService } from "@/services";
@@ -185,7 +186,7 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
         )}
       </View>
 
-      <HistoryEditModalize
+      <HistoryEditModal
         actualHistory={history}
         modalRef={editModalRef}
         afterSubmit={fetchData}

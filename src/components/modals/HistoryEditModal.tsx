@@ -8,8 +8,8 @@ import { MutableRefObject, useContext, useEffect, useState } from 'react';
 import { Dimensions, Platform, Text, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
-import { Button } from './Button';
-import { Input, InputArea } from './fields';
+import { Button } from '../Button';
+import { Input, InputArea } from '../fields';
 
 type Props = {
   actualHistory: History;
@@ -17,7 +17,7 @@ type Props = {
   afterSubmit: () => void;
 };
 
-export function HistoryEditModalize({ actualHistory, modalRef, afterSubmit }: Props) {
+export function HistoryEditModal({ actualHistory, modalRef, afterSubmit }: Props) {
   const windowHeight = Dimensions.get('window').height * 0.52;
 
   const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext);

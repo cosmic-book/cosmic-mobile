@@ -1,6 +1,6 @@
-import { Reading } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
-import { BackButton, ReadingEditModalize } from '@/components';
+import { BackButton } from '@/components';
+import { ReadingEditModal } from '@/components/modals';
 import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { useIsFocused } from '@react-navigation/native';
@@ -70,7 +70,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
     setStatusLabel('Adicionar')
     setStatusColor('text-blue-500')
 
-    userInfos.readings.filter((reading) => {
+    userInfos.allReadings.filter((reading) => {
       if (reading.id_book === book.id && reading.status !== null) {
         handleLoad(reading.id)
 
@@ -145,7 +145,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
         </View>
       </ScrollView>
 
-      <ReadingEditModalize book={book} modalRef={readingModalizeRef} />
+      <ReadingEditModal book={book} modalRef={readingModalizeRef} />
     </GestureHandlerRootView>
   );
 };

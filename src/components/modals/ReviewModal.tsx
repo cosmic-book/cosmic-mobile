@@ -3,9 +3,9 @@ import { MutableRefObject, useEffect, useState } from 'react';
 import { Dimensions, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
-import { Button } from './Button';
-import { Rating } from './Rating';
-import { InputArea } from './fields';
+import { Button } from '../Button';
+import { Rating } from '../Rating';
+import { InputArea } from '../fields';
 
 type Props = {
   modalRef: MutableRefObject<Modalize | null>;
@@ -15,7 +15,7 @@ type Props = {
   initialFavorite?: number | null;
 };
 
-export function ReviewModalize({
+export function ReviewModal({
   modalRef,
   onSubmit,
   initialReview = '',

@@ -8,14 +8,14 @@ import { MutableRefObject, useContext, useEffect, useRef } from 'react';
 import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
-import { ReadingEditModalize } from './ReadingEditModalize';
+import { ReadingEditModal } from './ReadingEditModal';
 
 type Props = {
   modalRef: MutableRefObject<Modalize | null>;
   navigation: NavigationProp<MainStackParamList>;
 };
 
-export function ReadingMenuModalize({ modalRef, navigation }: Props) {
+export function ReadingMenuModal({ modalRef, navigation }: Props) {
   const { actualUser } = useAuth()
   const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext)
 
@@ -112,7 +112,7 @@ export function ReadingMenuModalize({ modalRef, navigation }: Props) {
       </Modalize>
 
       {actualReading.book && (
-        <ReadingEditModalize book={actualReading.book} modalRef={editModalRef} />
+        <ReadingEditModal book={actualReading.book} modalRef={editModalRef} />
       )}
     </>
   );

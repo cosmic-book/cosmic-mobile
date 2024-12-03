@@ -9,16 +9,16 @@ import { MutableRefObject, useContext, useEffect, useRef, useState } from 'react
 import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Modalize } from 'react-native-modalize';
 import Toast from 'react-native-toast-message';
-import { Button } from './Button';
-import { DateInput, ReadingCategorySelector, ReadingStatusSelect, ReadingTypeSelector } from './fields';
-import { ReviewModalize } from './ReviewModalize';
+import { Button } from '../Button';
+import { DateInput, ReadingCategorySelector, ReadingStatusSelect, ReadingTypeSelector } from '../fields';
+import { ReviewModal } from './ReviewModal';
 
 type Props = {
   book: Partial<Book>;
   modalRef: MutableRefObject<Modalize | null>
 };
 
-export function ReadingEditModalize({ book, modalRef }: Props) {
+export function ReadingEditModal({ book, modalRef }: Props) {
   const windowHeight = Dimensions.get('window').height * 0.67;
 
   const { actualUser } = useAuth();
@@ -235,7 +235,7 @@ export function ReadingEditModalize({ book, modalRef }: Props) {
         </View>
       </Modalize>
 
-      <ReviewModalize
+      <ReviewModal
         modalRef={reviewModalRef}
         onSubmit={(newReview, newRating, newFavorite) => {
           handleReviewSubmit(newReview, newRating);
