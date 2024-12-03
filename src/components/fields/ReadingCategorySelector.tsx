@@ -29,7 +29,7 @@ export function ReadingCategorySelector({ value, onSelect }: Props) {
             key={id}
             onPress={() => handleChangeSelected(id)}
             className={`
-              ${isSelected ? 'bg-blue-600' : 'bg-white'} 
+              ${isSelected ? 'bg-primary' : 'bg-white'} 
               ${isFirst ? 'rounded-l-lg' : ''}
               ${isLast ? 'rounded-r-lg' : ''}
               ${!isFirst && 'border-l border-gray-300'} 
