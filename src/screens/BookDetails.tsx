@@ -52,10 +52,6 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
 
   const handleLoad = async (id: number) => {
     await loadReading(id);
-
-    if (actualUser) {
-      await loadUserInfos(actualUser.id);
-    }
   }
 
   useEffect(() => {
@@ -78,7 +74,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
         setStatusColor(statusTypes[reading.status].color)
       }
     })
-  }, [book])
+  }, [book, userInfos])
 
   return (
     <GestureHandlerRootView>

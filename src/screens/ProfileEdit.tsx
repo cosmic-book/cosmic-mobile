@@ -1,6 +1,7 @@
 import { User } from '@/@types';
 import { MainStackParamList } from '@/@types/navigation';
-import { Avatar, AvatarImage, BackButton, Button, Heading, ImagePickerModal } from '@/components';
+import { Avatar, AvatarImage, BackButton, Button, Heading } from '@/components';
+import { ImagePickerModal } from '@/components/modals';
 import { DateInput, GenderSelect, Input } from '@/components/fields';
 import { useAuth } from '@/contexts/AuthContext';
 import UserService from '@/services/UserService';
