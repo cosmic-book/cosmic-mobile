@@ -1,70 +1,70 @@
-import { User } from '@/@types';
-import { MainStackParamList } from '@/@types/navigation';
-import { Avatar, AvatarImage, BackButton, Button, Heading } from '@/components';
-import { ImagePickerModal } from '@/components/modals';
-import { DateInput, GenderSelect, Input } from '@/components/fields';
-import { useAuth } from '@/contexts/AuthContext';
-import UserService from '@/services/UserService';
-import { validateFields } from '@/utils/ValidateFields';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Camera } from 'lucide-react-native';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { TUser } from '@/@types'
+import { TMainStackParamList } from '@/@types/navigation'
+import { Avatar, AvatarImage, BackButton, Button, Heading } from '@/components'
+import { ImagePickerModal } from '@/components/modals'
+import { DateInput, GenderSelect, Input } from '@/components/fields'
+import { useAuth } from '@/contexts/AuthContext'
+import UserService from '@/services/UserService'
+import { validateFields } from '@/utils/ValidateFields'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { Camera } from 'lucide-react-native'
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 
-type ProfileEditProps = NativeStackScreenProps<MainStackParamList, 'ProfileEdit'>;
+type ProfileEditProps = NativeStackScreenProps<TMainStackParamList, 'ProfileEdit'>
 
 function ProfileEditScreen({ navigation }: ProfileEditProps) {
-  const { actualUser, setActualUser } = useAuth();
+  const { actualUser, setActualUser } = useAuth()
 
-  const [user, setUser] = useState<User>({} as User);
+  const [user, setUser] = useState<TUser>({} as TUser)
 
-  const [modalVisible, setModalVisible] = useState(false);
-  const [error, setError] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (actualUser) {
-        setUser(actualUser);
+        setUser(actualUser)
       }
-    };
+    }
 
-    fetchUserData();
-  }, [actualUser]);
+    fetchUserData()
+  }, [actualUser])
 
   const handleImagePicked = (uri: string | null) => {
-    setUser({ ...user, image: uri });
-  };
+    setUser({ ...user, image: uri })
+  }
 
   const validate = () => {
     return validateFields([
       {
-        value: (user.name && user.email && user.birthday && user.gender),
-        setter: setError,
-      },
-    ]);
-  };
+        value: user.name && user.email && user.birthday && user.gender,
+        setter: setError
+      }
+    ])
+  }
 
   const handleSave = async () => {
     if (validate() && actualUser && actualUser.id !== undefined) {
-      const updatedUser: User = {
+      const updatedUser: TUser = {
         ...actualUser,
         name: user.name,
         email: user.email,
         image: user.image,
         birthday: moment(user.birthday).format('YYYY-MM-DD'),
-        gender: user.gender ?? 0,
-      };
+        gender: user.gender ?? 0
+      }
 
-      const result = await UserService.update(actualUser.id, updatedUser);
+      const result = await UserService.update(actualUser.id, updatedUser)
 
-      setActualUser(updatedUser);
+      setActualUser(updatedUser)
 
       if (result) {
-        navigation.navigate('Profile');
+        navigation.navigate('Profile')
       }
     }
-  };
+  }
 
   return (
     <View className="bg-white flex-1">
@@ -110,18 +110,11 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
             onChangeDate={(date) => setUser({ ...user, birthday: date ?? '' })}
           />
 
-          <GenderSelect
-            value={user.gender}
-            onChangeOption={(gender) => setUser({ ...user, gender: gender ?? 0 })}
-          />
+          <GenderSelect value={user.gender} onChangeOption={(gender) => setUser({ ...user, gender: gender ?? 0 })} />
         </View>
 
         <View className="items-center gap-3">
-          {error && (
-            <Text className="text-sm text-error">
-              Preencha os campos antes de salvar
-            </Text>
-          )}
+          {error && <Text className="text-sm text-error">Preencha os campos antes de salvar</Text>}
 
           <Button className="w-full" label="Salvar Alterações" onPress={handleSave} />
         </View>
@@ -133,7 +126,7 @@ function ProfileEditScreen({ navigation }: ProfileEditProps) {
         onImagePicked={handleImagePicked}
       />
     </View>
-  );
+  )
 }
 
-export default ProfileEditScreen;
+export default ProfileEditScreen

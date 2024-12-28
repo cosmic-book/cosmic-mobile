@@ -1,24 +1,24 @@
-import { User } from '@/@types';
+import { TUser } from '@/@types';
 import { AuthService } from '@/services';
 import Service from '@/services/service';
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 import { setItemAsync, deleteItemAsync } from 'expo-secure-store';
 
 interface AuthContextProps {
-  actualUser: User | null;
-  setActualUser: (user: User | null) => void;
+  actualUser: TUser | null;
+  setActualUser: (user: TUser | null) => void;
   isAuthenticated: boolean;
-  login: (username: string, password: string) => Promise<User | null>;
+  login: (username: string, password: string) => Promise<TUser | null>;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [actualUser, setActualUser] = useState<User | null>(null);
+  const [actualUser, setActualUser] = useState<TUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const login = async (username: string, password: string): Promise<User | null> => {
+  const login = async (username: string, password: string): Promise<TUser | null> => {
     const data = await AuthService.login(username, password);
 
     if (!data) return null;

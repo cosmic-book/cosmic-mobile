@@ -1,42 +1,42 @@
-import { MainStackParamList } from '@/@types/navigation';
-import { BackButton } from '@/components';
-import { ReadingEditModal } from '@/components/modals';
-import { useAuth } from '@/contexts/AuthContext';
-import { GlobalContext } from '@/contexts/GlobalContext';
-import { useIsFocused } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Modalize } from 'react-native-modalize';
+import { TMainStackParamList } from '@/@types/navigation'
+import { BackButton } from '@/components'
+import { ReadingEditModal } from '@/components/modals'
+import { useAuth } from '@/contexts/AuthContext'
+import { GlobalContext } from '@/contexts/GlobalContext'
+import { useIsFocused } from '@react-navigation/native'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Modalize } from 'react-native-modalize'
 
-type BookDetailsProps = NativeStackScreenProps<MainStackParamList, 'BookDetails'>;
+type BookDetailsProps = NativeStackScreenProps<TMainStackParamList, 'BookDetails'>
 
 const statusTypes = [
   {
     label: 'Quero Ler',
-    color: 'text-blue-500',
+    color: 'text-blue-500'
   },
   {
     label: 'Lendo',
-    color: 'text-yellow-500',
+    color: 'text-yellow-500'
   },
   {
     label: 'Concluído',
-    color: 'text-green-500',
+    color: 'text-green-500'
   },
   {
     label: 'Relendo',
-    color: 'text-orange-500',
+    color: 'text-orange-500'
   },
   {
     label: 'Abandonado',
-    color: 'text-red-500',
-  },
+    color: 'text-red-500'
+  }
 ]
 
 const BookDetails = ({ route, navigation }: BookDetailsProps) => {
-  const { book } = route.params;
+  const { book } = route.params
 
   const { actualUser } = useAuth()
   const { userInfos, loadUserInfos, loadReading } = useContext(GlobalContext)
@@ -45,18 +45,18 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
 
   const isFocused = useIsFocused()
 
-  const [imageError, setImageError] = useState(false);
+  const [imageError, setImageError] = useState(false)
 
-  const [statusLabel, setStatusLabel] = useState('');
-  const [statusColor, setStatusColor] = useState('');
+  const [statusLabel, setStatusLabel] = useState('')
+  const [statusColor, setStatusColor] = useState('')
 
   const handleLoad = async (id: number) => {
-    await loadReading(id);
+    await loadReading(id)
   }
 
   useEffect(() => {
     readingModalizeRef.current?.close()
-  }, [isFocused]);
+  }, [isFocused])
 
   useEffect(() => {
     if (book.cover) {
@@ -79,7 +79,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
   return (
     <GestureHandlerRootView>
       <ScrollView className="flex-1 color-gray-200">
-        <BackButton color='white' onPress={() => navigation.goBack()} />
+        <BackButton color="white" onPress={() => navigation.goBack()} />
 
         <View style={styles.backgroundContainer}>
           <Image
@@ -121,10 +121,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           </View>
 
           <View className="flex-row items-center mt-8">
-            <Image
-              source={require('@/assets/user-icon.png')}
-              className="w-16 h-16 rounded-full mr-4"
-            />
+            <Image source={require('@/assets/user-icon.png')} className="w-16 h-16 rounded-full mr-4" />
             <View className="flex-1">
               <Text className="text-lg font-bold">{book.author}</Text>
               <Text className="text-sm text-gray-500" numberOfLines={2}>
@@ -134,17 +131,15 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           </View>
 
           <View className="my-4">
-            <Text className="text-base text-justify">
-              {book.description}
-            </Text>
+            <Text className="text-base text-justify">{book.description}</Text>
           </View>
         </View>
       </ScrollView>
 
       <ReadingEditModal book={book} modalRef={readingModalizeRef} />
     </GestureHandlerRootView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   backgroundContainer: {
@@ -153,17 +148,17 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 500,
-    zIndex: -1,
+    zIndex: -1
   },
   backgroundImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
+    resizeMode: 'cover'
   },
   contentContainer: {
     paddingTop: 150,
-    paddingHorizontal: 20,
-  },
-});
+    paddingHorizontal: 20
+  }
+})
 
-export default BookDetails;
+export default BookDetails

@@ -1,8 +1,6 @@
-import History from './History'
+import { THistory } from './History'
 
-type HistoryResult = {
-  histories: History[]
+export type THistoryResult = {
+  histories: THistory[]
   totalItems: number
 }
-
-export default HistoryResult

@@ -1,10 +1,10 @@
-import { Reading } from "@/@types";
+import { TReading } from "@/@types";
 import { Heart } from "lucide-react-native";
 import React from "react";
 import { Image, ScrollView, Text, View } from "react-native";
 
 type FavoritesCarouselProps = {
-  favoriteBooks: Reading[];
+  favoriteBooks: TReading[];
 };
 
 export function FavoritesCarousel({ favoriteBooks }: FavoritesCarouselProps) {

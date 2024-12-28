@@ -1,12 +1,12 @@
-import { Book } from "@/@types";
-import { MainStackParamList } from "@/@types/navigation";
+import { TBook } from "@/@types";
+import { TMainStackParamList } from "@/@types/navigation";
 import { NavigationProp } from '@react-navigation/native';
 import { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
-  book: Partial<Book>;
-  navigation: NavigationProp<MainStackParamList>;
+  book: Partial<TBook>;
+  navigation: NavigationProp<TMainStackParamList>;
 };
 
 export function BookListItem({ book, navigation }: Props) {

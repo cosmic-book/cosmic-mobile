@@ -1,6 +1,6 @@
-import { Book, BookSearch } from '@/@types'
-import { FilterModel } from '@/@types/filters'
-import { MainStackParamList } from '@/@types/navigation'
+import { TBook, TBookSearch } from '@/@types'
+import { TFilterModel } from '@/@types/filters'
+import { TMainStackParamList } from '@/@types/navigation'
 import { ImageView, Skeleton } from '@/components'
 import { Input } from '@/components/fields'
 import { BookListItem } from '@/components/layout'
@@ -13,7 +13,7 @@ import { FlatList, Text, View } from 'react-native'
 import { useDebounce } from 'use-debounce'
 
 type SearchProps = {
-  navigation: NavigationProp<MainStackParamList, 'Search'>
+  navigation: NavigationProp<TMainStackParamList, 'Search'>
   route: RouteProp<any>
 }
 
@@ -21,18 +21,18 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
   const { loading, setLoading } = useContext(GlobalContext)
 
   const [search, setSearch] = useState('')
-  const [books, setBooks] = useState<Book[]>([])
+  const [books, setBooks] = useState<TBook[]>([])
   const [totalItems, setTotalItems] = useState(0)
 
   const [debounceTerm] = useDebounce(search, 3000)
 
   const fetchData = async () => {
-    const filterModel: FilterModel = {
+    const filterModel: TFilterModel = {
       term: debounceTerm || ''
     }
 
     if (debounceTerm) {
-      const result: BookSearch = await BookService.search(filterModel)
+      const result: TBookSearch = await BookService.search(filterModel)
 
       setBooks(result.books)
       setTotalItems(result.totalItems)
@@ -79,10 +79,8 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
           className="pt-2 border-t border-gray-200"
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <BookListItem book={item} navigation={navigation} />
-          )}
-          ItemSeparatorComponent={() => <View className='h-5' />}
+          renderItem={({ item }) => <BookListItem book={item} navigation={navigation} />}
+          ItemSeparatorComponent={() => <View className="h-5" />}
           ListEmptyComponent={
             <View className="flex py-24 justify-center items-center">
               {search ? (

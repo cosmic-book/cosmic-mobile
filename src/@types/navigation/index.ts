@@ -1,2 +1,2 @@
-export { default as AuthStackParamList } from './AuthStackParamList'
-export { default as MainStackParamList } from './MainStackParamList'
+export { TAuthStackParamList } from './AuthStackParamList'
+export { TMainStackParamList } from './MainStackParamList'

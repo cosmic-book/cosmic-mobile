@@ -1,13 +1,11 @@
-import Reading from './Reading'
+import { TReading } from './Reading'
 
-type History = {
+export type THistory = {
   id: number
   id_user: number
   id_reading: number
   date: string | null
   read_pages: number
   comment?: string
-  reading?: Reading
+  reading?: TReading
 }
-
-export default History

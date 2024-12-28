@@ -1,10 +1,19 @@
-import { MainStackParamList } from '@/@types/navigation';
-import { Footer } from '@/components';
-import { BookDetailsScreen, BookshelfScreen, HistoriesScreen, MenuScreen, ProfileEditScreen, ProfileScreen, SearchScreen, SettingsScreen } from '@/screens';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React from 'react';
+import { TMainStackParamList } from '@/@types/navigation'
+import { Footer } from '@/components'
+import {
+  BookDetailsScreen,
+  BookshelfScreen,
+  HistoriesScreen,
+  MenuScreen,
+  ProfileEditScreen,
+  ProfileScreen,
+  SearchScreen,
+  SettingsScreen
+} from '@/screens'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import React from 'react'
 
-const Tab = createBottomTabNavigator<MainStackParamList>()
+const Tab = createBottomTabNavigator<TMainStackParamList>()
 
 const MainStack: React.FC = () => (
   <Tab.Navigator tabBar={(props) => <Footer {...props} />}>
@@ -17,6 +26,6 @@ const MainStack: React.FC = () => (
     <Tab.Screen name="ProfileEdit" component={ProfileEditScreen} options={{ headerShown: false }} />
     <Tab.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
   </Tab.Navigator>
-);
+)
 
-export default MainStack;
+export default MainStack

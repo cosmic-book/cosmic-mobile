@@ -1,6 +1,6 @@
-import { Reading } from '@/@types'
-import { BookshelfFilter } from '@/@types/filters'
-import { MainStackParamList } from '@/@types/navigation'
+import { TReading } from '@/@types'
+import { TBookshelfFilter } from '@/@types/filters'
+import { TMainStackParamList } from '@/@types/navigation'
 import { ImageView, Skeleton } from '@/components'
 import { ReadingGridItem } from '@/components/layout'
 import { BookshelfFilterModal, ReadingMenuModal } from '@/components/modals'
@@ -14,7 +14,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 
 type BookshelfProps = {
-  navigation: NavigationProp<MainStackParamList, 'Bookshelf'>
+  navigation: NavigationProp<TMainStackParamList, 'Bookshelf'>
   route: RouteProp<any>
 }
 
@@ -23,19 +23,24 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
   const { loading, userInfos, loadUserInfos, loadReading } = useContext(GlobalContext)
 
   const modalizeRef = useRef<Modalize>(null)
-  const filterModalRef = useRef<Modalize | null>(null);
+  const filterModalRef = useRef<Modalize | null>(null)
 
   const isFocused = useIsFocused()
 
   const [hasFilter, setHasFilter] = useState(false)
 
-  const openModalize = async (reading: Reading) => {
+  const openModalize = async (reading: TReading) => {
     await loadReading(reading.id)
     modalizeRef.current?.open()
   }
 
-  const handleFilter = async (filters: BookshelfFilter) => {
-    const hasFilters = !!(filters.category !== undefined || filters.status !== undefined || filters.type !== undefined || filters.rating !== undefined)
+  const handleFilter = async (filters: TBookshelfFilter) => {
+    const hasFilters = !!(
+      filters.category !== undefined ||
+      filters.status !== undefined ||
+      filters.type !== undefined ||
+      filters.rating !== undefined
+    )
 
     setHasFilter(hasFilters)
 
@@ -47,7 +52,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
   useEffect(() => {
     modalizeRef.current?.close()
     filterModalRef.current?.close()
-  }, [isFocused]);
+  }, [isFocused])
 
   return (
     <GestureHandlerRootView>
@@ -70,11 +75,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
               showsVerticalScrollIndicator={false}
               renderItem={({ item }) => (
                 <View className="w-[30%]">
-                  <ReadingGridItem
-                    reading={item}
-                    navigation={navigation}
-                    onPress={() => openModalize(item)}
-                  />
+                  <ReadingGridItem reading={item} navigation={navigation} onPress={() => openModalize(item)} />
                 </View>
               )}
               ListEmptyComponent={
@@ -105,7 +106,7 @@ const Bookshelf = ({ navigation, route }: BookshelfProps) => {
         <ReadingMenuModal modalRef={modalizeRef} navigation={navigation} />
       </View>
     </GestureHandlerRootView>
-  );
-};
+  )
+}
 
-export default Bookshelf;
+export default Bookshelf

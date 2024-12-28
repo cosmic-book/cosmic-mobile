@@ -1,14 +1,12 @@
-import History from './History'
-import Reading from './Reading'
+import { THistory } from './History'
+import { TReading } from './Reading'
 
-type ProfileInfos = {
-  allReadings: Reading[]
-  filteredReadings: Reading[]
+export type TProfileInfos = {
+  allReadings: TReading[]
+  filteredReadings: TReading[]
   totalReadPages: number
   totalReviews: number
   totalItems: number
-  favorites: Reading[]
-  lastHistory: History
+  favorites: TReading[]
+  lastHistory: THistory
 }
-
-export default ProfileInfos

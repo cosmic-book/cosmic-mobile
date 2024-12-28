@@ -1,10 +1,10 @@
-import { User } from '@/@types'
+import { TUser } from '@/@types'
 import { IAuthResponse } from '@/interfaces'
 import service from './service'
 
 export default class AuthService {
   static async login(username: string, password: string): Promise<IAuthResponse | undefined> {
-    const loginData: Partial<User> = {
+    const loginData: Partial<TUser> = {
       username,
       password
     }

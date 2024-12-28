@@ -1,8 +1,6 @@
-type BookshelfFilter = {
+export type TBookshelfFilter = {
   category?: number
   status?: number
   type?: number
   rating?: number
 }
-
-export default BookshelfFilter
