@@ -2,10 +2,10 @@ import { Progress } from '@/components';
 import React, { useState } from 'react';
 import { Image, Text, View } from 'react-native';
 
-import { History } from "@/@types";
+import { THistory } from "@/@types";
 
 type Props = {
-  history: History;
+  history: THistory;
 };
 
 export function LastHistoryItem({ history }: Props) {

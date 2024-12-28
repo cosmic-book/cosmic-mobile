@@ -1,4 +1,4 @@
-import { AuthStackParamList } from '@/@types/navigation'
+import { TAuthStackParamList } from '@/@types/navigation'
 import { Button, Heading } from '@/components'
 import { Input, PasswordInput } from '@/components/fields'
 import { useAuth } from '@/contexts/AuthContext'
@@ -9,10 +9,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useContext, useEffect, useState } from 'react'
 import { Text, TouchableOpacity, View } from 'react-native'
 
-type LoginProps = NativeStackScreenProps<AuthStackParamList, 'Login'>
+type LoginProps = NativeStackScreenProps<TAuthStackParamList, 'Login'>
 
 const Login = ({ navigation }: LoginProps) => {
-  const { login } = useAuth();
+  const { login } = useAuth()
   const { loading, setLoading, loadUserInfos } = useContext(GlobalContext)
 
   const [username, setUsername] = useState('')
@@ -62,21 +62,21 @@ const Login = ({ navigation }: LoginProps) => {
       <View className="mt-4">
         <View className="gap-3">
           <Input
-            placeholder='Nome de usuário *'
+            placeholder="Nome de usuário *"
             variant={usernameError ? 'error' : 'default'}
             value={username}
             onChangeText={setUsername}
             clearable
           />
           <PasswordInput
-            placeholder='Senha *'
+            placeholder="Senha *"
             value={password}
             onChangeText={setPassword}
             variant={passwordError ? 'error' : 'default'}
           />
         </View>
         <View className="mb-4">
-          <TouchableOpacity className="flex items-end mt-2 mb-4 mr-2" onPress={() => { }}>
+          <TouchableOpacity className="flex items-end mt-2 mb-4 mr-2" onPress={() => {}}>
             <Text className="font-medium text-gray-600">Esqueceu a senha?</Text>
           </TouchableOpacity>
         </View>

@@ -1,4 +1,4 @@
-type User = {
+export type TUser = {
   id: number
   name: string
   username: string
@@ -9,5 +9,3 @@ type User = {
   profile?: number
   password: string
 }
-
-export default User

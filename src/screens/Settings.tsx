@@ -1,74 +1,74 @@
-import React, { useState } from 'react';
-import { View, Text, Alert, TouchableOpacity } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { useAuth } from '@/contexts/AuthContext';
-import { Input, PasswordInput } from '@/components/fields';
-import { BackButton, Button } from '@/components';
-import { validateFields } from '@/utils/ValidateFields';
-import moment from 'moment';
-import { User } from '@/@types';
-import { UserService } from '@/services';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { MainStackParamList } from '@/@types/navigation';
-import { ArrowLeft, SettingsIcon } from 'lucide-react-native';
+import { TUser } from '@/@types'
+import { TMainStackParamList } from '@/@types/navigation'
+import { Button } from '@/components'
+import { Input, PasswordInput } from '@/components/fields'
+import { useAuth } from '@/contexts/AuthContext'
+import { UserService } from '@/services'
+import { validateFields } from '@/utils/ValidateFields'
+import { useFocusEffect } from '@react-navigation/native'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { ArrowLeft, SettingsIcon } from 'lucide-react-native'
+import moment from 'moment'
+import React, { useState } from 'react'
+import { Alert, Text, TouchableOpacity, View } from 'react-native'
 
-type SettingsProps = NativeStackScreenProps<MainStackParamList, 'Settings'>;
+type SettingsProps = NativeStackScreenProps<TMainStackParamList, 'Settings'>
 
 const Settings = ({ navigation }: SettingsProps) => {
-  const { actualUser, logout } = useAuth();
-  const [username, setUsername] = useState(actualUser?.username || '');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState(false);
+  const { actualUser, logout } = useAuth()
+  const [username, setUsername] = useState(actualUser?.username || '')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState(false)
 
   const validate = () => {
     return validateFields([
       {
         value: username && password && confirmPassword && password === confirmPassword,
-        setter: setError,
-      },
-    ]);
-  };
+        setter: setError
+      }
+    ])
+  }
 
   const handleSaveChanges = async () => {
     if (!actualUser?.id) {
-      Alert.alert('Erro', 'ID do usuário não encontrado.');
-      return;
+      Alert.alert('Erro', 'ID do usuário não encontrado.')
+      return
     }
 
     if (validate()) {
-      const user: User = {
+      const user: TUser = {
         id: actualUser.id,
         username,
         password,
         email: actualUser.email,
         name: actualUser.name,
         birthday: moment(actualUser.birthday).format('YYYY-MM-DD'),
-        gender: actualUser.gender,
-      };
+        gender: actualUser.gender
+      }
 
       try {
-        const result = await UserService.update(actualUser.id, user);
+        const result = await UserService.update(actualUser.id, user)
 
         if (result) {
-          Alert.alert('Sucesso', 'Alterações salvas com sucesso. Faça login novamente.');
-          logout();
+          Alert.alert('Sucesso', 'Alterações salvas com sucesso. Faça login novamente.')
+          logout()
         } else {
-          Alert.alert('Erro', 'Não foi possível salvar as alterações.');
+          Alert.alert('Erro', 'Não foi possível salvar as alterações.')
         }
       } catch (error) {
-        console.error('Erro ao salvar alterações:', error);
-        Alert.alert('Erro', 'Ocorreu um erro ao salvar as alterações.');
+        console.error('Erro ao salvar alterações:', error)
+        Alert.alert('Erro', 'Ocorreu um erro ao salvar as alterações.')
       }
     }
-  };
+  }
 
   useFocusEffect(
     React.useCallback(() => {
-      setPassword('');
-      setConfirmPassword('');
+      setPassword('')
+      setConfirmPassword('')
     }, [])
-  );
+  )
 
   return (
     <View className="flex-1 bg-white h-full gap-3">
@@ -89,48 +89,28 @@ const Settings = ({ navigation }: SettingsProps) => {
       </View>
 
       <View className="px-6 gap-3">
-        <View className='flex-col'>
-          <Text className="text-gray-500 text-base font-bold mt-2 mb-2">
-            Alterar Nome de Usuário
-          </Text>
-          <Input
-            placeholder="Nome de Usuário *"
-            value={username}
-            onChangeText={setUsername}
-          />
+        <View className="flex-col">
+          <Text className="text-gray-500 text-base font-bold mt-2 mb-2">Alterar Nome de Usuário</Text>
+          <Input placeholder="Nome de Usuário *" value={username} onChangeText={setUsername} />
         </View>
 
-        <View className='flex-col'>
-          <Text className="text-gray-500 text-base font-bold mt-2 mb-2">
-            Alterar Senha
-          </Text>
-          <View className='gap-3'>
-            <PasswordInput
-              placeholder="Senha *"
-              value={password}
-              onChangeText={setPassword}
-            />
+        <View className="flex-col">
+          <Text className="text-gray-500 text-base font-bold mt-2 mb-2">Alterar Senha</Text>
+          <View className="gap-3">
+            <PasswordInput placeholder="Senha *" value={password} onChangeText={setPassword} />
 
-            <PasswordInput
-              placeholder="Confirmar Senha *"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
+            <PasswordInput placeholder="Confirmar Senha *" value={confirmPassword} onChangeText={setConfirmPassword} />
           </View>
         </View>
       </View>
 
       <View className="items-center px-6 gap-3">
-        {error && (
-          <Text className="text-sm text-error">
-            Preencha os campos corretamente
-          </Text>
-        )}
+        {error && <Text className="text-sm text-error">Preencha os campos corretamente</Text>}
 
         <Button className="w-full mt-6" label="Salvar Alterações" onPress={handleSaveChanges} />
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default Settings;
+export default Settings

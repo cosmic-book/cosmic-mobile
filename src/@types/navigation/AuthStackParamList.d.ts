@@ -1,7 +1,5 @@
-type AuthStackParamList = {
+export type TAuthStackParamList = {
   Greeting: undefined
   Login: undefined
   Register: undefined
 }
-
-export default AuthStackParamList

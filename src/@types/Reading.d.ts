@@ -1,7 +1,7 @@
 import { ItemType, OwnershipStatus, ReadingStatus } from '@/enums'
-import Book from './Book'
+import { TBook } from './Book'
 
-type Reading = {
+export type TReading = {
   id: number
   id_user: number
   id_book: number
@@ -15,7 +15,5 @@ type Reading = {
   start_date?: string | null
   finish_date?: string | null
   favorite: number | null
-  book?: Book
+  book?: TBook
 }
-
-export default Reading

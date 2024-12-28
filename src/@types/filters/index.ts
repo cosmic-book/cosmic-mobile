@@ -1,2 +1,2 @@
-export { default as BookshelfFilter } from './BookshelfFilter'
-export { default as FilterModel } from './FilterModel'
+export { TBookshelfFilter } from './BookshelfFilter'
+export { TFilterModel } from './FilterModel'

@@ -1,13 +1,13 @@
-import { Reading } from "@/@types";
-import { MainStackParamList } from "@/@types/navigation";
+import { TReading } from "@/@types";
+import { TMainStackParamList } from "@/@types/navigation";
 import { NavigationProp } from "@react-navigation/native";
 import { useState } from "react";
 import { Image, TouchableOpacity, View } from "react-native";
 import { Progress } from "../Progress";
 
 type Props = {
-  reading: Partial<Reading>;
-  navigation: NavigationProp<MainStackParamList>;
+  reading: Partial<TReading>;
+  navigation: NavigationProp<TMainStackParamList>;
   onPress?: () => void;
 };
 

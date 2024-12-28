@@ -3,12 +3,12 @@ import { Modalize } from 'react-native-modalize';
 import { Dimensions, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { Filter, Star } from 'lucide-react-native';
 import { ReadingStatus, ReadingCategory, ReadingType } from '@/enums';
-import { BookshelfFilter } from '@/@types/filters';
+import { TBookshelfFilter } from '@/@types/filters';
 import { Button } from '../Button';
 
 type Props = {
   modalRef: MutableRefObject<Modalize | null>;
-  onApplyFilters: (filters: BookshelfFilter) => void;
+  onApplyFilters: (filters: TBookshelfFilter) => void;
 };
 
 export function BookshelfFilterModal({ modalRef, onApplyFilters }: Props) {

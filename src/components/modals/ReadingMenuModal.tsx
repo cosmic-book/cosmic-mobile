@@ -1,4 +1,4 @@
-import { MainStackParamList } from '@/@types/navigation';
+import { TMainStackParamList } from '@/@types/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { ReadingService } from '@/services';
@@ -12,7 +12,7 @@ import { ReadingEditModal } from './ReadingEditModal';
 
 type Props = {
   modalRef: MutableRefObject<Modalize | null>;
-  navigation: NavigationProp<MainStackParamList>;
+  navigation: NavigationProp<TMainStackParamList>;
 };
 
 export function ReadingMenuModal({ modalRef, navigation }: Props) {

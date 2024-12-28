@@ -1,24 +1,24 @@
-import { History, HistoryResult } from '@/@types'
+import { THistory, THistoryResult } from '@/@types'
 import service from './service'
 
 export default class HistoryService {
-  static async getAll(): Promise<History[]> {
+  static async getAll(): Promise<THistory[]> {
     return service.get('/histories')
   }
 
-  static async getByReading(reading_id: number): Promise<HistoryResult> {
+  static async getByReading(reading_id: number): Promise<THistoryResult> {
     return service.get(`/histories/reading/${reading_id}`)
   }
 
-  static async getById(id: number): Promise<History | undefined> {
+  static async getById(id: number): Promise<THistory | undefined> {
     return service.get(`/histories/${id}`)
   }
 
-  static async create(history: History): Promise<History> {
+  static async create(history: THistory): Promise<THistory> {
     return service.post('/histories', history)
   }
 
-  static async update(id: number, history: History): Promise<History | undefined> {
+  static async update(id: number, history: THistory): Promise<THistory | undefined> {
     return service.put(`/histories/${id}`, history)
   }
 

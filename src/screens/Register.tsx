@@ -1,5 +1,5 @@
-import { User } from '@/@types'
-import { AuthStackParamList } from '@/@types/navigation'
+import { TUser } from '@/@types'
+import { TAuthStackParamList } from '@/@types/navigation'
 import { Button, Heading } from '@/components'
 import { DateInput, GenderSelect, Input, PasswordInput } from '@/components/fields'
 import { UserService } from '@/services'
@@ -9,28 +9,28 @@ import moment from 'moment'
 import { useState } from 'react'
 import { ScrollView, Text, View } from 'react-native'
 
-type RegisterProps = NativeStackScreenProps<AuthStackParamList, 'Register'>
+type RegisterProps = NativeStackScreenProps<TAuthStackParamList, 'Register'>
 
 const Register = ({ navigation }: RegisterProps) => {
-  const [user, setUser] = useState<User>({} as User)
+  const [user, setUser] = useState<TUser>({} as TUser)
 
   const [error, setError] = useState(false)
 
   const validate = () => {
     return validateFields([
       {
-        value: (user.name && user.username && user.email && user.birthday && user.gender && user.password),
+        value: user.name && user.username && user.email && user.birthday && user.gender && user.password,
         setter: setError
-      },
+      }
     ])
   }
 
   const handleRegister = async () => {
     if (validate()) {
-      const payload: Partial<User> = {
+      const payload: Partial<TUser> = {
         ...user,
         birthday: moment(user.birthday).format('YYYY-MM-DD'),
-        gender: user.gender ?? 0,
+        gender: user.gender ?? 0
       }
 
       const result = await UserService.create(payload)
@@ -40,7 +40,7 @@ const Register = ({ navigation }: RegisterProps) => {
   }
 
   const handleClear = () => {
-    setUser({} as User)
+    setUser({} as TUser)
   }
 
   return (
@@ -81,44 +81,27 @@ const Register = ({ navigation }: RegisterProps) => {
             onChangeDate={(date) => setUser({ ...user, birthday: date ?? '' })}
           />
 
-          <GenderSelect
-            value={user.gender}
-            onChangeOption={(value) => setUser({ ...user, gender: value ?? 0 })}
-          />
+          <GenderSelect value={user.gender} onChangeOption={(value) => setUser({ ...user, gender: value ?? 0 })} />
 
           <PasswordInput
-            placeholder='Senha *'
+            placeholder="Senha *"
             value={user.password}
             onChangeText={(value) => setUser({ ...user, password: value })}
           />
         </View>
 
-        <View className='items-center gap-3'>
-          {error && (
-            <Text className='text-sm text-error'>
-              Preencha os campos para se cadastrar
-            </Text>
-          )}
+        <View className="items-center gap-3">
+          {error && <Text className="text-sm text-error">Preencha os campos para se cadastrar</Text>}
 
-          <Button className='w-full' label="Cadastrar" onPress={handleRegister} />
+          <Button className="w-full" label="Cadastrar" onPress={handleRegister} />
 
-          <Button
-            label="Limpar campos"
-            onPress={handleClear}
-            variant={'inline'}
-            size={null}
-          />
+          <Button label="Limpar campos" onPress={handleClear} variant={'inline'} size={null} />
         </View>
 
         <View className="mt-10">
           <View className="flex flex-row items-center justify-center">
             <Text className="text-gray-600">Já possui uma conta? </Text>
-            <Button
-              label="Entrar"
-              variant={'link'}
-              size={null}
-              onPress={() => navigation.navigate('Login')}
-            />
+            <Button label="Entrar" variant={'link'} size={null} onPress={() => navigation.navigate('Login')} />
           </View>
         </View>
       </ScrollView>

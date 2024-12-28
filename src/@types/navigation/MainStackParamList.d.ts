@@ -1,17 +1,14 @@
-import Book from '../Book'
-import Reading from '../Reading'
+import { TBook } from '../Book'
 
-type MainStackParamList = {
+export type TMainStackParamList = {
   Menu: undefined
   Search: undefined
   Bookshelf: undefined
   BookDetails: {
-    book: Partial<Book>
+    book: Partial<TBook>
   }
   History: undefined
   Profile: undefined
   ProfileEdit: undefined
   Settings: undefined
 }
-
-export default MainStackParamList

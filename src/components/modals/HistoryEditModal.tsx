@@ -1,4 +1,4 @@
-import { History, Reading } from '@/@types';
+import { THistory } from '@/@types';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { HistoryService } from '@/services';
 import { validateFields } from '@/utils/ValidateFields';
@@ -12,7 +12,7 @@ import { Button } from '../Button';
 import { Input, InputArea } from '../fields';
 
 type Props = {
-  actualHistory: History;
+  actualHistory: THistory;
   modalRef: MutableRefObject<Modalize | null>;
   afterSubmit: () => void;
 };
@@ -22,7 +22,7 @@ export function HistoryEditModal({ actualHistory, modalRef, afterSubmit }: Props
 
   const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext);
 
-  const [history, setHistory] = useState<History>(actualHistory || {} as History);
+  const [history, setHistory] = useState<THistory>(actualHistory || {} as THistory);
   const [error, setError] = useState(false);
 
   const validate = () => {
@@ -36,14 +36,14 @@ export function HistoryEditModal({ actualHistory, modalRef, afterSubmit }: Props
 
   const handleSubmit = async () => {
     if (validate()) {
-      const payload: History = {
+      const payload: THistory = {
         ...history,
         id_user: actualReading.id_user,
         id_reading: actualReading.id,
         date: moment(history.id ? history.date : new Date()).format('YYYY-MM-DDTHH:mm:ss'),
       };
 
-      let response: History | undefined;
+      let response: THistory | undefined;
 
       if (payload.id) {
         response = await HistoryService.update(payload.id, payload);
@@ -76,11 +76,11 @@ export function HistoryEditModal({ actualHistory, modalRef, afterSubmit }: Props
   };
 
   const handleOpen = () => {
-    setHistory(actualHistory || {} as History);
+    setHistory(actualHistory || {} as THistory);
   };
 
   const handleClose = () => {
-    setHistory({} as History);
+    setHistory({} as THistory);
     setError(false);
   };
 

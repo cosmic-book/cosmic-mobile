@@ -1,11 +1,11 @@
-import { AuthStackParamList } from '@/@types/navigation'
+import { TAuthStackParamList } from '@/@types/navigation'
 import { Button, Heading } from '@/components'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import React from 'react'
 import { Image, Text, View } from 'react-native'
 import packageInfo from '../../package.json'
 
-type GreetingProps = NativeStackScreenProps<AuthStackParamList, 'Greeting'>
+type GreetingProps = NativeStackScreenProps<TAuthStackParamList, 'Greeting'>
 
 const Greeting = ({ navigation }: GreetingProps) => {
   return (

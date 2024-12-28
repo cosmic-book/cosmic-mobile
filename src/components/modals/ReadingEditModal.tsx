@@ -1,4 +1,4 @@
-import { Book, Reading } from '@/@types';
+import { TBook, TReading } from '@/@types';
 import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { ReadingStatus } from '@/enums';
@@ -14,7 +14,7 @@ import { DateInput, ReadingCategorySelector, ReadingStatusSelect, ReadingTypeSel
 import { ReviewModal } from './ReviewModal';
 
 type Props = {
-  book: Partial<Book>;
+  book: Partial<TBook>;
   modalRef: MutableRefObject<Modalize | null>
 };
 
@@ -30,7 +30,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [rating, setRating] = useState<number | null>(null);
   const [review, setReview] = useState<string | null>(null);
-  const [reading, setReading] = useState<Reading>({} as Reading);
+  const [reading, setReading] = useState<TReading>({} as TReading);
   const [isReviewModalOpen, setReviewModalOpen] = useState(false);
 
   const reviewModalRef = useRef<Modalize>(null);
@@ -56,7 +56,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
         await loadReading(actualReading.id);
       }
     } else {
-      setReading({} as Reading);
+      setReading({} as TReading);
       setIsFavorite(false);
       setRating(null);
       setReview(null);
@@ -90,7 +90,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
 
   const handleSubmit = async () => {
     if (actualUser) {
-      const payload: Reading = {
+      const payload: TReading = {
         id: reading?.id,
         id_user: actualUser.id,
         id_book: book.id ?? actualReading.id_book,
@@ -105,7 +105,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
         review: review ?? null,
       };
 
-      let response: Reading | undefined;
+      let response: TReading | undefined;
 
       if (payload.id) {
         response = await ReadingService.update(payload.id, payload);

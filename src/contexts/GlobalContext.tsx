@@ -1,51 +1,51 @@
-import { Reading, ProfileInfos } from '@/@types';
-import { BookshelfFilter } from '@/@types/filters';
-import { ProfileService, ReadingService } from '@/services';
-import React, { createContext, ReactNode, useState } from 'react';
+import { TReading, TProfileInfos } from '@/@types'
+import { TBookshelfFilter } from '@/@types/filters'
+import { ProfileService, ReadingService } from '@/services'
+import React, { createContext, ReactNode, useState } from 'react'
 
 interface GlobalContextData {
-  loading: boolean;
-  setLoading: (load: boolean) => void;
-  actualReading: Reading;
-  loadReading: (readingId: number) => Promise<void>;
-  userInfos: ProfileInfos;
-  loadUserInfos: (userId?: number, filters?: BookshelfFilter) => Promise<void>;
-};
+  loading: boolean
+  setLoading: (load: boolean) => void
+  actualReading: TReading
+  loadReading: (readingId: number) => Promise<void>
+  userInfos: TProfileInfos
+  loadUserInfos: (userId?: number, filters?: TBookshelfFilter) => Promise<void>
+}
 
 type GlobalProviderProps = {
-  children: ReactNode;
-};
+  children: ReactNode
+}
 
-export const GlobalContext = createContext<GlobalContextData>({} as GlobalContextData);
+export const GlobalContext = createContext<GlobalContextData>({} as GlobalContextData)
 
 export const GlobalProvider = ({ children }: GlobalProviderProps) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [actualReading, setActualReading] = useState<Reading>({} as Reading);
-  const [userInfos, setUserInfos] = useState<ProfileInfos>({} as ProfileInfos);
+  const [loading, setLoading] = useState<boolean>(false)
+  const [actualReading, setActualReading] = useState<TReading>({} as TReading)
+  const [userInfos, setUserInfos] = useState<TProfileInfos>({} as TProfileInfos)
 
   async function loadReading(readingId: number): Promise<void> {
     try {
-      const result = await ReadingService.getById(readingId);
+      const result = await ReadingService.getById(readingId)
 
-      setActualReading(result ?? ({} as Reading));
+      setActualReading(result ?? ({} as TReading))
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   }
 
-  async function loadUserInfos(userId?: number, filters?: BookshelfFilter): Promise<void> {
+  async function loadUserInfos(userId?: number, filters?: TBookshelfFilter): Promise<void> {
     try {
       if (userId) {
         setLoading(true)
 
-        const result = await ProfileService.getByUser(userId, filters);
+        const result = await ProfileService.getByUser(userId, filters)
 
-        setUserInfos(result);
+        setUserInfos(result)
       }
 
       setLoading(false)
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
   }
 
@@ -62,5 +62,5 @@ export const GlobalProvider = ({ children }: GlobalProviderProps) => {
     >
       {children}
     </GlobalContext.Provider>
-  );
-};
+  )
+}

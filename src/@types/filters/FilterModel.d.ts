@@ -1,5 +1,3 @@
-type FilterModel = {
+export type TFilterModel = {
   term?: string
 }
-
-export default FilterModel

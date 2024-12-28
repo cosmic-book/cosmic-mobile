@@ -1,6 +1,6 @@
-type BookSearch = {
-  books: Book[]
+import { TBook } from './Book'
+
+export type TBookSearch = {
+  books: TBook[]
   totalItems: number
 }
-
-export default BookSearch
