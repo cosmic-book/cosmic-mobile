@@ -1,7 +1,7 @@
 import { TReading } from '@/@types'
 import service from './service'
 
-export default class ReadingService {
+export class ReadingService {
   static async getAll(): Promise<TReading[]> {
     return service.get('/readings')
   }

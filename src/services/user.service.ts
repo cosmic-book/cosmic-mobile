@@ -2,7 +2,7 @@ import { TUser } from '@/@types'
 import service from './service'
 import { INewPasswordForm } from '@/interfaces'
 
-export default class UserService {
+export class UserService {
   static async getAll(): Promise<TUser[]> {
     return service.get('/users')
   }

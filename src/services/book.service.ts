@@ -2,7 +2,7 @@ import { TBook, TBookSearch } from '@/@types'
 import { TFilterModel } from '@/@types/filters'
 import service from './service'
 
-export default class BookService {
+export class BookService {
   static async getAll(): Promise<TBook[]> {
     return service.get('/books')
   }

@@ -1,7 +1,7 @@
 import { THistory, THistoryResult } from '@/@types'
 import service from './service'
 
-export default class HistoryService {
+export class HistoryService {
   static async getAll(): Promise<THistory[]> {
     return service.get('/histories')
   }

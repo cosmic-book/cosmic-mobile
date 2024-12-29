@@ -1,7 +1,7 @@
 import { TGender } from '@/@types'
 import service from './service'
 
-export default class GenderService {
+export class GenderService {
   static async getAll(): Promise<TGender[]> {
     return service.get('/genders')
   }
