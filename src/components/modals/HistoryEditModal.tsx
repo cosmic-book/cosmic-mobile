@@ -1,6 +1,6 @@
 import { THistory } from '@/@types';
 import { GlobalContext } from '@/contexts/GlobalContext';
-import { HistoryService } from '@/services';
+import { HistoriesService } from '@/services';
 import { validateFields } from '@/utils/ValidateFields';
 import { BookOpen } from 'lucide-react-native';
 import moment from 'moment';
@@ -22,15 +22,15 @@ export function HistoryEditModal({ actualHistory, modalRef, afterSubmit }: Props
 
   const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext);
 
-  const [history, setHistory] = useState<THistory>(actualHistory || {} as THistory);
+  const [history, setHistory] = useState<THistory>(actualHistory || ({} as THistory));
   const [error, setError] = useState(false);
 
   const validate = () => {
     return validateFields([
       {
         value: history.read_pages,
-        setter: setError,
-      },
+        setter: setError
+      }
     ]);
   };
 
@@ -40,22 +40,22 @@ export function HistoryEditModal({ actualHistory, modalRef, afterSubmit }: Props
         ...history,
         id_user: actualReading.id_user,
         id_reading: actualReading.id,
-        date: moment(history.id ? history.date : new Date()).format('YYYY-MM-DDTHH:mm:ss'),
+        date: moment(history.id ? history.date : new Date()).format('YYYY-MM-DDTHH:mm:ss')
       };
 
       let response: THistory | undefined;
 
       if (payload.id) {
-        response = await HistoryService.update(payload.id, payload);
+        response = await HistoriesService.update(payload.id, payload);
       } else {
-        response = await HistoryService.create(payload);
+        response = await HistoriesService.create(payload);
       }
 
       if (response) {
         Toast.show({
           type: 'success',
           text1: 'Sucesso',
-          text2: `Seu registro foi ${payload.id ? 'atualizado' : 'adicionado'}`,
+          text2: `Seu registro foi ${payload.id ? 'atualizado' : 'adicionado'}`
         });
 
         await handleReload();
@@ -76,7 +76,7 @@ export function HistoryEditModal({ actualHistory, modalRef, afterSubmit }: Props
   };
 
   const handleOpen = () => {
-    setHistory(actualHistory || {} as THistory);
+    setHistory(actualHistory || ({} as THistory));
   };
 
   const handleClose = () => {
@@ -135,9 +135,10 @@ export function HistoryEditModal({ actualHistory, modalRef, afterSubmit }: Props
           onChangeText={(value) => setHistory({ ...history, read_pages: Number(value) })}
         />
 
-        {actualReading.book && (
+        {actualReading.edition && (
           <Text className="text-sm text-right font-medium mr-3">
-            Página atual: {!actualHistory.id ? actualReading.read_pages : actualHistory.read_pages}/{actualReading.book.pages}
+            Página atual: {!actualHistory.id ? actualReading.read_pages : actualHistory.read_pages}/
+            {actualReading.edition.num_pages}
           </Text>
         )}
       </View>

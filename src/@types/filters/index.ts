@@ -1,2 +1,1 @@
-export { TBookshelfFilter } from './BookshelfFilter'
-export { TFilterModel } from './FilterModel'
+export { TBookshelfFilter } from './BookshelfFilter';

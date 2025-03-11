@@ -1,60 +1,60 @@
-import { TBook, TBookSearch } from '@/@types'
-import { TFilterModel } from '@/@types/filters'
-import { TMainStackParamList } from '@/@types/navigation'
-import { ImageView, Skeleton } from '@/components'
-import { Input } from '@/components/fields'
-import { BookListItem } from '@/components/layout'
-import { GlobalContext } from '@/contexts/GlobalContext'
-import { BookService } from '@/services'
-import { NavigationProp, RouteProp } from '@react-navigation/native'
-import { Search } from 'lucide-react-native'
-import { useContext, useEffect, useState } from 'react'
-import { FlatList, Text, View } from 'react-native'
-import { useDebounce } from 'use-debounce'
+import { TEdition } from '@/@types';
+import { TMainStackParamList } from '@/@types/navigation';
+import { ImageView, Skeleton } from '@/components';
+import { Input } from '@/components/fields';
+import { EditionListItem } from '@/components/layout';
+import { GlobalContext } from '@/contexts/GlobalContext';
+import { IFilterModel, ISearchResult } from '@/interfaces';
+import { EditionsService } from '@/services/editions.service';
+import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { Search } from 'lucide-react-native';
+import { useContext, useEffect, useState } from 'react';
+import { FlatList, Text, View } from 'react-native';
+import { useDebounce } from 'use-debounce';
 
 type SearchProps = {
-  navigation: NavigationProp<TMainStackParamList, 'Search'>
-  route: RouteProp<any>
-}
+  navigation: NavigationProp<TMainStackParamList, 'Search'>;
+  route: RouteProp<any>;
+};
 
 const SearchScreen = ({ navigation, route }: SearchProps) => {
-  const { loading, setLoading } = useContext(GlobalContext)
+  const { loading, setLoading } = useContext(GlobalContext);
 
-  const [search, setSearch] = useState('')
-  const [books, setBooks] = useState<TBook[]>([])
-  const [totalItems, setTotalItems] = useState(0)
+  const [search, setSearch] = useState('');
+  const [editions, setEditions] = useState<TEdition[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
 
-  const [debounceTerm] = useDebounce(search, 3000)
+  const [debounceTerm] = useDebounce(search, 1000);
 
   const fetchData = async () => {
-    const filterModel: TFilterModel = {
+    const filterModel: IFilterModel = {
       term: debounceTerm || ''
-    }
+    };
 
     if (debounceTerm) {
-      const result: TBookSearch = await BookService.search(filterModel)
+      const result: ISearchResult<TEdition> = await EditionsService.search(filterModel);
 
-      setBooks(result.books)
-      setTotalItems(result.totalItems)
+      setEditions(result.items);
+      setTotalItems(result.totalItems);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (debounceTerm) {
-      fetchData()
+      fetchData();
     }
-  }, [debounceTerm])
+  }, [debounceTerm]);
 
   useEffect(() => {
     if (search) {
-      setLoading(true)
+      setLoading(true);
     } else {
-      setLoading(false)
-      setBooks([])
+      setLoading(false);
+      setEditions([]);
     }
-  }, [search])
+  }, [search]);
 
   return (
     <View className="flex-1 justify-center container bg-white h-full pt-16 px-6">
@@ -64,7 +64,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
 
       <View>
         <Text className="text-lg font-bold pb-2" numberOfLines={1}>
-          {search && books ? `Resultados de "${search}"` : 'Busca de Livros'}
+          {search && editions ? `Resultados de "${search}"` : 'Busca de Livros'}
         </Text>
         {search && !loading && totalItems ? (
           <Text className="text-sm pb-2 color-slate-500">{`Livros encontrados: ${totalItems}`}</Text>
@@ -73,13 +73,13 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
 
       {!loading ? (
         <FlatList
-          data={books}
+          data={editions}
           initialNumToRender={10}
           keyExtractor={(item) => item.id.toString()}
           className="pt-2 border-t border-gray-200"
           contentContainerStyle={{ paddingBottom: 100 }}
           showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => <BookListItem book={item} navigation={navigation} />}
+          renderItem={({ item }) => <EditionListItem edition={item} navigation={navigation} />}
           ItemSeparatorComponent={() => <View className="h-5" />}
           ListEmptyComponent={
             <View className="flex py-24 justify-center items-center">
@@ -117,7 +117,7 @@ const SearchScreen = ({ navigation, route }: SearchProps) => {
         </View>
       )}
     </View>
-  )
-}
+  );
+};
 
-export default SearchScreen
+export default SearchScreen;
