@@ -1,20 +1,20 @@
-import { TUser } from '@/@types'
-import { TAuthStackParamList } from '@/@types/navigation'
-import { Button, Heading } from '@/components'
-import { DateInput, GenderSelect, Input, PasswordInput } from '@/components/fields'
-import { UserService } from '@/services'
-import { validateFields } from '@/utils/ValidateFields'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import moment from 'moment'
-import { useState } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import { TUser } from '@/@types';
+import { TAuthStackParamList } from '@/@types/navigation';
+import { Button, Heading } from '@/components';
+import { DateInput, GenderSelect, Input, PasswordInput } from '@/components/fields';
+import { UsersService } from '@/services';
+import { validateFields } from '@/utils/ValidateFields';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import moment from 'moment';
+import { useState } from 'react';
+import { ScrollView, Text, View } from 'react-native';
 
-type RegisterProps = NativeStackScreenProps<TAuthStackParamList, 'Register'>
+type RegisterProps = NativeStackScreenProps<TAuthStackParamList, 'Register'>;
 
 const Register = ({ navigation }: RegisterProps) => {
-  const [user, setUser] = useState<TUser>({} as TUser)
+  const [user, setUser] = useState<TUser>({} as TUser);
 
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
 
   const validate = () => {
     return validateFields([
@@ -22,8 +22,8 @@ const Register = ({ navigation }: RegisterProps) => {
         value: user.name && user.username && user.email && user.birthday && user.gender && user.password,
         setter: setError
       }
-    ])
-  }
+    ]);
+  };
 
   const handleRegister = async () => {
     if (validate()) {
@@ -31,17 +31,17 @@ const Register = ({ navigation }: RegisterProps) => {
         ...user,
         birthday: moment(user.birthday).format('YYYY-MM-DD'),
         gender: user.gender ?? 0
-      }
+      };
 
-      const result = await UserService.create(payload)
+      const result = await UsersService.create(payload);
 
-      if (result) navigation.navigate('Login')
+      if (result) navigation.navigate('Login');
     }
-  }
+  };
 
   const handleClear = () => {
-    setUser({} as TUser)
-  }
+    setUser({} as TUser);
+  };
 
   return (
     <View className="bg-white flex-1 justify-center">
@@ -106,7 +106,7 @@ const Register = ({ navigation }: RegisterProps) => {
         </View>
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

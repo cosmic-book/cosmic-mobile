@@ -1,67 +1,67 @@
-import { THistory, THistoryResult } from '@/@types'
-import { TMainStackParamList } from '@/@types/navigation'
-import { Button, Progress, Skeleton } from '@/components'
-import { HistoryEditModal } from '@/components/modals'
-import { useAuth } from '@/contexts/AuthContext'
-import { GlobalContext } from '@/contexts/GlobalContext'
-import { HistoryService } from '@/services'
-import { useIsFocused } from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { ArrowLeft, Calendar, HistoryIcon, Pencil, Trash } from 'lucide-react-native'
-import moment from 'moment'
-import { useContext, useEffect, useRef, useState } from 'react'
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { Modalize } from 'react-native-modalize'
+import { THistory } from '@/@types';
+import { TMainStackParamList } from '@/@types/navigation';
+import { Button, Progress, Skeleton } from '@/components';
+import { HistoryEditModal } from '@/components/modals';
+import { useAuth } from '@/contexts/AuthContext';
+import { GlobalContext } from '@/contexts/GlobalContext';
+import { HistoriesService } from '@/services';
+import { useIsFocused } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ArrowLeft, Calendar, HistoryIcon, Pencil, Trash } from 'lucide-react-native';
+import moment from 'moment';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Modalize } from 'react-native-modalize';
 
-type HistoryProps = NativeStackScreenProps<TMainStackParamList, 'History'>
+type HistoryProps = NativeStackScreenProps<TMainStackParamList, 'History'>;
 
 function HistoriesScreen({ navigation, route }: HistoryProps) {
-  const { actualUser } = useAuth()
-  const { loading, setLoading, actualReading, loadReading, loadUserInfos } = useContext(GlobalContext)
+  const { actualUser } = useAuth();
+  const { loading, setLoading, actualReading, loadReading, loadUserInfos } = useContext(GlobalContext);
 
-  const editModalRef = useRef<Modalize>(null)
-  const isFocused = useIsFocused()
+  const editModalRef = useRef<Modalize>(null);
+  const isFocused = useIsFocused();
 
-  const [imageError, setImageError] = useState(false)
+  const [imageError, setImageError] = useState(false);
 
-  const [histories, setHistories] = useState<THistory[]>([])
-  const [history, setHistory] = useState<THistory>({} as THistory)
+  const [histories, setHistories] = useState<THistory[]>([]);
+  const [history, setHistory] = useState<THistory>({} as THistory);
 
   const fetchData = async () => {
-    setLoading(true)
+    setLoading(true);
 
-    const result: THistoryResult = await HistoryService.getByReading(actualReading.id)
+    const result: THistory[] = await HistoriesService.getByReading(actualReading.id);
 
     if (result) {
-      setHistories(result.histories)
+      setHistories(result);
     }
 
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   const handleOpen = (item?: THistory) => {
-    setHistory(item || ({} as THistory))
+    setHistory(item || ({} as THistory));
 
-    editModalRef.current?.open()
-  }
+    editModalRef.current?.open();
+  };
 
   const handleDelete = async (id: number) => {
-    await HistoryService.delete(id)
+    await HistoriesService.delete(id);
 
     if (actualUser) {
-      await loadReading(actualReading.id)
-      await loadUserInfos(actualUser.id)
+      await loadReading(actualReading.id);
+      await loadUserInfos(actualUser.id);
     }
 
-    fetchData()
-  }
+    fetchData();
+  };
 
   useEffect(() => {
     if (isFocused) {
-      fetchData()
+      fetchData();
     }
-  }, [isFocused])
+  }, [isFocused]);
 
   const renderItem = ({ item }: { item: THistory }) => (
     <View className="flex-col bg-white px-4 py-3 gap-5 shadow-sm shadow-black rounded-lg">
@@ -88,22 +88,22 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
         </View>
       )}
 
-      {actualReading.book && (
+      {actualReading.edition && (
         <View>
-          <Progress value={Math.ceil((item.read_pages / actualReading.book.pages) * 100)} className="mb-2" />
+          <Progress value={Math.ceil((item.read_pages / actualReading.edition.num_pages) * 100)} className="mb-2" />
 
           <View className="flex-row justify-between mb-2">
             <Text className="text-sm text-left text-primary font-semibold">
-              {item.read_pages}/{actualReading.book.pages} pág.
+              {item.read_pages}/{actualReading.edition.num_pages} pág.
             </Text>
             <Text className="text-sm text-right text-pink font-semibold">
-              {Math.ceil((item.read_pages / actualReading.book.pages) * 100)}%
+              {Math.ceil((item.read_pages / actualReading.edition.num_pages) * 100)}%
             </Text>
           </View>
         </View>
       )}
     </View>
-  )
+  );
 
   return (
     <GestureHandlerRootView className="flex-1">
@@ -124,11 +124,11 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
       </View>
 
       <View className="flex-1 px-8 pt-5">
-        {actualReading.book && (
+        {actualReading.edition && (
           <View className="bg-white p-3 rounded-lg flex-row gap-3 mb-5 shadow-sm shadow-black">
-            {actualReading.book.cover && !imageError ? (
+            {actualReading.edition.cover && !imageError ? (
               <Image
-                source={{ uri: actualReading.book.cover }}
+                source={{ uri: actualReading.edition.cover }}
                 style={{ width: 70, height: 100 }}
                 className="rounded-lg"
                 onError={() => setImageError(true)}
@@ -142,12 +142,12 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
             )}
             <View className="flex-1 gap-1">
               <Text className="text-lg font-bold" numberOfLines={1}>
-                {actualReading.book.title}
+                {actualReading.edition.title}
               </Text>
-              <Text className="text-sm color-gray-400">{actualReading.book.author}</Text>
-              <Text className="text-sm color-gray-400">{actualReading.book.publisher}</Text>
+              {/* <Text className="text-sm color-gray-400">{actualReading.edition.author}</Text> */}
+              <Text className="text-sm color-gray-400">{actualReading.edition.publisher}</Text>
               <Text className="text-sm color-gray-400">
-                {actualReading.book.year + ' - ' + actualReading.book.pages + ' páginas'}
+                {(actualReading.edition.publish_date || '') + (actualReading.edition.num_pages ? ' - ' + actualReading.edition.num_pages + ' páginas' : '')}
               </Text>
             </View>
           </View>
@@ -186,7 +186,7 @@ function HistoriesScreen({ navigation, route }: HistoryProps) {
 
       <HistoryEditModal actualHistory={history} modalRef={editModalRef} afterSubmit={fetchData} />
     </GestureHandlerRootView>
-  )
+  );
 }
 
-export default HistoriesScreen
+export default HistoriesScreen;

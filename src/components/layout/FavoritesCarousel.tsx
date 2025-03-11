@@ -27,7 +27,7 @@ export function FavoritesCarousel({ favoriteBooks }: FavoritesCarouselProps) {
           {favoriteBooks.map((favorite) => (
             <View key={favorite.id} className="w-20 h-28">
               <Image
-                source={{ uri: favorite.book?.cover }}
+                source={{ uri: favorite?.edition?.cover }}
                 className="w-full h-full rounded"
                 resizeMode="cover"
               />

@@ -1,7 +1,7 @@
 import { TMainStackParamList } from '@/@types/navigation'
 import { Footer } from '@/components'
 import {
-  BookDetailsScreen,
+  EditionDetailsScreen,
   BookshelfScreen,
   HistoriesScreen,
   MenuScreen,
@@ -20,7 +20,7 @@ const MainStack: React.FC = () => (
     <Tab.Screen name="Search" component={SearchScreen} options={{ headerShown: false }} />
     <Tab.Screen name="Menu" component={MenuScreen} options={{ headerShown: false }} />
     <Tab.Screen name="Bookshelf" component={BookshelfScreen} options={{ headerShown: false }} />
-    <Tab.Screen name="BookDetails" component={BookDetailsScreen} options={{ headerShown: false }} />
+    <Tab.Screen name="EditionDetails" component={EditionDetailsScreen} options={{ headerShown: false }} />
     <Tab.Screen name="History" component={HistoriesScreen} options={{ headerShown: false }} />
     <Tab.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
     <Tab.Screen name="ProfileEdit" component={ProfileEditScreen} options={{ headerShown: false }} />

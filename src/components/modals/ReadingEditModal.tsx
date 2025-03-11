@@ -1,8 +1,8 @@
-import { TBook, TReading } from '@/@types';
+import { TEdition, TReading } from '@/@types';
 import { useAuth } from '@/contexts/AuthContext';
 import { GlobalContext } from '@/contexts/GlobalContext';
 import { ReadingStatus } from '@/enums';
-import { ReadingService } from '@/services';
+import { ReadingsService } from '@/services';
 import { Pencil, Plus } from 'lucide-react-native';
 import moment from 'moment';
 import { MutableRefObject, useContext, useEffect, useRef, useState } from 'react';
@@ -14,15 +14,15 @@ import { DateInput, ReadingCategorySelector, ReadingStatusSelect, ReadingTypeSel
 import { ReviewModal } from './ReviewModal';
 
 type Props = {
-  book: Partial<TBook>;
-  modalRef: MutableRefObject<Modalize | null>
+  edition: Partial<TEdition>;
+  modalRef: MutableRefObject<Modalize | null>;
 };
 
-export function ReadingEditModal({ book, modalRef }: Props) {
+export function ReadingEditModal({ edition, modalRef }: Props) {
   const windowHeight = Dimensions.get('window').height * 0.67;
 
   const { actualUser } = useAuth();
-  const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext)
+  const { loadUserInfos, actualReading, loadReading } = useContext(GlobalContext);
 
   const [isToRead, setIsToRead] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -46,7 +46,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
   };
 
   const handleOpen = async () => {
-    if (actualReading.id_book === book.id) {
+    if (actualReading.id_edition === edition.id) {
       setReading(actualReading);
       setIsFavorite(actualReading.favorite !== null);
       setRating(actualReading.rating ?? null);
@@ -80,7 +80,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
         status: 0,
         start_date: null,
         finish_date: null,
-        category: 0,
+        category: 0
       });
       setIsFavorite(false);
       setRating(null);
@@ -93,7 +93,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
       const payload: TReading = {
         id: reading?.id,
         id_user: actualUser.id,
-        id_book: book.id ?? actualReading.id_book,
+        id_edition: edition.id ?? actualReading.id_edition,
         status: reading.status ?? null,
         type: reading.type ?? 0,
         category: reading.category ?? 0,
@@ -102,21 +102,25 @@ export function ReadingEditModal({ book, modalRef }: Props) {
         finish_date: reading.finish_date ? moment(reading.finish_date).format('YYYY-MM-DD') : null,
         favorite: isFavorite ? 1 : null,
         rating: rating ?? null,
-        review: review ?? null,
+        review: review ?? null
       };
 
       let response: TReading | undefined;
 
       if (payload.id) {
-        response = await ReadingService.update(payload.id, payload);
+        response = await ReadingsService.update(payload.id, payload);
       } else {
-        response = await ReadingService.create(payload);
+        response = await ReadingsService.create(payload);
       }
 
       if (response) {
-        Toast.show({ type: 'success', text1: `Leitura ${payload.id ? 'editada' : 'adicionada'}`, text2: 'Acesse a estante para visualizar seus livros' })
+        Toast.show({
+          type: 'success',
+          text1: `Leitura ${payload.id ? 'editada' : 'adicionada'}`,
+          text2: 'Acesse a estante para visualizar seus livros'
+        });
 
-        await loadUserInfos(actualUser.id)
+        await loadUserInfos(actualUser.id);
 
         modalRef.current?.close();
       }
@@ -137,7 +141,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
     if (!isFinished) {
       setReading({
         ...reading,
-        finish_date: null,
+        finish_date: null
       });
     }
 
@@ -145,7 +149,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
       setReading({
         ...reading,
         start_date: null,
-        finish_date: null,
+        finish_date: null
       });
     }
   }, [reading.status]);
@@ -154,12 +158,10 @@ export function ReadingEditModal({ book, modalRef }: Props) {
     <View className="flex-row items-center w-full border_bottom p-5">
       <View className="flex-col">
         <Text className="text-gray-600 text-base font-medium">
-          {reading.book ? reading.book.title : book ? book.title : ''}
+          {reading.edition ? reading.edition.title : edition ? edition.title : ''}
         </Text>
 
-        <Text className="text-gray-500 text-sm">
-          {reading.book ? reading.book.author : book ? book.author : ''}
-        </Text>
+        {/* <Text className="text-gray-500 text-sm">{reading.edition ? reading.edition.author : edition ? edition.author : ''}</Text> */}
       </View>
     </View>
   );
@@ -186,10 +188,7 @@ export function ReadingEditModal({ book, modalRef }: Props) {
       >
         <View className="p-5 gap-5">
           <View className="flex items-center">
-            <ReadingTypeSelector
-              value={reading.type ?? 0}
-              onSelect={(type) => setReading({ ...reading, type })}
-            />
+            <ReadingTypeSelector value={reading.type ?? 0} onSelect={(type) => setReading({ ...reading, type })} />
           </View>
 
           <ReadingStatusSelect
@@ -216,19 +215,13 @@ export function ReadingEditModal({ book, modalRef }: Props) {
             onSelect={(category) => setReading({ ...reading, category })}
           />
 
-          <TouchableOpacity
-            disabled={!isFinished}
-            onPress={handleOpenReview}
-            className="flex-row items-center gap-2"
-          >
+          <TouchableOpacity disabled={!isFinished} onPress={handleOpenReview} className="flex-row items-center gap-2">
             {review ? (
               <Pencil size={22} color={isFinished ? '#6b7280' : '#d1d5db'} />
             ) : (
               <Plus size={24} color={isFinished ? '#6b7280' : '#d1d5db'} />
             )}
-            <Text
-              className={`${isFinished ? 'text-gray-500' : 'text-gray-300'} text-lg`}
-            >
+            <Text className={`${isFinished ? 'text-gray-500' : 'text-gray-300'} text-lg`}>
               {review ? 'Editar resenha' : 'Escrever uma resenha'}
             </Text>
           </TouchableOpacity>

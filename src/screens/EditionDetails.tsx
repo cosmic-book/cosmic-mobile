@@ -10,7 +10,7 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Modalize } from 'react-native-modalize'
 
-type BookDetailsProps = NativeStackScreenProps<TMainStackParamList, 'BookDetails'>
+type BookDetailsProps = NativeStackScreenProps<TMainStackParamList, 'EditionDetails'>
 
 const statusTypes = [
   {
@@ -35,8 +35,8 @@ const statusTypes = [
   }
 ]
 
-const BookDetails = ({ route, navigation }: BookDetailsProps) => {
-  const { book } = route.params
+const EditionDetails = ({ route, navigation }: BookDetailsProps) => {
+  const { edition } = route.params
 
   const { actualUser } = useAuth()
   const { userInfos, loadUserInfos, loadReading } = useContext(GlobalContext)
@@ -59,7 +59,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
   }, [isFocused])
 
   useEffect(() => {
-    if (book.cover) {
+    if (edition.cover) {
       setImageError(false)
     }
 
@@ -67,14 +67,14 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
     setStatusColor('text-blue-500')
 
     userInfos.allReadings.filter((reading) => {
-      if (reading.id_book === book.id && reading.status !== null) {
+      if (reading.id_edition === edition.id && reading.status !== null) {
         handleLoad(reading.id)
 
         setStatusLabel(statusTypes[reading.status].label)
         setStatusColor(statusTypes[reading.status].color)
       }
     })
-  }, [book, userInfos])
+  }, [edition, userInfos])
 
   return (
     <GestureHandlerRootView>
@@ -83,7 +83,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
 
         <View style={styles.backgroundContainer}>
           <Image
-            source={book.cover && !imageError ? { uri: book.cover } : require('@/assets/no-cover.png')}
+            source={edition.cover && !imageError ? { uri: edition.cover } : require('@/assets/no-cover.png')}
             style={styles.backgroundImage}
             blurRadius={15}
             onError={() => setImageError(true)}
@@ -93,23 +93,23 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
         <View style={styles.contentContainer}>
           <View className="items-center">
             <Image
-              source={book.cover && !imageError ? { uri: book.cover } : require('@/assets/no-cover.png')}
+              source={edition.cover && !imageError ? { uri: edition.cover } : require('@/assets/no-cover.png')}
               style={{ width: 160, height: 240, borderRadius: 10, top: -40 }}
               onError={() => setImageError(true)}
             />
-            <Text className="text-2xl color-white text-center">{book.title}</Text>
-            <Text className="text-2x1 opacity-90 mt-2 color-white">Por {book.author}</Text>
+            <Text className="text-2xl color-white text-center">{edition.title}</Text>
+            {/* <Text className="text-2x1 opacity-90 mt-2 color-white">Por {edition.author}</Text> */}
           </View>
 
           <View className="mt-20 rounded-lg bg-white p-2 flex-row justify-around">
             <View className="flex-1 items-center border-r border-gray-200 p-2">
               <Text className="text-sm text-gray-500 mb-1">ANO</Text>
-              <Text className="text-base font-bold">{book.year}</Text>
+              <Text className="text-base font-bold">{edition.publish_date ?? '-'}</Text>
             </View>
 
             <View className="flex-1 items-center border-r border-gray-200 p-2">
               <Text className="text-sm text-gray-500 mb-1">PÁGINAS</Text>
-              <Text className="text-base font-bold">{book.pages}</Text>
+              <Text className="text-base font-bold">{edition.num_pages > 0 ? edition.num_pages : '-'}</Text>
             </View>
 
             <View className="flex-1 items-center p-2">
@@ -123,7 +123,7 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           <View className="flex-row items-center mt-8">
             <Image source={require('@/assets/user-icon.png')} className="w-16 h-16 rounded-full mr-4" />
             <View className="flex-1">
-              <Text className="text-lg font-bold">{book.author}</Text>
+              {/* <Text className="text-lg font-bold">{edition.author}</Text> */}
               <Text className="text-sm text-gray-500" numberOfLines={2}>
                 Descrição do Autor
               </Text>
@@ -131,12 +131,12 @@ const BookDetails = ({ route, navigation }: BookDetailsProps) => {
           </View>
 
           <View className="my-4">
-            <Text className="text-base text-justify">{book.description}</Text>
+            <Text className="text-base text-justify">{edition.description}</Text>
           </View>
         </View>
       </ScrollView>
 
-      <ReadingEditModal book={book} modalRef={readingModalizeRef} />
+      <ReadingEditModal edition={edition} modalRef={readingModalizeRef} />
     </GestureHandlerRootView>
   )
 }
@@ -161,4 +161,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default BookDetails
+export default EditionDetails
